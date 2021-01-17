@@ -5,6 +5,8 @@ import HomeNavigator from './src/navigations/homeNavigation';
 import { NavigationContainer } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 
+import TabBar from './src/navigations/bottomTabBar';
+
 const toastConfig = {
   success: ({ text1, props, ...rest }) => (
     <View style={{ height: 60, width: '100%', backgroundColor: 'pink' }}>
@@ -20,7 +22,7 @@ const toastConfig = {
 const App = () => {
     return (
       <NavigationContainer>
-        <HomeNavigator></HomeNavigator>
+        <TabBar></TabBar>
         <Toast config = {toastConfig} ref={(ref) => Toast.setRef(ref)} />
       </NavigationContainer>
     );
