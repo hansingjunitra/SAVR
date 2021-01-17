@@ -22,13 +22,6 @@ const SpendingDetails = (props) => {
       { cancelable: false }
     );
 
-    // React.useEffect(() => {
-    //     Toast.show({
-    //       text1: 'Hello',
-    //       text2: 'This is some something 👋'
-    //     });
-    //   }, []);
-
     const { setAmount, setModal, setDate } = React.useContext(NewTransactionContext);
 
     return (
