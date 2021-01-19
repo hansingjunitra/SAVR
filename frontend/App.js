@@ -9,6 +9,8 @@ import { Icon } from 'react-native-elements';
 
 import Toast from 'react-native-toast-message';
 
+import TabBar from './src/navigations/bottomTabBar';
+
 const toastConfig = {
   success: ({ text1, props, ...rest }) => (
     <View style={{ height: 60, width: '100%', backgroundColor: 'pink' }}>
