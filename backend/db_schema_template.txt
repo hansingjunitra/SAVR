@@ -1,0 +1,33 @@
+{
+    "username": "johndoe",
+    "creditCards": [
+        {
+            "bank": "DBS",
+            "cardNumber": 5632,
+            "type": "DBS Live Fresh Card",
+            "categories": [
+                {
+                    "category": "online",
+                    "cashback": 0.05,
+                    "cap": 20,
+                    "minimum": 600,
+                    "spent": 312
+                },
+                {
+                    "category": "visa contactless",
+                    "cashback": 0.05,
+                    "cap": 20,
+                    "minimum": 600,
+                    "spent": 203
+                },
+                {
+                    "category": "others",
+                    "cashback": 0.003,
+                    "cap": 20,
+                    "minimum": null,
+                    "spent": null
+                }
+            ]
+        }
+    ]
+}

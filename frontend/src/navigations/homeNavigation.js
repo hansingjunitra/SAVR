@@ -8,7 +8,7 @@ import AddTransaction from '../screens/addTransaction';
 
 const Stack = createStackNavigator();
 
-const HomeNavigator = () => {
+const HomeTab = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen name = "Home" component = {Home} options = {{headerShown: false}}/>
@@ -17,4 +17,4 @@ const HomeNavigator = () => {
     )
 }
 
-export default HomeNavigator;
+export default HomeTab;

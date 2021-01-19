@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, TouchableHighlight, Alert, TextInput } from 'react-native';
 
 import Swiper from 'react-native-swiper';
-import { Icon } from 'react-native-elements';
+import { Icon, Image } from 'react-native-elements';
 import Modal from 'react-native-modal'
 
 import TranscationCard from '../components/transactionCard';
@@ -107,6 +107,9 @@ const Home = ({navigation}) => {
                         </View>
                         <Swiper autoplayTimeout = {5} autoplay = {true}>
                             {cardList.map((card, index) => {
+                                {/* <View>
+                                    <Image source={require('./Capture.jpg')}></Image>
+                                </View> */}
                                 return <CardCard key = {index} card = {card}/>
                             })}
                         </Swiper>
