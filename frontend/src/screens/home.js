@@ -24,7 +24,7 @@ const Home = ({navigation}) => {
         {name: 'Amazon.sg', card: 'Online', amount: 241.65, date: '4 Jan'}    
     ])
 
-    const cardList = [{bank: 'DBS', colorCode: '#000000'}, {bank: 'UOB', colorCode: '#0c4f75'}, {bank: 'OCBC', colorCode: '#d10022'}]
+    const cardList = [{bank: 'DBS', colorCode: '#000000', asset: 'dbs_live_fresh_card'}, {bank: 'UOB', colorCode: '#0c4f75', asset: 'uob_visa'}, {bank: 'OCBC', colorCode: '#d10022', asset: 'ocbc_365'}]
 
     const [modalView, setModalView] = React.useState(null)
     const [newTransaction, setNewTransaction] = React.useState({
