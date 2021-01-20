@@ -1,0 +1,6 @@
+module Pods_SAVR {
+  umbrella header "Pods-SAVR-umbrella.h"
+
+  export *
+  module * { export * }
+}

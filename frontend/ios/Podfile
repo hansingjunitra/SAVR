@@ -8,9 +8,7 @@ target 'SAVR' do
 
   use_react_native!(:path => config["reactNativePath"])
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  pod 'react-native-payments', :path => '../node_modules/react-native-payments'
 
   target 'SAVRTests' do
     inherit! :complete
