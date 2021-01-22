@@ -3,13 +3,12 @@ import { View, Text, SafeAreaView, TouchableHighlight, ScrollView, StyleSheet, M
 
 import HomeTab from './src/navigations/homeNavigation';
 import ProfileTab from './src/navigations/profileNavigation';
+import CardTab from './src/navigations/cardNavigation';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'react-native-elements';
 
 import Toast from 'react-native-toast-message';
-
-import TabBar from './src/navigations/bottomTabBar';
 
 const toastConfig = {
   success: ({ text1, props, ...rest }) => (
@@ -37,6 +36,13 @@ const App = () => {
                   tabBarIcon: () => 
                     <Icon name ={'home'} type={'entypo'}/>
                   
+                }}/>
+              <BottomTab.Screen 
+                name = "Cards" 
+                component = {CardTab} 
+                options = {{
+                  tabBarIcon: ({color, size}) => 
+                    <Icon name ={'credit-card'} type={'entypo'}/>
                 }}/>
               <BottomTab.Screen 
                 name = "Profile" 
