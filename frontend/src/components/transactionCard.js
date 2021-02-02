@@ -27,7 +27,7 @@ const TransactionCard = (props) => {
             </View>
             <View style = {{flex: 3, flexDirection: 'row'}}>
                 <View>
-                    <Text>{props.transaction.name}</Text>
+                    <Text>{props.transaction.merchant}</Text>
                     <Text style ={{color: 'grey'}}>{props.transaction.card}</Text>
                 </View>
             </View>

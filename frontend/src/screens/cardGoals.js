@@ -3,13 +3,16 @@ import { View, Text, ScrollView } from 'react-native';
 
 import CardStats from '../components/cardStats';
 
+const cardList = require('../creditCards.json');
+
 const CardGoals = ({navigation}) => {
 
-  const [cardInfoList, setCardInfoList] = React.useState([
-    {card: 'dbs_live_fresh_card', limit: '600', categories: 'dining, petrol'},
-    {card: 'ocbc_365', limit: '400', categories: 'groceries'},
-    {card: 'uob_visa', limit: '0', categories: 'general'}
-  ])
+  // const [cardInfoList, setCardInfoList] = React.useState([
+  //   {card: 'dbs_live_fresh_card', limit: '600', categories: 'dining, petrol'},
+  //   {card: 'ocbc_365', limit: '400', categories: 'groceries'},
+  //   {card: 'uob_visa', limit: '0', categories: 'general'}
+  // ])
+
 
   return(
     <View style={{flex: 1, justifyContent: 'center'}}>
@@ -24,8 +27,8 @@ const CardGoals = ({navigation}) => {
       <View style={{flex: 4}}>
         <ScrollView>
           <Text>Cards owned</Text>
-          {cardInfoList.map((cardInfo, index) => {
-            return <CardStats key = {index} cardInfo = {cardInfo}/>
+          {cardList.map((card, index) => {
+            return <CardStats key = {index} card = {card}/>
           })}
         </ScrollView>
         </View>

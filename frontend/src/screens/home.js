@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, TouchableHighlight, Alert, TextInput } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, TouchableHighlight, Alert, KeyboardAvoidingView } from 'react-native';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Swiper from 'react-native-swiper';
 import { Icon, Image } from 'react-native-elements';
@@ -16,24 +18,64 @@ import SelectCard from '../modal/home/selectCard';
 
 import NewTransactionContext from '../util/newTransactionContext';
 
+const cardList = require('../creditCards.json');
+
 const Home = ({navigation}) => {
 
-    const [transactionList, setTransactionList] = React.useState([
-        {name: 'NTUC Fairprice', card: 'Groceries', amount: 81.65, date: '4 Jan'},
-        {name: "McDonald's Singapore", card: 'Food & Beverage', amount: 12.65, date: '4 Jan'},
-        {name: 'Amazon.sg', card: 'Online', amount: 241.65, date: '4 Jan'}    
-    ])
 
-    const cardList = [{bank: 'DBS', colorCode: '#000000', asset: 'dbs_live_fresh_card'}, {bank: 'UOB', colorCode: '#0c4f75', asset: 'uob_visa'}, {bank: 'OCBC', colorCode: '#d10022', asset: 'ocbc_365'}]
+    const [retrieve, setRetrieve] = React.useState(true);
+
+    React.useEffect(() => {
+        const getTransactionHistory = async () => {
+            try {
+                const transactionHistoryString = await AsyncStorage.getItem('transactionHistory');
+                const transactionHistory = JSON.parse(transactionHistoryString);
+                setTransactionList(transactionHistory);
+            } catch (e) {
+                console.error(e)
+            }
+        }
+        
+        if (retrieve) {
+            getTransactionHistory();
+            setRetrieve(false);
+        }
+    }, [retrieve]);
+
+    const [transactionList, setTransactionList] = React.useState(
+       []
+    )
 
     const [modalView, setModalView] = React.useState(null)
     const [newTransaction, setNewTransaction] = React.useState({
         card: null,
         amount: null,
         date: null,
+        merchant: null,
         category: null
     })
 
+    const setTransactionHistory = async () => {
+        try {
+            setTransactionList((prevState) => 
+                [
+                    {   
+                        merchant: newTransaction.merchant, 
+                        card: newTransaction.category,
+                        amount: newTransaction.amount, 
+                        date: newTransaction.date.format('DD MMM')
+                    },
+                    ...prevState
+                ]
+            
+            );
+            await AsyncStorage.setItem('transactionHistory', JSON.stringify(transactionList))
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    // Adding new transaction context, state is shared between different components
     const newTransactionContext = React.useMemo(() => ({
         setModal: (modal) => {
             setModalView(modal)
@@ -66,20 +108,21 @@ const Home = ({navigation}) => {
                 category: category
             }});
         },
+        setMerchant:  (merchant) => {
+            setNewTransaction((prevState) => { 
+            return {
+                ...prevState,
+                merchant: merchant
+            }});
+        },
         addTransaction: () => {
-            setTransactionList((prevState) => 
-                [...prevState,
-                    {   name: newTransaction.card.bank, 
-                        card: newTransaction.category,
-                        amount: newTransaction.amount, 
-                        date: newTransaction.date.format('DD MMM')
-                    }
-                ]
             
-            )
+
+            setTransactionHistory().then(console.log('hello'))
+            console.log(transactionList)
         }
     }))
-
+    
     const setModalViewHandler = (modal) => {
         switch (modal) {
             case 0:
@@ -95,6 +138,11 @@ const Home = ({navigation}) => {
         }
     }
 
+    const [cardSwiperProps, setCardSwiperProps] = React.useState({
+        autoplay: true,
+        index: 0
+    })
+
     return (
         <View style = {{flex : 1}}>
             <NewTransactionContext.Provider value = {newTransactionContext}>
@@ -105,15 +153,17 @@ const Home = ({navigation}) => {
                                 My Cards
                             </Text>
                         </View>
-                        <Swiper autoplayTimeout = {5} autoplay = {true}>
+                        <Swiper autoplayTimeout = {5} autoplay = {cardSwiperProps.autoplay}>
                             {cardList.map((card, index) => {
-                                {/* <View>
-                                    <Image source={require('./Capture.jpg')}></Image>
-                                </View> */}
-                                return <CardCard key = {index} card = {card}/>
+                                return (
+                                    <View  key = {index} style = {{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+                                        <Image source = {{uri: card.image}} style={{height: 150, width: 250, borderRadius: 15}}/>
+                                    </View>
+                                )    
                             })}
                         </Swiper>
                     </View>
+                
                     <View style ={{flex: 3, backgroundColor: '#edece8', paddingVertical: 15}}>
                         <View style = {{alignItems: 'center', justifyContent: 'center', marginVertical: 5}}>
                             <Text style = {{fontSize: 16}}>
@@ -137,9 +187,9 @@ const Home = ({navigation}) => {
                     </View>
                 </View>
                 <Modal isVisible={modalView === null ? false : true} onSwipeComplete={() => setModalView(null)} swipeDirection="down" style ={{margin:0}}>
-                    <View style = {{flex: 1, justifyContent: 'flex-end'}}>
+                    <KeyboardAvoidingView behavior = "height" enabled style = {{flex: 1, justifyContent: 'flex-end'}} keyboardVerticalOffset = {10}>
                         {setModalViewHandler(modalView)}
-                    </View>               
+                    </KeyboardAvoidingView>
                 </Modal>
             </NewTransactionContext.Provider>
         </View>
