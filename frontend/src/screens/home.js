@@ -18,53 +18,58 @@ import SelectCard from '../modal/home/selectCard';
 
 import NewTransactionContext from '../util/newTransactionContext';
 
+import  TransactionCard from '../components/transactionCard';
+import { Swipeable } from 'react-native-gesture-handler';
+
 const cardList = require('../creditCards.json');
 
 const Home = ({navigation}) => {
 
-
-    const [retrieve, setRetrieve] = React.useState(true);
-
+    const [retrieve, setRetrieve] = React.useState(false);
+    const [transactionList, setTransactionList] = React.useState([])
+ 
     React.useEffect(() => {
         const getTransactionHistory = async () => {
             try {
-                const transactionHistoryString = await AsyncStorage.getItem('transactionHistory');
-                const transactionHistory = JSON.parse(transactionHistoryString);
+                const transactionHistory = JSON.parse( await AsyncStorage.getItem('transactionHistory'));
                 setTransactionList(transactionHistory);
             } catch (e) {
                 console.error(e)
             }
         }
-        
-        if (retrieve) {
+        if (!retrieve) {
             getTransactionHistory();
-            setRetrieve(false);
+            setRetrieve(true);
         }
     }, [retrieve]);
 
-    const [transactionList, setTransactionList] = React.useState(
-       []
-    )
 
     const [modalView, setModalView] = React.useState(null)
-    const [newTransaction, setNewTransaction] = React.useState({
-        card: null,
-        amount: null,
-        date: null,
-        merchant: null,
-        category: null
-    })
+    const [newTransaction, setNewTransaction] = React.useState(null)
+
+    // id: Math.random(),   
+    // merchant: "McDonald's", 
+    // category: { 
+    //     id    : 3, 
+    //     name  : "Dining", 
+    //     icon  : "coffee",
+    //     type  : "feather",
+    //     color: "#de7300"
+    // },
+    // amount: {
+    //     value : 7.3,
+    //     currency : {
+    //         symbol : "S$",
+    //         code: 'SGD'
+    //     }
+    // }, 
+    // date: moment().format("DD MMM YYYY")
 
     const setTransactionHistory = async () => {
         try {
             setTransactionList((prevState) => 
                 [
-                    {   
-                        merchant: newTransaction.merchant, 
-                        card: newTransaction.category,
-                        amount: newTransaction.amount, 
-                        date: newTransaction.date.format('DD MMM')
-                    },
+                   newTransaction,
                     ...prevState
                 ]
             
@@ -91,7 +96,10 @@ const Home = ({navigation}) => {
             setNewTransaction((prevState) => { 
             return {
                 ...prevState,
-                amount: amount
+                amount: {
+                    ...prevState.amount,
+                    value: amount
+                }
             }});
         },
         setDate:  (date) => {
@@ -101,6 +109,13 @@ const Home = ({navigation}) => {
                 date: date
             }});
         },
+        setMerchant:  (merchant) => {
+            setNewTransaction((prevState) => { 
+                return {
+                    ...prevState,
+                    merchant: merchant
+                }});
+        },
         setCategory:  (category) => {
             setNewTransaction((prevState) => { 
             return {
@@ -108,18 +123,8 @@ const Home = ({navigation}) => {
                 category: category
             }});
         },
-        setMerchant:  (merchant) => {
-            setNewTransaction((prevState) => { 
-            return {
-                ...prevState,
-                merchant: merchant
-            }});
-        },
         addTransaction: () => {
-            
-
-            setTransactionHistory().then(console.log('hello'))
-            console.log(transactionList)
+            setTransactionHistory()
         }
     }))
     
@@ -142,6 +147,12 @@ const Home = ({navigation}) => {
         autoplay: true,
         index: 0
     })
+
+    const handleDelete = transaction => {
+        // const ind  = transactionLi9tionList);
+        const items = transactionList.filter(item => item.id !== transaction.id);
+        setTransactionList(items);
+    }
 
     return (
         <View style = {{flex : 1}}>
@@ -172,14 +183,55 @@ const Home = ({navigation}) => {
                         </View>
                         <View>
                             <ScrollView>
-                                {transactionList.map((transaction, index) => {
-                                    return <TranscationCard key = {index} transaction = {transaction}/>
-                                })}
+                            {
+                                retrieve ? (
+                                    <View>
+                                        <View>
+                                            {transactionList === null ? 'No Transaction Recorded' : transactionList.map((transaction, index) => {
+                                                return (
+                                                    <Swipeable
+                                                        renderRightActions = {() => (
+                                                                            <TouchableOpacity onPress = {() => {
+                                                                                    handleDelete(transaction)
+                                                                                }}>                                              
+                                                                                <View style = {{width: 50, justifyContent: 'center', alignContent: 'center'}}>
+                                                                                    <Icon  name = 'delete' type= 'materials'/>
+                                                                                </View>
+                                                                            </TouchableOpacity>
+                                                                            )}
+                                                        key = {index}>
+                                                        <TransactionCard transaction = {transaction}/>    
+                                                    </Swipeable>   
+                                                )
+                                            })}
+                                        </View>
+                                    </View>
+                                ) : (
+                                    <View>
+                                        <Text>Retrieving</Text>
+                                    </View>
+                                )
+                            }
                             </ScrollView>
                         </View>
                     </View>
                     <View style = {{marginBottom: 10}}>
-                        <TouchableOpacity style = {{alignItems: 'center', justifyContent: 'flex-end'} } onPress = {() => setModalView(0)}>
+                        <TouchableOpacity style = {{alignItems: 'center', justifyContent: 'flex-end'} } onPress = {() => {setModalView(0); setNewTransaction(
+                                                                            {
+                                                        id: Math.random(),
+                                                        merchant: null,
+                                                        category: null,
+                                                        amount: {
+                                                                value : null,
+                                                                currency : {
+                                                                    symbol : "S$",
+                                                                    code: 'SGD'
+                                                                }
+                                                            },
+                                                        date: null,
+                                                        card: null
+                                                    }
+                                                    )}}>
                             <View style ={{backgroundColor:'#8f4fbd', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 20}}>
                                 <Text style = {{color:'white'}}>+ New Spending</Text>
                             </View>

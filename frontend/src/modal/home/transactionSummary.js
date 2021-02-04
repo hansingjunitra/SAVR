@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, TouchableHighlight, TextInput } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, TouchableHighlight, TextInput, Image } from 'react-native';
 
 import { Icon } from 'react-native-elements';
 
@@ -20,7 +20,7 @@ const TransactionSummary = (props) => {
                         <Text>Amount</Text>
                     </View>
                     <View style = {{flex :1, alignContent: 'flex-start'}}>
-                        <Text style = {{fontWeight: "bold"}}>$ {props.summary.amount}</Text>
+                        <Text style = {{fontWeight: "bold"}}>$ {props.summary.amount.value}</Text>
                     </View>
                 </View>
                 <View style = {{flexDirection: 'row', flex: 1, width: '100%'}}>
@@ -28,7 +28,7 @@ const TransactionSummary = (props) => {
                         <Text>Date</Text>
                     </View>
                     <View style = {{flex :1, alignContent: 'flex-start'}}>
-                        <Text style = {{fontWeight: "bold"}}>{props.summary.date.format('DD/MM/YYYY')}</Text>
+                        <Text style = {{fontWeight: "bold"}}>{props.summary.date}</Text>
                     </View>
                 </View>
                 <View style = {{flexDirection: 'row', flex: 1, width: '100%'}}>
@@ -36,22 +36,20 @@ const TransactionSummary = (props) => {
                         <Text>Category</Text>
                     </View>
                     <View style = {{flex :1, alignContent: 'flex-start'}}>
-                        <Text style = {{fontWeight: "bold"}}>{props.summary.category}</Text>
+                        <Text style = {{fontWeight: "bold"}}>{props.summary.category.name}</Text>
                     </View>
                 </View>
             </View>
             <Text></Text>
             <View style = {{height: '40%', width: '60%'}}>
+                <Image source = {{uri: props.summary.card.image}} style = {{width:180, height:120, borderRadius:15}}/>
                 <View style = {{flex: 1, marginVertical: 5}}>
                     <Text style = {{fontSize: 10}}>Total Spending Progress</Text>
                     <Text style = {{fontSize: 10}}>$345 / 500</Text>
                 </View>
-                <View style = {{justifyContent: 'center', alignItems:'center', flex: 3, backgroundColor: props.summary.card.colorCode, marginVertical: 10, borderRadius: 20}}>
-                    <Text style = {{color: 'white'}}>{props.summary.card.bank}</Text>
-                </View>
             </View>
             <View style = {{height: '20%', justifyContent: 'center',  width: '80%'}}>
-                <TouchableOpacity style = {{backgroundColor: '#2196F3', padding: 10, borderRadius: 10}} onPress = {() => setModal(null)}>
+                <TouchableOpacity style = {{backgroundColor: '#2196F3', padding: 10, borderRadius: 10}} onPress = {() => {setModal(null)}}>
                     <View style = {{alignItems: 'center',}}>
                         <Text style = {{color: 'white'}}>Dismiss</Text>
                     </View>

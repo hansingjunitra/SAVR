@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity,  Image, TextInput, Alert, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableOpacity,  Image, TextInput, Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
 
 import { Icon } from 'react-native-elements';
 
@@ -12,16 +12,6 @@ var moment = require('moment');
 const SpendingDetails = (props) => {
     const [amountSpent, setAmountSpent] = React.useState(null)
     const [merchantName, setMerchantName] = React.useState(null)
-
-    const createTwoButtonAlert = () =>
-    Alert.alert(
-        "Warning",
-        "Please select a card",
-      [
-        { text: "OK"}
-      ],
-      { cancelable: false }
-    );
 
     const { setAmount, setModal, setDate, setMerchant } = React.useContext(NewTransactionContext);
 
@@ -38,12 +28,13 @@ const SpendingDetails = (props) => {
                     </View>
                 </View>
                 <View style = {{margin: 5, flex : 3, justifyContent: 'center'}}>
-                    <TextInput placeholder = {'Amount'} style ={{ borderWidth: 2, borderRadius: 10, padding: 10, borderColor: '#bdbdbd'}} keyboardType = {'numeric'} onChangeText = {(amount) => {amount === '' ? setAmountSpent(null) : setAmountSpent(amount)}}></TextInput>
+                    <TextInput placeholder = {'Amount'} style = {[styles.textInput, {borderWidth: 2}]} keyboardType = {'numeric'} 
+                                onChangeText = {(amount) => {amount === '' ? setAmountSpent(null) : setAmountSpent(amount)}}/>
                 </View>
             </View>
             <View style = {{marginVertical:10}}>
                 <Text>Where did you make the transaction?</Text>
-                <TextInput placeholder = {'Merchant Name'} style ={{ borderBottomWidth: 2, borderRadius: 10, padding: 10, borderColor: '#bdbdbd'}} onChangeText = {(merchant) => {merchant === '' ? setMerchantName(null) : setMerchantName(merchant)}}></TextInput>
+                <TextInput placeholder = {'Merchant Name'} style ={styles.textInput} onChangeText = {(merchant) => {merchant === '' ? setMerchantName(null) : setMerchantName(merchant)}}></TextInput>
             </View>
             <View >
                 <View style = {{alignItems : 'center'}}>
@@ -51,10 +42,10 @@ const SpendingDetails = (props) => {
                 </View>
                 <View style = {{flexDirection: 'row', width: '100%'}}>
                     <View style = {{alignItems : 'center', marginVertical: 20, flex :1}}>
-                        <TouchableOpacity style ={{margin:5, padding: 10, width: '50%', alignItems: 'center', borderRadius: 10, backgroundColor: '#9100d4'}} onPress = {() => {setAmount(amountSpent); setMerchant(merchantName); setDate(moment()); setModal(3)}}>
+                        <TouchableOpacity style ={[styles.button, {backgroundColor: '#9100d4'}]} onPress = {() => {setAmount(amountSpent); setMerchant(merchantName); setDate(moment().format("DD MMM YYYY")); setModal(3)}}>
                             <Text style = {{color: 'white'}}>Yes</Text> 
                         </TouchableOpacity>
-                        <TouchableOpacity style ={{margin:5, padding: 10, width: '50%', alignItems: 'center', borderRadius: 10, backgroundColor: '#00c0e6'}} onPress = {() => {setAmount(amountSpent); setMerchant(merchantName); setModal(2);}}>
+                        <TouchableOpacity style ={[styles.button, {backgroundColor: '#00c0e6'}]} onPress = {() => {setAmount(amountSpent); setMerchant(merchantName); setModal(2);}}>
                             <Text style = {{color: 'white'}}>Select Other Date</Text>
                         </TouchableOpacity>
                     </View>
@@ -63,5 +54,22 @@ const SpendingDetails = (props) => {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    textInput: {
+        borderBottomWidth: 2, 
+        borderRadius: 10, 
+        padding: 10, 
+        borderColor: '#bdbdbd'
+    },
+    button: {
+        margin:5, 
+        padding: 10, 
+        width: '50%', 
+        alignItems: 'center', 
+        borderRadius: 10,
+        color: 'white'
+    }
+})
 
 export default SpendingDetails;
