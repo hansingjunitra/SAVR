@@ -8,9 +8,9 @@ import NewTransactionContext from '../../util/newTransactionContext';
 
 const SelectCategory = () => {
 
-    const [ selectedCategory, setSelectedCategory ] = React.useState(null)
+    const [ selectedCategory, setSelectedCategory, setId ] = React.useState(null)
 
-    const { setModal, setCategory, addTransaction } = React.useContext(NewTransactionContext)
+    const { setModal, setCategory, addTransactionHandler } = React.useContext(NewTransactionContext)
 
     const categoryList = require('../../categories.json')
 
@@ -25,7 +25,7 @@ const SelectCategory = () => {
                     {categoryList.map((category, index) => {return (
                         <View style = {{alignItems: 'center', width: '33%', height: 80, padding: 5, justifyContent: 'center'}} key = {index}>
                             <View style = {[{width  : '95%', height: '95%', borderRadius:5, backgroundColor: '#D3D3D3', justifyContent: 'center', alignItems: 'center'}, selectedCategory === null ? null : (selectedCategory.id === category.id ? {backgroundColor: category.color} : null ) ]}>
-                                <TouchableOpacity onPress = {() => {setCategory(category); setSelectedCategory(category)}} activeOpacity = {1}>
+                                <TouchableOpacity onPress = {() => {setSelectedCategory(category)}} activeOpacity = {1}>
                                     <Icon name ={category.icon} type={category.type}/>
                                     <Text style ={{fontSize: 11.5}}>{category.name}</Text>                         
                                 </TouchableOpacity>
@@ -40,7 +40,7 @@ const SelectCategory = () => {
                 <TextInput placeholder = {'Merchant Name'} style = {{padding: 5}}/>
             </View>
             <View style = {{flexDirection: 'row', marginVertical: 5}}>
-                <TouchableOpacity style = {{flex: 1, alignItems: 'center'}} onPress = {() => {setModal(4); addTransaction()}}>
+                <TouchableOpacity style = {{flex: 1, alignItems: 'center'}} onPress = {() => {setModal(null); setCategory(category); setId();; addTransactionHandler()}}>
                     <Text>Confirm</Text>
                 </TouchableOpacity>
             </View>

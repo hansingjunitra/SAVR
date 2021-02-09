@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, TouchableHighlight, Alert, KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -10,242 +10,129 @@ import Modal from 'react-native-modal'
 import TranscationCard from '../components/transactionCard';
 import CardCard from '../components/cardCard';
 
+import { CreditCardRecordContext, TransactionRecordContext, NewTransactionContext } from '../util/context';
+
+import  TransactionCard from '../components/transactionCard';
+import { Swipeable, TouchableOpacity } from 'react-native-gesture-handler';
+
 import TransactionSummary from '../modal/home/transactionSummary';
 import SelectCategory from '../modal/home/selectCategory';
 import SelectDate from '../modal/home/selectDate';
 import SpendingDetails from '../modal/home/spendingDetails';
 import SelectCard from '../modal/home/selectCard';
 
-import NewTransactionContext from '../util/newTransactionContext';
-
-import  TransactionCard from '../components/transactionCard';
-import { Swipeable } from 'react-native-gesture-handler';
-
-const cardList = require('../creditCards.json');
+const moment = require('moment');
 
 const Home = ({navigation}) => {
 
-    const [retrieve, setRetrieve] = React.useState(false);
-    const [transactionList, setTransactionList] = React.useState([])
- 
-    React.useEffect(() => {
-        const getTransactionHistory = async () => {
-            try {
-                const transactionHistory = JSON.parse( await AsyncStorage.getItem('transactionHistory'));
-                setTransactionList(transactionHistory);
-            } catch (e) {
-                console.error(e)
-            }
-        }
-        if (!retrieve) {
-            getTransactionHistory();
-            setRetrieve(true);
-        }
-    }, [retrieve]);
+    const { addTransaction, deleteTransaction, getTransactionList } = React.useContext(TransactionRecordContext);
 
+    let transactionList = getTransactionList();
 
-    const [modalView, setModalView] = React.useState(null)
-    const [newTransaction, setNewTransaction] = React.useState(null)
+    let refsList = [];
 
-    // id: Math.random(),   
-    // merchant: "McDonald's", 
-    // category: { 
-    //     id    : 3, 
-    //     name  : "Dining", 
-    //     icon  : "coffee",
-    //     type  : "feather",
-    //     color: "#de7300"
-    // },
-    // amount: {
-    //     value : 7.3,
-    //     currency : {
-    //         symbol : "S$",
-    //         code: 'SGD'
-    //     }
-    // }, 
-    // date: moment().format("DD MMM YYYY")
-
-    const setTransactionHistory = async () => {
-        try {
-            setTransactionList((prevState) => 
-                [
-                   newTransaction,
-                    ...prevState
-                ]
-            
-            );
-            await AsyncStorage.setItem('transactionHistory', JSON.stringify(transactionList))
-        } catch (e) {
-            console.error(e)
-        }
+    const addTransactionHandler = () => {
+        addTransaction({
+            id: Math.random(),   
+            merchant: "Uniqlo's", 
+            category: { 
+                id: 4, 
+                name: "Beauty", 
+                icon: "shirt", 
+                type: "ionicon",
+                color: "#d41dde"
+            },
+            amount: {
+                value : Math.round(Math.random() * 10),
+                currency : {
+                    symbol : "S$",
+                    code: 'SGD'
+                }
+            }, 
+            date: moment().format("DD MMM YYYY")
+        })
     }
 
-    // Adding new transaction context, state is shared between different components
-    const newTransactionContext = React.useMemo(() => ({
-        setModal: (modal) => {
-            setModalView(modal)
+    const deleteTransactionHandler = (transaction) => {
+        deleteTransaction(transaction);
+        refsList.map((ref, index) => ref.close());
+    }
+
+    const [newTransaction, setNewTransaction] = React.useState({
+        id : null,
+        card: null,
+        merchant: null,
+        category: {
+            id : null,
+            name: null,
+            icon: null, 
+            type: null,
+            color: null
         },
-        setCard:  (card) => {
-            setNewTransaction((prevState) => { 
-            return {
-                ...prevState,
-                card: card
-            }});
+        amount: {
+            value: null,
+            currency : {
+                symbol : "S$",
+                code: 'SGD'
+            }
         },
-        setAmount:  (amount) => {
-            setNewTransaction((prevState) => { 
-            return {
-                ...prevState,
-                amount: {
-                    ...prevState.amount,
-                    value: amount
-                }
-            }});
-        },
-        setDate:  (date) => {
-            setNewTransaction((prevState) => { 
-            return {
-                ...prevState,
-                date: date
-            }});
-        },
-        setMerchant:  (merchant) => {
-            setNewTransaction((prevState) => { 
-                return {
-                    ...prevState,
-                    merchant: merchant
-                }});
-        },
-        setCategory:  (category) => {
-            setNewTransaction((prevState) => { 
-            return {
-                ...prevState,
-                category: category
-            }});
-        },
-        addTransaction: () => {
-            setTransactionHistory()
-        }
-    }))
-    
+        date: null
+    });
+
     const setModalViewHandler = (modal) => {
         switch (modal) {
-            case 0:
-                return <SelectCard/>
             case 1:
-                return <SpendingDetails summary = {newTransaction}/>
+                return <SelectCard/>
             case 2:
-                return <SelectDate/>
+                return <SpendingDetails summary = {newTransaction}/>
             case 3:
-                return <SelectCategory/>
+                return <SelectDate/>
             case 4:
+                return <SelectCategory/>
+            case 5:
                 return <TransactionSummary summary = {newTransaction}/>
         }
     }
 
-    const [cardSwiperProps, setCardSwiperProps] = React.useState({
-        autoplay: true,
-        index: 0
+    const newTransactionContext = React.useMemo(() => {
+
     })
 
-    const handleDelete = transaction => {
-        // const ind  = transactionLi9tionList);
-        const items = transactionList.filter(item => item.id !== transaction.id);
-        setTransactionList(items);
-    }
+    const [modalView, setModalView] = React.useState(null);
 
-    return (
-        <View style = {{flex : 1}}>
-            <NewTransactionContext.Provider value = {newTransactionContext}>
-                <View style = {{flex: 5, backgroundColor: '#edece8', }}>
-                    <View style={{flex: 2}}>
-                        <View style = {{alignItems : 'center', height: 40, justifyContent: 'center'}}>
-                            <Text style = {{fontSize: 20}}>
-                                My Cards
-                            </Text>
-                        </View>
-                        <Swiper autoplayTimeout = {5} autoplay = {cardSwiperProps.autoplay}>
-                            {cardList.map((card, index) => {
-                                return (
-                                    <View  key = {index} style = {{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-                                        <Image source = {{uri: card.image}} style={{height: 150, width: 250, borderRadius: 15}}/>
-                                    </View>
-                                )    
-                            })}
-                        </Swiper>
-                    </View>
-                
-                    <View style ={{flex: 3, backgroundColor: '#edece8', paddingVertical: 15}}>
-                        <View style = {{alignItems: 'center', justifyContent: 'center', marginVertical: 5}}>
-                            <Text style = {{fontSize: 16}}>
-                                Transaction History
-                            </Text>
-                        </View>
-                        <View>
-                            <ScrollView>
-                            {
-                                retrieve ? (
-                                    <View>
-                                        <View>
-                                            {transactionList === null ? 'No Transaction Recorded' : transactionList.map((transaction, index) => {
-                                                return (
-                                                    <Swipeable
-                                                        renderRightActions = {() => (
-                                                                            <TouchableOpacity onPress = {() => {
-                                                                                    handleDelete(transaction)
-                                                                                }}>                                              
-                                                                                <View style = {{width: 50, justifyContent: 'center', alignContent: 'center'}}>
-                                                                                    <Icon  name = 'delete' type= 'materials'/>
-                                                                                </View>
-                                                                            </TouchableOpacity>
-                                                                            )}
-                                                        key = {index}>
-                                                        <TransactionCard transaction = {transaction}/>    
-                                                    </Swipeable>   
-                                                )
-                                            })}
-                                        </View>
-                                    </View>
-                                ) : (
-                                    <View>
-                                        <Text>Retrieving</Text>
-                                    </View>
-                                )
-                            }
-                            </ScrollView>
-                        </View>
-                    </View>
-                    <View style = {{marginBottom: 10}}>
-                        <TouchableOpacity style = {{alignItems: 'center', justifyContent: 'flex-end'} } onPress = {() => {setModalView(0); setNewTransaction(
-                                                                            {
-                                                        id: Math.random(),
-                                                        merchant: null,
-                                                        category: null,
-                                                        amount: {
-                                                                value : null,
-                                                                currency : {
-                                                                    symbol : "S$",
-                                                                    code: 'SGD'
-                                                                }
-                                                            },
-                                                        date: null,
-                                                        card: null
-                                                    }
-                                                    )}}>
-                            <View style ={{backgroundColor:'#8f4fbd', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 20}}>
-                                <Text style = {{color:'white'}}>+ New Spending</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+    return ( 
+        <View>
+            <Text>Home Screen</Text>
+            {transactionList.length !== 0 ? transactionList.map((transaction, index) => {
+                return (
+                    <Swipeable ref = {(ref) => {refsList[index] = ref}} renderRightActions = {() => (
+                            <TouchableOpacity onPress = {() => { deleteTransactionHandler(transaction);}}>
+                                <View style = {{width: 50, height: 50, margin:3, justifyContent: 'center', alignContent: 'center'}}>
+                                    <Icon  name = 'delete' type= 'materials' size= {25}/>
+                                </View>
+                            </TouchableOpacity> )}key = {index}>
+                        <TranscationCard key = {index} transaction = {transaction}/>
+                    </Swipeable>
+                )
+            }) : <Text>There is no transaction recorded</Text>}
+            <TouchableOpacity onPress = {() => navigation.navigate('AddTransaction')}>
+                <View style = {styles.button1}>
+                    <Text>Add</Text>
                 </View>
-                <Modal isVisible={modalView === null ? false : true} onSwipeComplete={() => setModalView(null)} swipeDirection="down" style ={{margin:0}}>
-                    <KeyboardAvoidingView behavior = "height" enabled style = {{flex: 1, justifyContent: 'flex-end'}} keyboardVerticalOffset = {10}>
-                        {setModalViewHandler(modalView)}
-                    </KeyboardAvoidingView>
-                </Modal>
-            </NewTransactionContext.Provider>
+            </TouchableOpacity>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    button1: {
+        padding: 10,
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingHorizontal: 10,
+        alignSelf: 'flex-start',
+        margin: 10
+    }
+})
 
 export default Home;

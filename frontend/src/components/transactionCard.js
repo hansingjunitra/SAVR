@@ -3,7 +3,6 @@ import { View, Text } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 const TransactionCard = (props) => {
-
     return (
         <View style = {{ flexDirection: 'row',
                         backgroundColor:'white', margin: 3, shadowColor: '#000',

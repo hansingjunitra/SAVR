@@ -27,8 +27,10 @@ const AddTransaction = ({navigation}) => {
     return (
         <KeyboardAvoidingView style = {[{flex: 1, flexDirection: 'column'}, calendarModal ? {backgroundColor: 'rgba(0,0,0,0.5)'} : null]}>
             <View style = {{margin: 15, flex: 1}}>
-                <View style = {{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style = {{fontSize: 36}}> $ 20 </Text>
+                <View style = {{flex: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
+                    {/* <Text style = {{fontSize: 36}}> $ 20 </Text> */}
+                    <Text style = {{fontSize: 54}}>$</Text>
+                    <TextInput placeholder = {'0'} placeholderTextColor = {'black'} keyboardType={'decimal-pad'} style = {{fontSize: 54}}/>
                 </View>
                 <View style = {{flex: 1}}>
                     <View style = {{marginVertical: 10}}>

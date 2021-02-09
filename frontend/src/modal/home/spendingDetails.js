@@ -23,18 +23,18 @@ const SpendingDetails = (props) => {
             </View>
             <View style = {{flexDirection : 'row', marginVertical:10, height: 80}}>
                 <View style = {{ margin:5, flex : 2}}>
-                    <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center', borderRadius: 10}}>
+                    {/* <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center', borderRadius: 10}}>
                         <Image source = {{uri: props.summary.card.image}} style = {{height: '100%', width: '100%', borderRadius: 10}}></Image>
-                    </View>
+                    </View> */}
                 </View>
                 <View style = {{margin: 5, flex : 3, justifyContent: 'center'}}>
                     <TextInput placeholder = {'Amount'} style = {[styles.textInput, {borderWidth: 2}]} keyboardType = {'numeric'} 
-                                onChangeText = {(amount) => {amount === '' ? setAmountSpent(null) : setAmountSpent(amount)}}/>
+                                onChangeText = {(amount) => {amount === '' ? setAmountSpent(0) : setAmountSpent(amount)}}/>
                 </View>
             </View>
             <View style = {{marginVertical:10}}>
                 <Text>Where did you make the transaction?</Text>
-                <TextInput placeholder = {'Merchant Name'} style ={styles.textInput} onChangeText = {(merchant) => {merchant === '' ? setMerchantName(null) : setMerchantName(merchant)}}></TextInput>
+                <TextInput placeholder = {'Merchant Name'} style ={styles.textInput} onChangeText = {(merchant) => {merchant === '' ? setMerchantName('null') : setMerchantName(merchant)}}></TextInput>
             </View>
             <View >
                 <View style = {{alignItems : 'center'}}>
@@ -42,7 +42,7 @@ const SpendingDetails = (props) => {
                 </View>
                 <View style = {{flexDirection: 'row', width: '100%'}}>
                     <View style = {{alignItems : 'center', marginVertical: 20, flex :1}}>
-                        <TouchableOpacity style ={[styles.button, {backgroundColor: '#9100d4'}]} onPress = {() => {setAmount(amountSpent); setMerchant(merchantName); setDate(moment().format("DD MMM YYYY")); setModal(3)}}>
+                        <TouchableOpacity style ={[styles.button, {backgroundColor: '#9100d4'}]} onPress = {() => {setAmount(amountSpent); setMerchant(merchantName); setDate(moment().format("DD MMM YYYY")); setModal(3);}}>
                             <Text style = {{color: 'white'}}>Yes</Text> 
                         </TouchableOpacity>
                         <TouchableOpacity style ={[styles.button, {backgroundColor: '#00c0e6'}]} onPress = {() => {setAmount(amountSpent); setMerchant(merchantName); setModal(2);}}>

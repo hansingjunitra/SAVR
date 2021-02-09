@@ -32,7 +32,7 @@ const SelectCard = () => {
                 </ScrollView>
             </View>
             <View style = {{height: '15%', justifyContent: 'center', width: '40%'}}>
-                <TouchableOpacity style = {{margin:10, padding: 10, backgroundColor: '#2196F3', borderRadius: 10, alignItems: 'center'}} onPress = {() => {setCard(selectedCard); setModal(1)}}>
+                <TouchableOpacity style = {{margin:10, padding: 10, backgroundColor: '#2196F3', borderRadius: 10, alignItems: 'center'}} onPress = {() => {setCard(selectedCard); setModal(1); console.log('pressed')}}>
                         <Text style = {{color: 'white'}}>Confirm</Text>
                 </TouchableOpacity>
             </View>
