@@ -39,7 +39,7 @@ const Wallet = ({navigation}) => {
                 </View>
             </TouchableOpacity> */}
             <View style = {{flex: 6}}>
-                <Swiper autoplayTimeout = {10} autoplay = {true} showsPagination= {false}>
+                <Swiper autoplayTimeout = {10} autoplay = {true} showsPagination= {true}>
                     {creditCardList.map((card, index) => {
                         return (
                             <View key = {index} style = {{flex: 1}}>

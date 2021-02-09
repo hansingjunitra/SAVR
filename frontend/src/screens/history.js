@@ -15,7 +15,7 @@ const moment = require('moment');
 
 const History = () => {
 
-    const { getTransactionList, addTransaction, updateInternalStorage } = React.useContext(TransactionRecordContext);
+    const { getTransactionList, addTransaction, deleteTransaction, updateInternalStorage } = React.useContext(TransactionRecordContext);
 
     const initTransactionHistory = () => {
         addTransaction(
@@ -23,7 +23,7 @@ const History = () => {
                 id: Math.random(),   
                 merchant: "Texas", 
                 category: { 
-                    id: 3, 
+                    id: Math.random(), 
                     name: "Dining", 
                     icon: "coffee",
                     type: "feather",
@@ -51,8 +51,13 @@ const History = () => {
                         <View>
                             {getTransactionList() === null ? 'No Transaction Recorded' : getTransactionList().map((transaction, index) => {
                                 return (
-                                    <Swipeable key= {index}>
-                                        <TransactionCard transaction = {transaction}/>    
+                                    <Swipeable key= {index} renderRightActions = {() => ( 
+                                        <TouchableOpacity onPress = {() => { deleteTransaction(transaction)}}>                                              
+                                            <View style = {{width: 50, justifyContent: 'center', alignContent: 'center'}}>
+                                                <Icon  name = 'delete' type= 'materials'/>
+                                            </View>
+                                        </TouchableOpacity>)} key = {index}>
+                                        <TransactionCard transaction = {transaction}/> 
                                     </Swipeable>   
                                 )
                             })}
