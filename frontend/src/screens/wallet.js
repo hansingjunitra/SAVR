@@ -59,7 +59,7 @@ const Wallet = ({navigation}) => {
                                             <View style ={{width: '33%', height: 100, justifyContent: 'center', alignItems: 'center'}} key = {index}>
                                                 <Text style = {{fontSize: 20}}>$ {cashback.spent}</Text>
                                                 <Text style = {{textAlign: 'center', fontSize: 10}}>{cashback.eligibility}</Text>
-                                                <Text style = {{fontSize: 8}}>Cashback: {cashback.percentage * cashback.spent}</Text>
+                                                <Text style = {{fontSize: 8}}>Cashback: {(cashback.percentage * cashback.spent).toFixed(2)}</Text>
                                             </View>
                                         )})}
                                     </View>

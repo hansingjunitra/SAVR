@@ -5,7 +5,6 @@ import { Icon } from 'react-native-elements';
 
 import NewTransactionContext from '../../util/newTransactionContext';
 
-const cardList =  require('../../creditCards.json')
 const SelectCard = () => {
 
     const [selectedCard, setSelectedCard]  = React.useState(null);

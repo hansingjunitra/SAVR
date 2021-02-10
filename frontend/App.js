@@ -106,16 +106,52 @@ const App = () => {
         }
     }, [transactionList])
 
+    const updateTotalSpentHandler = (selectedCreditCard, newTransaction) => { 
+        setUpdateCreditCardList(true);
+        if (creditCardList !== null) {
+            const creditCardIndex = creditCardList.findIndex((creditCard) => creditCard['name'] == selectedCreditCard['name']);
+            const categoryIndex = creditCardList[creditCardIndex]['cashbacks'].findIndex((cashback) => cashback['eligibility'] == newTransaction['category']['name'])
+            setCreditCardList((prevState) => [
+                ...prevState.slice(0, creditCardIndex),
+                {
+                    ...prevState[creditCardIndex],
+                    totalSpent: prevState[creditCardIndex]['totalSpent'] + parseInt(newTransaction.amount.value),
+                    cashbacks: [
+                        ...prevState[creditCardIndex]['cashbacks'].slice(0, categoryIndex),
+                        {
+                            ...prevState[creditCardIndex]['cashbacks'][categoryIndex],
+                            spent: prevState[creditCardIndex]['cashbacks'][categoryIndex]['spent'] + parseInt(newTransaction.amount.value)
+                        },
+                        ...prevState[creditCardIndex]['cashbacks'].slice(categoryIndex + 1)
+                    ]
+                },
+                ...prevState.slice(creditCardIndex + 1)
+            ])
+        } else {
+            console.log('There is no such credit card');
+        }
+        // console.log(newTransaction);
+    }
+
     // Update specified credit card totalSpent amount
-    const updateTotalSpentHandler = async(creditCard, amount) => {
+    const editStorage = async(creditCard, amount, category, newTransaction) => {
         try {
             if (creditCardList !== null) {
-                const index = creditCardList.indexOf(creditCard);
+                const creditCardIndex = creditCardList.indexOf(creditCard);
+                const categoryIndex = creditCardList[creditCardIndex].cashbacks.findIndex((cashback) => cashback['eligibility'] == category)
+                console.log(creditCardIndex, categoryIndex, newTransaction);
                 setCreditCardList((prevState) => [
                     ...prevState.slice(),
-                    prevState[index] = {
-                        ...prevState[index],
-                        totalSpent: amount
+                    prevState[creditCardIndex] = {
+                        ...prevState[creditCardIndex],
+                        totalSpent: amount,
+                        cashbacks: [
+                            ...prevState[creditCardIndex]['cashbacks'],
+                            prevState[creditCardIndex]['cashbacks'][categoryIndex] = {
+                                ...prevState[creditCardIndex]['cashbacks'][categoryIndex]['spent'],
+                                spent: prevState[creditCardIndex]['cashbacks'][categoryIndex]['spent'] + amount 
+                            }
+                        ]
                     }
                 ])
             } else {
@@ -135,6 +171,7 @@ const App = () => {
             deleteTransactionHandler(transaction);
         },
         getTransactionList: () => {
+            console.log('Retrieving transactionList')
             if (transactionList !== null) {
                 return transactionList;
             } else {
@@ -147,8 +184,8 @@ const App = () => {
         addCreditCard: (creditCards) => {
             addNewCreditCardHandler(creditCards);
         },
-        updateTotalSpent: (creditCard, amount) =>{
-            updateTotalSpentHandler(creditCard, amount)
+        updateTotalSpent: (creditCard, newTransaction ) =>{
+            updateTotalSpentHandler(creditCard, newTransaction);
         },
         getCreditCardList: () => {
             if (creditCardList !== null) {

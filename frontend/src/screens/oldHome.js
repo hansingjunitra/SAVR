@@ -112,7 +112,7 @@ const Home = ({navigation}) => {
     }))
     
     const setModalViewHandler = (modal) => {
-        switch (modal) {
+            switch (modal) {
             case 0:
                 return <SelectCard/>
             case 1:
