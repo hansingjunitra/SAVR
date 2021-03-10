@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {} from 'react-native';
+import { View, Image, Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'react-native-elements';
@@ -13,49 +13,85 @@ import WalletTab from  './src/navigations/walletNavigation';
 
 import {CreditCardRecordContext, TransactionRecordContext} from './src/util/context';
 import { set } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native';
 
 const BottomTab = createBottomTabNavigator();
 
 const App = () => {
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
 
     const [transactionList, setTransactionList] = React.useState([]);
     const [creditCardList, setCreditCardList] = React.useState([]);
 
+    const [creditCardInformation, setCreditCardInformation] = React.useState([]);
+    
     const [updateTransactionList, setUpdateTransactionList] = React.useState(false);
     const [updateCreditCardList, setUpdateCreditCardList] = React.useState(false);
     
     const [retrieved, setRetrieved] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(true);
+    
+    /*
+        Handle application first load.
+        Fetch data from internal storage, while fetching display splash screen.
+    */
     React.useEffect(() => {
-        // When first load - get transactionList and user cards from internal storage
         const getTransactionHistory = async() => {
             console.log('First Retrieve')
             try {
-                const transcationRecord = JSON.parse( await AsyncStorage.getItem('transactionHistory'));
-                transcationRecord === null ? setTransactionList([]) : setTransactionList(transcationRecord);
+                const transactionRecord = JSON.parse( await AsyncStorage.getItem('transactionHistory'));
+                if (transactionRecord === null) {
+                    setTransactionList([]);
+                } else {
+                    setTransactionList(transactionRecord);
+                }
+
                 const creditCardRecord = JSON.parse( await AsyncStorage.getItem('creditCardRecord'));
-                creditCardRecord === null ? setCreditCardList([]) : setCreditCardList(creditCardRecord);
+                if (creditCardRecord === null) {
+                    setCreditCardList([]);
+                } else {
+                    setCreditCardList(creditCardRecord);
+                }
             } catch (e) {
                 console.error(e);
             }
         }
 
-        if (!retrieved) {
-            getTransactionHistory().then('Initial Transaction List');
-            setRetrieved(true);
-        } 
-    }, [retrieved]);
+        const getCreditCardInformation = async () => {
+            fetch("http://localhost:3000/creditcards")
+            .then(response => response.json())
+            .then(data => {
+                setCreditCardInformation(data);
+            })
+            .catch(err => console.error(err))
+        }
 
-    
-    // Update the internal storage when creditCardList changes except when first load
-    React.useEffect(() => {
-        const updateLocalStorage = async() => {
-            try {
-                await AsyncStorage.setItem('creditCardRecord', JSON.stringify(creditCardList));
-            } catch (e) {
-                console.log(e);
+        const getFirstLoad = () => {
+            if (!retrieved) {
+                getTransactionHistory().then(console.log('Initialized List'));
+                getCreditCardInformation().then(console.log('Received Card Info from backend.'));
+                setRetrieved(true);
+                setIsLoading(false);
             }
         }
+
+        setTimeout(getFirstLoad, 2000);
+
+    }, [retrieved]);
+  
+    /*
+        Update the credit card internal storage when creditCardList changes except when first load
+    */ 
+    React.useEffect(() => {
         if (updateCreditCardList) {
+            const updateLocalStorage = async() => {
+                try {
+                    await AsyncStorage.setItem('creditCardRecord', JSON.stringify(creditCardList));
+                } catch (e) {
+                    console.log(e);
+                }
+            }
             updateLocalStorage();
             setUpdateCreditCardList(false);
             console.log('Updated CreditCard Internal Storage')
@@ -80,24 +116,40 @@ const App = () => {
         setTransactionList(updatedTransactionList);
     }
     
-    // Update the internal storage when transasctionList changes except when first load
-    const addNewCreditCardHandler = (creditCards) => {
+    /*
+        Update the internal storage when transasctionList changes except when first load
+        Args : creditcCards obj []
+    */ 
+
+    const addNewCreditCardHandler = (creditCardList) => {
         setUpdateCreditCardList(true);
+
+        let res = [];
+        creditCardList.map((creditCard, index) => {
+            res.append({
+                id: creditCard.id,
+                
+            })
+        })
+
         setCreditCardList((prevState) => [
             ...prevState,
             ...creditCards
         ]);
     }
     
+    /*
+        Update the transaction history internal storage when transactionList changes except when first load
+    */ 
     React.useEffect(() => {
-        const updateLocalStorage = async() => {
-            try {
-                await AsyncStorage.setItem('transactionHistory', JSON.stringify(transactionList));
-            } catch (e) {
-                console.log(e);
-            }
-        }
         if (updateTransactionList) {
+            const updateLocalStorage = async() => {
+                try {
+                    await AsyncStorage.setItem('transactionHistory', JSON.stringify(transactionList));
+                } catch (e) {
+                    console.log(e);
+                }
+            }
             updateLocalStorage();
             setUpdateTransactionList(false);
             console.log('Updated TransactionHistory Internal Storage')
@@ -129,37 +181,6 @@ const App = () => {
             ])
         } else {
             console.log('There is no such credit card');
-        }
-        // console.log(newTransaction);
-    }
-
-    // Update specified credit card totalSpent amount
-    const editStorage = async(creditCard, amount, category, newTransaction) => {
-        try {
-            if (creditCardList !== null) {
-                const creditCardIndex = creditCardList.indexOf(creditCard);
-                const categoryIndex = creditCardList[creditCardIndex].cashbacks.findIndex((cashback) => cashback['eligibility'] == category)
-                console.log(creditCardIndex, categoryIndex, newTransaction);
-                setCreditCardList((prevState) => [
-                    ...prevState.slice(),
-                    prevState[creditCardIndex] = {
-                        ...prevState[creditCardIndex],
-                        totalSpent: amount,
-                        cashbacks: [
-                            ...prevState[creditCardIndex]['cashbacks'],
-                            prevState[creditCardIndex]['cashbacks'][categoryIndex] = {
-                                ...prevState[creditCardIndex]['cashbacks'][categoryIndex]['spent'],
-                                spent: prevState[creditCardIndex]['cashbacks'][categoryIndex]['spent'] + amount 
-                            }
-                        ]
-                    }
-                ])
-            } else {
-                console.log('There is no such credit card');
-            }
-            await AsyncStorage.setItem('creditCardRecord', JSON.stringify(creditCardList));
-        } catch (e) {
-            console.error(e);
         }
     }
     
@@ -193,11 +214,30 @@ const App = () => {
             } else {
                 return [];
             }
+        },
+        getCreditCardInformation: () => {
+            return creditCardInformation;
         }
     }))
 
+    const splashScreen = require('./src/assets/splashscreen.jpg')
+
+    // if (isLoading) {
+    //     console.log('Using Splash Screen', new Date())
+    //     return (
+    //         <View style = {{flex: 1}}>
+    //             <Image source = {splashScreen} style = {{height: '100%', width: '100%'}}></Image>
+    //         </View>
+    //     )
+    // }
+
     return (
         <>
+            {isLoading ? 
+            <View>
+                <Image source = {splashScreen} style = {{height: windowHeight, width: windowWidth, alignSelf: 'center'}}></Image>
+                {/* 4688 x 10150 */}
+            </View> : null}
             <CreditCardRecordContext.Provider value = {creditCardRecordContext} >
             <TransactionRecordContext.Provider value = {transactionRecordContext}>
                 <NavigationContainer>

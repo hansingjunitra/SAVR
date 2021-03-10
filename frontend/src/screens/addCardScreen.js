@@ -8,7 +8,9 @@ const AddCardScreen = ({navigation}) => {
 
     const allCreditCardList = require('../creditCards.json');
     const [creditCardList, setCreditCardList] = React.useState([]);
-    const { addCreditCard } = React.useContext(CreditCardRecordContext);
+    const { addCreditCard, getCreditCardInformation } = React.useContext(CreditCardRecordContext);
+
+    // const allCreditCardList = getCreditCardInformation();
 
     const addCreditCardHandler = (newCard) => {
         setCreditCardList((prevState) => [

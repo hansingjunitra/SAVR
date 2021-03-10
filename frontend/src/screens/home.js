@@ -8,6 +8,7 @@ import TranscationCard from '../components/transactionCard';
 import { CreditCardRecordContext, TransactionRecordContext, NewTransactionContext } from '../util/context';
 import  TransactionCard from '../components/transactionCard';
 import { Swipeable } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native';
 
 const moment = require('moment');
 
@@ -15,7 +16,7 @@ const Home = ({navigation}) => {
 
     var SendIntentAndroid = require("react-native-send-intent");
     const { getTransactionList, addTransaction, deleteTransaction, updateInternalStorage } = React.useContext(TransactionRecordContext);
-    const { getCreditCardList } = React.useContext(CreditCardRecordContext);
+    const { getCreditCardList, getCreditCardInformation } = React.useContext(CreditCardRecordContext);
 
     let refsList = [];
     let transactionList = getTransactionList();
@@ -37,15 +38,17 @@ const Home = ({navigation}) => {
 
     // Create context for the modals
     return ( 
-        <View style= {{flex:1}}>
+        <SafeAreaView style= {{flex:1}}>
+            {console.log('rendered')}
             <View style = {{alignItems: 'center', justifyContent: 'center', flex: 1}}>
                 <Text style = {styles.title}>Transaction History</Text>
             </View>
-            <View style = {{flex: 8}}>
+            {/* <View style = {{flex: 8}}>
                 <ScrollView style = {{flex: 1}}>
                     {
                         <View> 
-                            {transactionList === null ? 'No Transaction Recorded' : transactionList.map((transaction, index) => {
+                            {transactionList === null || transactionList === [] ? 'No Transaction Recorded' : transactionList.map((transaction, index) => {
+                                console.log(transactionList)
                                 return (
                                     <Swipeable ref = {(ref) => {refsList[index] = ref}} key= {index} renderRightActions = {() => ( 
                                         <TouchableOpacity onPress = {() => { deleteTransactionHandler(transaction)}}>
@@ -59,7 +62,7 @@ const Home = ({navigation}) => {
                         </View>
                     }
                 </ScrollView>
-            </View>
+            </View> */}
             <View style = {{flex: 1, alignItems: 'center'}}>
                 <TouchableOpacity onPress = {() => setModalVisibility(true)}>
                     <View style = {styles.button1}>
@@ -93,7 +96,7 @@ const Home = ({navigation}) => {
                     </View>
                 </View>
             </Modal>
-        </View>
+        </SafeAreaView>
     )
 }
 

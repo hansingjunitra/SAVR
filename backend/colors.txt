@@ -1,0 +1,14 @@
+Online      : #CF4D6F
+Contacless  : #FFDA22
+Others      : #E9EBF8
+Dining      : #CCFF66
+Grocery     : #576490
+Transport   : #FFB17A
+Petrol      : #A18276
+Travel      : #201335
+Rec Bills   : #0FA3B1
+Forex       : #FF9B42
+Food Delivery   : #FF715B
+Fast Food       : #E43F6F
+Learning / Retail   : #2D3319
+Streaming / TV      : #26547C

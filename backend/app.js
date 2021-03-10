@@ -13,6 +13,8 @@ const url = 'mongodb://localhost:27017';
 // Database Name
 var db = 'SAVR';
 
+// var creditCards =  require('./creditCards.json');
+
 mc.connect(url, (err, client) => {
     try {
         db = client.db('SAVR');
@@ -27,19 +29,19 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-
-
 app.get('/', (req, res) => {
-    var collection = db.collection('users');
-    var data = collection.findOne({'username':'johndoe'}, (err, item) => {
-        console.log(item)
+    // res.send(JSON.stringify({'Nothing Here'}))
+})
+
+app.get('/creditcards', (req, res) => {
+    db.collection('cards').find({}).toArray(function (err, docs) {
+        if (err) {
+            return res.status(500).send({error: err})
+        }
+        res.send(docs)
     })
 })
 
 app.listen(PORT, () => {
-    console.log('Example app listening')
+    console.log('SAVR Backend Listening')
 })

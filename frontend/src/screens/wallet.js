@@ -19,10 +19,32 @@ const Wallet = ({navigation}) => {
     }
 
     const creditCardList = getCreditCardList();
+
+    const getCashback = (cashback) => {
+        let value = cashback.percentage * cashback.spent
+        if (cashback.cap !== null ) {
+            if (value >= cashback.cap) {
+                let num = 23
+                console.log(num.toFixed(2))
+                return (cashback.cap).toFixed(2)
+            }
+        } else {
+            return value.toFixed(2)
+        }
+    }
+
+    const getProgress = (spent, minimum) => {
+        let value = spent / minimum;
+        if (value > 1) {
+            return 1;
+        } else {
+            return value;
+        }
+    }
     
     return (
         <View style = {{flex:1}}>
-            <View style = {{flex: 1, alignItems: 'center'}}>
+            <View style = {{flex: 1, alignItems: 'center', borderBottomLeftRadius: 20, borderBottomRightRadius: 20}}>
                 <TouchableOpacity onPress = {() => navigation.navigate('AddCardScreen')}>
                     <View style = {styles.button1}>
                         <Text>Add Credit Card</Text>
@@ -38,7 +60,7 @@ const Wallet = ({navigation}) => {
                         <Text>Add</Text>
                 </View>
             </TouchableOpacity> */}
-            <View style = {{flex: 6}}>
+            <View style = {{flex: 6, paddingTop: 25}}>
                 <Swiper autoplayTimeout = {10} autoplay = {true} showsPagination= {true}>
                     {creditCardList.map((card, index) => {
                         return (
@@ -50,7 +72,7 @@ const Wallet = ({navigation}) => {
                                     </View>
                                     <View style = {{alignItems: 'center'}}>
                                         <View style ={{height: 40, width: 200, borderRadius: 10}}>
-                                            <ProgressBar progress={card.totalSpent / card.minimum_spending} color={card.color.quartenary} style = {{height: '100%', borderRadius: 20}}/>
+                                            <ProgressBar progress={getProgress(card.totalSpent, card.minimum_spending)} color={card.color.quartenary} style = {{height: '100%', borderRadius: 20}}/>
                                             <Text style = {{position:'absolute', right: 10, top: 10}}>${card.totalSpent} / ${card.minimum_spending}</Text>
                                         </View>
                                     </View>
@@ -59,7 +81,7 @@ const Wallet = ({navigation}) => {
                                             <View style ={{width: '33%', height: 100, justifyContent: 'center', alignItems: 'center'}} key = {index}>
                                                 <Text style = {{fontSize: 20}}>$ {cashback.spent}</Text>
                                                 <Text style = {{textAlign: 'center', fontSize: 10}}>{cashback.eligibility}</Text>
-                                                <Text style = {{fontSize: 8}}>Cashback: {(cashback.percentage * cashback.spent).toFixed(2)}</Text>
+                                                <Text style = {{fontSize: 8}}>Cashback: {getCashback(cashback)}</Text>
                                             </View>
                                         )})}
                                     </View>
