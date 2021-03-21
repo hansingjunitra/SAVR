@@ -6,7 +6,7 @@
         "name": "DBS Live Fresh Card",
         "minimum_spending": 800,
         "maximum_rebates": 60,
-        "cashbacks": [
+        "categories": [
             {
                 "eligibility": "Online",
                 "percentage": 0.05,
@@ -53,7 +53,7 @@
         "name": "OCBC 365 Card",
         "minimum_spending": 800,
         "maximum_rebates": 80,
-        "cashbacks": [
+        "categories": [
             {
                 "eligibility": "Dining",
                 "percentage": 0.05,
@@ -141,7 +141,7 @@
         "name": "Citi Cashback",
         "minimum_spending": 800,
         "maximum_rebates": 80,
-        "cashbacks": [
+        "categories": [
             {
                 "eligibility": "Dining",
                 "percentage": 0.06,
@@ -198,7 +198,7 @@
         "name": "OCBC Frank",
         "minimum_spending": 600,
         "maximum_rebates": 100,
-        "cashbacks": [
+        "categories": [
             {
                 "eligibility": "Online",
                 "percentage": 0.06,
@@ -255,7 +255,7 @@
         "name": "Maybank Family and Friends",
         "minimum_spending": 500,
         "maximum_rebates": 80,
-        "cashbacks": [
+        "categories": [
             {
                 "eligibility": "Food Delivery",
                 "percentage": 0.05,
@@ -352,7 +352,7 @@
         "name": "HSBC Advance",
         "minimum_spending": 0,
         "maximum_rebates": 70,
-        "cashbacks": [
+        "categories": [
             {
                 "eligibility": "Others" ,
                 "percentage": 0.015,
@@ -379,7 +379,7 @@
         "name": "POSB Everyday",
         "minimum_spending": 0,
         "maximum_rebates": null,
-        "cashbacks": [
+        "categories": [
             {
                 "eligibility": "Online",
                 "percentage": 0.03,

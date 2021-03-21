@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { View, Image, Dimensions, Text } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CreditCardRecordContext, TransactionRecordContext} from './src/util/context';
-
+import {Navigator} from './src/navigation';
 import {CardContext, TransactionContext} from './src/context';
 
 import {SplashScreen} from './src/splashScreen';
-import {TestScreen} from './src/screens/testScreen';
 
 const App = () => {
     console.log("Render App.js")
@@ -25,6 +24,9 @@ const App = () => {
         },
         deleteCard: (card) => {
             console.log('Remove card');
+        },
+        updateCardListStorage: () => {
+            console.log('Update Card List Storage');
         }
     }));
 
@@ -37,22 +39,37 @@ const App = () => {
         },
         deleteTransaction: (transaction) => {
             console.log("Remove transaction");
+        },
+        updateTransationListStorage: () => {
+            console.log('Update Transaction List Storage');
         }
     }))
     
     React.useEffect(() => {
         console.log('Fetching Data From Internal Storage');
         const getFromStorage = async () => {
-            let fetchedCardList = null;
+            let fetchedCardList, fetchedTransactionList, fetchedCredentials = null;
             try {
                 fetchedCardList = await AsyncStorage.getItem('creditCardRecord');
+                fetchedTransactionList = await AsyncStorage.getItem('transactionHistory');
+
+                fetchedCredentials = await AsyncStorage.getItem('userCredentials');
+                if (fetchedCredentials == null) {
+                    // AsyncStorage.setItem()
+                    // Get customer_id for SaltEdge
+                }
+
             } catch (err) {
                 console.error(err);
             }
-            setCardList(fetchedCardList);
+            setCardList(JSON.parse(fetchedCardList));
         }
         getFromStorage();
         setTimeout(() => setRetrieving(false), 2000);
+
+        return () => {
+            console.log('Closing Application')
+        }
     }, [])
 
     if (retrieving) {
@@ -65,7 +82,7 @@ const App = () => {
         <>
             <CardContext.Provider value = {CardContextValue}>
             <TransactionContext.Provider value = {TransactionContextValue}>
-                <TestScreen/>
+                <Navigator/>
             </TransactionContext.Provider>
             </CardContext.Provider>
         </>
