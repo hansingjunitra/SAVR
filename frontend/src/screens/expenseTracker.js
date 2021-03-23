@@ -1,7 +1,6 @@
 import React, { createRef } from 'react';
 import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity } from 'react-native';
 
-
 import {TransactionContext} from '../context';
 
 export const ExpenseTracker = () => {

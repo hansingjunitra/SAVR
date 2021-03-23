@@ -1,12 +1,24 @@
 import React from 'react';
 
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View, TouchableOpacity, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {CreditCardRecordContext, TransactionRecordContext} from './src/util/context';
 import {Navigator} from './src/navigation';
-import {CardContext, TransactionContext} from './src/context';
+import {SHA1} from './src/sha1';
 
 import {SplashScreen} from './src/splashScreen';
+import {TokenInput} from './src/screens/TokenInput';
+import {CardContext, TransactionContext, TokenContext} from './src/context';
+
+const getUniqueId = (username) => {
+    // const shasum = crypto.createHash('sha1')
+    const date = new Date().getTime().toString();
+    const key = username + date;
+    // shasum.update(date + username)
+    const hash = SHA1(key);
+    // const hash = shasum.digest('hex') // => "0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33" 
+    return hash;
+    
+}
 
 const App = () => {
     console.log("Render App.js")
@@ -14,6 +26,7 @@ const App = () => {
     const [retrieving, setRetrieving] = React.useState(true);
     const [cardList, setCardList] = React.useState([]);
     const [transactionList, setTransactionList] = React.useState([]);
+    const [token, setToken] = React.useState({ id: null, name: null});
 
     const CardContextValue = React.useMemo(() => ({
         getCardList: () => {
@@ -44,6 +57,16 @@ const App = () => {
             console.log('Update Transaction List Storage');
         }
     }))
+
+    const TokenContextValue = React.useMemo(() => ({
+        getToken: () => {
+            return token;
+        },
+        setTokenName: (name) => {
+            setToken({...prevState, 'name': name, 'id': getUniqueId(name)});
+            // create new customer on saltedge 
+        }
+    }))
     
     React.useEffect(() => {
         console.log('Fetching Data From Internal Storage');
@@ -54,16 +77,15 @@ const App = () => {
                 fetchedTransactionList = await AsyncStorage.getItem('transactionHistory');
 
                 fetchedCredentials = await AsyncStorage.getItem('userCredentials');
-                if (fetchedCredentials == null) {
-                    // AsyncStorage.setItem()
-                    // Get customer_id for SaltEdge
-                }
-
             } catch (err) {
                 console.error(err);
             }
+
             setCardList(JSON.parse(fetchedCardList));
-        }
+            if (fetchedCredentials !== null) {
+                setCredentials(fetchedCredentials);
+            }
+    }
         getFromStorage();
         setTimeout(() => setRetrieving(false), 2000);
 
@@ -78,11 +100,16 @@ const App = () => {
         )
     }
 
+    // console.log(token.id, token.name)
+
     return (
         <>
             <CardContext.Provider value = {CardContextValue}>
             <TransactionContext.Provider value = {TransactionContextValue}>
+            <TokenContext.Provider value = {TokenContextValue}>
+                {/* {token.name === null ?  <TokenInput/> : <Navigator/>} */}
                 <Navigator/>
+            </TokenContext.Provider>
             </TransactionContext.Provider>
             </CardContext.Provider>
         </>
