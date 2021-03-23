@@ -1,6 +1,8 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Linking} from 'react-native';
 import {CardContext, CredentialsContext} from '../context';
+
+import {createConnection} from '../saltedge';
 
 const cardDetailsJSON = require('../creditCards.json'); 
 export const UserProfile = () => {
@@ -18,6 +20,15 @@ export const UserProfile = () => {
     })
 
     const credentials = getCredentials();
+
+    const syncOnlineHandler = async (customerID, bankCode) => {
+        try {
+            const res = await createConnection(customerID, bankCode)
+            Linking.openURL(res);
+        } catch (err) {
+            console.error(err);
+        }
+    }
     
     cardList.sort(function (a, b) {
         return (a.bank).localeCompare(b.bank);
@@ -35,7 +46,7 @@ export const UserProfile = () => {
                             <View style ={{flex: 1}}>                            
                                 <Text>{card.name}</Text>
                             </View>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress = {() => card.bank_saltedge_code != null ? syncOnlineHandler(credentials.saltEdgeID, card.bank_saltedge_code): null}>
                                 <View>
                                     <Text>Online Sync</Text>
                                 </View>
@@ -43,12 +54,13 @@ export const UserProfile = () => {
                         </View>
                 )})}
             </View>
+            <Text style ={{fontSize: 20}}>Token</Text>
             <Text>{JSON.stringify(credentials)}</Text>
-            <TouchableOpacity onPress={()=> deleteCredentials()}>
+            {/* <TouchableOpacity onPress={()=> deleteCredentials()}>
                 <Text>
                     Delete Credentials
                 </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     )
 }

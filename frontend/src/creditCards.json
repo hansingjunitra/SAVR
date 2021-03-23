@@ -2,6 +2,7 @@
     {
         "id": "0a3edbee018543f2f8dacaf367f4efd7",
         "bank": "DBS",
+        "bank_saltedge_code": "dbs_sg",
         "type": "credit",
         "name": "DBS Live Fresh Card",
         "minimum_spending": 800,
@@ -49,6 +50,7 @@
     {
         "id": "a6941304de7fafbf23902a51d2eab763",
         "bank": "OCBC",
+        "bank_saltedge_code": "ocbc_sg",
         "type": "credit",
         "name": "OCBC 365 Card",
         "minimum_spending": 800,
@@ -137,6 +139,7 @@
     {   
         "id": "3a4138f67d4aac0452ddd8e8b27349e9",
         "bank": "Citibank",
+        "bank_saltedge_code": "citibank_online_sg",
         "type": "credit",
         "name": "Citi Cashback",
         "minimum_spending": 800,
@@ -194,6 +197,7 @@
     {   
         "id": "f4275ee30f5f4197785a443ab15e333c",
         "bank": "OCBC",
+        "bank_saltedge_code": "ocbc_sg",
         "type": "credit",
         "name": "OCBC Frank",
         "minimum_spending": 600,
@@ -251,6 +255,7 @@
     {   
         "id": "041c4d3fca29fe2ff3bfcf9fae4f4aee",
         "bank": "Maybank",
+        "bank_saltedge_code": null,
         "type": "credit",
         "name": "Maybank Family and Friends",
         "minimum_spending": 500,
@@ -348,6 +353,7 @@
     {   
         "id": "8146d27e770d506e0d852c644adcb9f0",
         "bank": "HSBC",
+        "bank_saltedge_code": "hsbc_sg",
         "type": "credit",
         "name": "HSBC Advance",
         "minimum_spending": 0,
@@ -375,6 +381,7 @@
     {   
         "id": "ab3d753a2440046d2f8372e11ef73b2a",
         "bank": "POSB",
+        "bank_saltedge_code": null,
         "type": "credit",
         "name": "POSB Everyday",
         "minimum_spending": 0,

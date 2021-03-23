@@ -1,0 +1,833 @@
+{
+    "data": [
+        {
+            "id": "2270",
+            "code": "citibank_online_sg",
+            "name": "Citibank Online",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": false,
+            "interactive": true,
+            "instruction": "Please enter your internet banking credentials for us to establish a secure connection.",
+            "home_url": "https://www.citibank.com.sg",
+            "customer_notified_on_sign_in": false,
+            "login_url": "https://www.citibank.com.sg/SGGCB/JSO/signon/DisplayUsernameSignon.do",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/sg/citibank_online_sg.svg",
+            "country_code": "SG",
+            "created_at": "2014-12-09T16:26:05Z",
+            "updated_at": "2020-09-17T09:05:53Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [
+                "names"
+            ],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 480,
+            "optional_interactivity": false,
+            "max_fetch_interval": 365,
+            "supported_fetch_scopes": [
+                "accounts",
+                "holder_info",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "account_name",
+                "account_number",
+                "available_amount",
+                "card_type",
+                "credit_limit",
+                "next_payment_amount",
+                "next_payment_date",
+                "status"
+            ],
+            "supported_transaction_extra_fields": [],
+            "supported_account_natures": [
+                "account",
+                "checking",
+                "credit_card",
+                "investment",
+                "loan"
+            ],
+            "supported_account_types": [
+                "personal"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        },
+        {
+            "id": "2271",
+            "code": "dbs_sg",
+            "name": "DBS",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": false,
+            "interactive": true,
+            "instruction": "The sync process will fail if you are already logged in on the DBS Digibank application. You need to log out first in order for the sync process to work.",
+            "home_url": "http://www.dbs.com.sg/personal/default.page",
+            "customer_notified_on_sign_in": true,
+            "login_url": "https://internet-banking.dbs.com.sg",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/sg/dbs_sg.svg",
+            "country_code": "SG",
+            "created_at": "2014-12-09T16:26:05Z",
+            "updated_at": "2020-11-19T15:36:58Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [
+                "emails",
+                "names",
+                "phone_numbers"
+            ],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 240,
+            "optional_interactivity": false,
+            "max_fetch_interval": 180,
+            "supported_fetch_scopes": [
+                "accounts",
+                "holder_info",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "account_name",
+                "available_amount",
+                "card_type",
+                "cards",
+                "closing_balance",
+                "credit_limit",
+                "expiry_date",
+                "next_payment_amount",
+                "next_payment_date",
+                "open_date",
+                "unit_price",
+                "units"
+            ],
+            "supported_transaction_extra_fields": [
+                "type"
+            ],
+            "supported_account_natures": [
+                "account",
+                "credit",
+                "credit_card",
+                "insurance",
+                "investment",
+                "loan",
+                "mortgage",
+                "savings"
+            ],
+            "supported_account_types": [
+                "personal"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        },
+        {
+            "id": "2272",
+            "code": "scb_sg",
+            "name": "Standard Chartered",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": false,
+            "interactive": true,
+            "instruction": "Please enter your internet banking credentials for us to establish a secure connection.",
+            "home_url": "https://www.sc.com/sg",
+            "customer_notified_on_sign_in": true,
+            "login_url": "https://retail.sc.com/sg/nfs/login.htm",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/sg/scb_sg.svg",
+            "country_code": "SG",
+            "created_at": "2014-12-09T16:26:05Z",
+            "updated_at": "2020-12-29T08:25:14Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [
+                "names"
+            ],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 120,
+            "optional_interactivity": false,
+            "max_fetch_interval": 90,
+            "supported_fetch_scopes": [
+                "accounts",
+                "holder_info",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "account_name",
+                "account_number",
+                "available_amount",
+                "card_type",
+                "credit_limit",
+                "expiry_date"
+            ],
+            "supported_transaction_extra_fields": [
+                "closing_balance",
+                "transfer_account_name",
+                "transfer_account_name"
+            ],
+            "supported_account_natures": [
+                "account",
+                "checking",
+                "credit_card",
+                "investment",
+                "loan",
+                "mortgage",
+                "savings"
+            ],
+            "supported_account_types": [
+                "personal",
+                "business"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        },
+        {
+            "id": "2665",
+            "code": "ocbc_sg",
+            "name": "OCBC",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": false,
+            "interactive": true,
+            "instruction": "If you choose to login via mobile application make sure\nOCBC Mobile Banking application is installed and\nnotifications inside the application are enabled.\n",
+            "home_url": "http://www.ocbc.com/group/Group-Home.html",
+            "customer_notified_on_sign_in": false,
+            "login_url": "https://internet.ocbc.com/internet-banking",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/sg/ocbc_sg.svg",
+            "country_code": "SG",
+            "created_at": "2016-03-10T12:11:06Z",
+            "updated_at": "2020-06-17T15:35:02Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [
+                "emails",
+                "names",
+                "phone_numbers"
+            ],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 480,
+            "optional_interactivity": false,
+            "max_fetch_interval": 180,
+            "supported_fetch_scopes": [
+                "accounts",
+                "holder_info",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "account_name",
+                "available_amount",
+                "card_type",
+                "cards",
+                "client_name",
+                "credit_limit",
+                "next_payment_amount",
+                "next_payment_date",
+                "status",
+                "total_payment_amount"
+            ],
+            "supported_transaction_extra_fields": [
+                "information",
+                "original_amount",
+                "original_currency_code",
+                "posting_date"
+            ],
+            "supported_account_natures": [
+                "account",
+                "credit",
+                "credit_card",
+                "insurance",
+                "investment",
+                "loan",
+                "savings"
+            ],
+            "supported_account_types": [
+                "personal"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        },
+        {
+            "id": "2738",
+            "code": "uob_sg",
+            "name": "United Overseas",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": false,
+            "interactive": true,
+            "instruction": "Please enter your internet banking credentials for us to establish a secure connection.",
+            "home_url": "https://pib.uob.com.sg",
+            "customer_notified_on_sign_in": false,
+            "login_url": "https://pib.uob.com.sg/PIBLogin",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/sg/uob_sg.svg",
+            "country_code": "SG",
+            "created_at": "2016-06-10T09:32:30Z",
+            "updated_at": "2020-09-17T09:05:53Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [
+                "names"
+            ],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 480,
+            "optional_interactivity": false,
+            "max_fetch_interval": 60,
+            "supported_fetch_scopes": [
+                "accounts",
+                "holder_info",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "account_name",
+                "available_amount",
+                "card_type",
+                "cards",
+                "credit_limit",
+                "interest_rate",
+                "next_payment_amount",
+                "next_payment_date",
+                "total_payment_amount"
+            ],
+            "supported_transaction_extra_fields": [
+                "closing_balance",
+                "original_amount",
+                "original_currency_code",
+                "posting_date",
+                "record_number"
+            ],
+            "supported_account_natures": [
+                "account",
+                "checking",
+                "credit_card",
+                "investment",
+                "loan",
+                "mortgage",
+                "savings"
+            ],
+            "supported_account_types": [
+                "personal"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        },
+        {
+            "id": "2775",
+            "code": "american_express_sg",
+            "name": "American Express",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": true,
+            "interactive": false,
+            "instruction": "Please enter your internet banking credentials for us to establish a secure connection.",
+            "home_url": "https://www.americanexpress.com/sg",
+            "customer_notified_on_sign_in": false,
+            "login_url": "https://www.americanexpress.com/sg",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/sg/american_express_sg.svg",
+            "country_code": "SG",
+            "created_at": "2016-09-01T09:33:37Z",
+            "updated_at": "2020-11-10T10:07:20Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 480,
+            "optional_interactivity": false,
+            "max_fetch_interval": 365,
+            "supported_fetch_scopes": [
+                "accounts",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "account_name",
+                "available_amount",
+                "card_type",
+                "credit_limit",
+                "next_payment_amount",
+                "next_payment_date"
+            ],
+            "supported_transaction_extra_fields": [
+                "payee",
+                "posting_date"
+            ],
+            "supported_account_natures": [
+                "account",
+                "credit_card"
+            ],
+            "supported_account_types": [
+                "personal"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        },
+        {
+            "id": "2960",
+            "code": "cimb_bank_sg",
+            "name": "CIMB",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": false,
+            "interactive": true,
+            "instruction": "Please enter your internet banking credentials for us to establish a secure connection.",
+            "home_url": "https://www.cimbbank.com.sg/en/personal/index.html",
+            "customer_notified_on_sign_in": false,
+            "login_url": "https://www.cimbclicks.com.sg/clicks",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/sg/cimb_bank_sg.svg",
+            "country_code": "SG",
+            "created_at": "2017-07-31T20:47:53Z",
+            "updated_at": "2020-09-17T09:05:53Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 480,
+            "optional_interactivity": false,
+            "max_fetch_interval": 90,
+            "supported_fetch_scopes": [
+                "accounts",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "account_name",
+                "available_amount",
+                "card_type",
+                "credit_limit",
+                "interest_rate",
+                "investment_amount",
+                "next_payment_date",
+                "product_type",
+                "total_unit_value",
+                "unit_price"
+            ],
+            "supported_transaction_extra_fields": [
+                "closing_balance",
+                "posting_date"
+            ],
+            "supported_account_natures": [
+                "account",
+                "credit_card",
+                "investment",
+                "loan",
+                "savings"
+            ],
+            "supported_account_types": [
+                "personal"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        },
+        {
+            "id": "2986",
+            "code": "hsbc_sg",
+            "name": "HSBC",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": false,
+            "interactive": true,
+            "instruction": "The password is optional for the new interface, and is required for the old interface.",
+            "home_url": "https://www.hsbc.com.sg",
+            "customer_notified_on_sign_in": false,
+            "login_url": "https://www.hsbc.com.sg/security",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/sg/hsbc_sg.svg",
+            "country_code": "SG",
+            "created_at": "2017-10-16T15:27:57Z",
+            "updated_at": "2020-11-27T10:07:07Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [
+                "names"
+            ],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 480,
+            "optional_interactivity": false,
+            "max_fetch_interval": 365,
+            "supported_fetch_scopes": [
+                "accounts",
+                "holder_info",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "account_name",
+                "available_amount",
+                "blocked_amount",
+                "card_type",
+                "cards",
+                "credit_limit",
+                "interest_rate",
+                "next_payment_amount",
+                "next_payment_date",
+                "statement_cut_date"
+            ],
+            "supported_transaction_extra_fields": [
+                "additional",
+                "closing_balance",
+                "posting_date"
+            ],
+            "supported_account_natures": [
+                "account",
+                "card",
+                "credit_card",
+                "insurance",
+                "investment",
+                "loan",
+                "mortgage",
+                "savings"
+            ],
+            "supported_account_types": [
+                "personal"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        },
+        {
+            "id": "3045",
+            "code": "dbs_ideal_sg",
+            "name": "DBS IDEAL (Business)",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": false,
+            "interactive": true,
+            "instruction": "Please enter your internet banking credentials for us to establish a secure connection.",
+            "home_url": "https://ideal.dbs.com",
+            "customer_notified_on_sign_in": false,
+            "login_url": "https://ideal.dbs.com/loginSubscriberv2/login/pin",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/sg/dbs_ideal_sg.svg",
+            "country_code": "SG",
+            "created_at": "2018-02-15T11:56:52Z",
+            "updated_at": "2020-09-17T09:05:53Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 180,
+            "optional_interactivity": false,
+            "max_fetch_interval": 365,
+            "supported_fetch_scopes": [
+                "accounts",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "account_name",
+                "available_amount"
+            ],
+            "supported_transaction_extra_fields": [
+                "additional",
+                "closing_balance",
+                "original_category",
+                "posting_date"
+            ],
+            "supported_account_natures": [
+                "account",
+                "checking"
+            ],
+            "supported_account_types": [
+                "business"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        },
+        {
+            "id": "3046",
+            "code": "ocbc_velocity_sg",
+            "name": "OCBC Velocity (Business)",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": false,
+            "interactive": true,
+            "instruction": "Please enter your internet banking credentials for us to establish a secure connection.",
+            "home_url": "https://velocity.ocbc.com",
+            "customer_notified_on_sign_in": false,
+            "login_url": "https://velocity.ocbc.com/login.html",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/sg/ocbc_velocity_sg.svg",
+            "country_code": "SG",
+            "created_at": "2018-02-16T09:11:46Z",
+            "updated_at": "2020-09-17T09:05:53Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 480,
+            "optional_interactivity": true,
+            "max_fetch_interval": 365,
+            "supported_fetch_scopes": [
+                "accounts",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "account_name",
+                "available_amount",
+                "blocked_amount",
+                "current_date",
+                "current_time"
+            ],
+            "supported_transaction_extra_fields": [
+                "closing_balance",
+                "posting_date"
+            ],
+            "supported_account_natures": [
+                "account"
+            ],
+            "supported_account_types": [
+                "business"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        },
+        {
+            "id": "3670",
+            "code": "bank_of_china_sg",
+            "name": "Bank of China Singapore",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": false,
+            "interactive": true,
+            "instruction": "Please enter your internet banking credentials for us to establish a secure connection.",
+            "home_url": "http://www.boc.cn",
+            "customer_notified_on_sign_in": false,
+            "login_url": "https://ap.ebs.bankofchina.com/login_sin.html?bn=SG&bo=inv&",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/cn/bank_of_china_csv_cn.svg",
+            "country_code": "SG",
+            "created_at": "2018-06-25T17:05:06Z",
+            "updated_at": "2020-10-23T12:51:28Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 480,
+            "optional_interactivity": false,
+            "max_fetch_interval": 365,
+            "supported_fetch_scopes": [
+                "accounts",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "available_amount",
+                "card_type",
+                "cards",
+                "credit_limit"
+            ],
+            "supported_transaction_extra_fields": [
+                "closing_balance",
+                "original_amount",
+                "original_currency_code",
+                "posting_date"
+            ],
+            "supported_account_natures": [
+                "credit_card",
+                "savings"
+            ],
+            "supported_account_types": [
+                "personal"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        },
+        {
+            "id": "3879",
+            "code": "fundsupermart_sg",
+            "name": "Fundsupermart",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": false,
+            "interactive": true,
+            "instruction": "Please enter your internet banking credentials for us to establish a secure connection.",
+            "home_url": "https://secure.fundsupermart.com/fsm/home",
+            "customer_notified_on_sign_in": false,
+            "login_url": "https://secure.fundsupermart.com/fsm/account/login",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/xf/placeholder_global.svg",
+            "country_code": "SG",
+            "created_at": "2019-05-13T10:10:30Z",
+            "updated_at": "2021-02-08T16:57:34Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 480,
+            "optional_interactivity": false,
+            "max_fetch_interval": 365,
+            "supported_fetch_scopes": [
+                "accounts",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "account_name",
+                "account_number",
+                "asset_class",
+                "fund_holdings",
+                "indicative_unit_price",
+                "investment_amount",
+                "payment_type",
+                "product_type",
+                "profit_amount",
+                "profit_rate",
+                "total_unit_value",
+                "unit_price",
+                "units"
+            ],
+            "supported_transaction_extra_fields": [
+                "account_number",
+                "original_amount",
+                "original_currency_code",
+                "record_number",
+                "type",
+                "unit_price",
+                "units"
+            ],
+            "supported_account_natures": [
+                "account",
+                "investment"
+            ],
+            "supported_account_types": [
+                "personal"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        },
+        {
+            "id": "3880",
+            "code": "prudential_sg",
+            "name": "Prudential",
+            "mode": "web",
+            "status": "active",
+            "automatic_fetch": false,
+            "interactive": true,
+            "instruction": "For Corporate Policyholder, use Client Number.\n",
+            "home_url": "https://pruaccess.prudential.com.sg/pruaccess_sg",
+            "customer_notified_on_sign_in": false,
+            "login_url": "https://pruaccess.prudential.com.sg/pruaccess_sg/login.jsp",
+            "logo_url": "https://d1uuj3mi6rzwpm.cloudfront.net/logos/providers/xf/placeholder_global.svg",
+            "country_code": "SG",
+            "created_at": "2019-05-13T10:10:30Z",
+            "updated_at": "2020-08-18T14:23:46Z",
+            "timezone": "Asia/Singapore",
+            "refresh_timeout": 60,
+            "holder_info": [
+                "emails",
+                "extra",
+                "names",
+                "phone_numbers"
+            ],
+            "max_consent_days": null,
+            "identification_mode": "saltedge",
+            "max_interactive_delay": 480,
+            "optional_interactivity": false,
+            "max_fetch_interval": 60,
+            "supported_fetch_scopes": [
+                "accounts",
+                "holder_info",
+                "transactions"
+            ],
+            "supported_account_extra_fields": [
+                "account_name",
+                "cashback_amount",
+                "client_name",
+                "financial_consultant",
+                "fund_holdings",
+                "gross_surrender",
+                "guaranteed_gross_surrender",
+                "life_assured_name",
+                "next_payment_date",
+                "open_date",
+                "owned_policy_amount",
+                "paid_up_conversion_reversionary_bonus",
+                "payment_type",
+                "policy_components",
+                "policy_converted_to_paid_up",
+                "policy_loan_limit",
+                "premium_frequency",
+                "reversionary_bonus_cash_value",
+                "single_premium_amount",
+                "total_premium_amount",
+                "total_reversionary_bonus",
+                "total_unit_value"
+            ],
+            "supported_transaction_extra_fields": [],
+            "supported_account_natures": [
+                "account",
+                "insurance"
+            ],
+            "supported_account_types": [
+                "business",
+                "personal"
+            ],
+            "regulated": false,
+            "identification_codes": [],
+            "bic_codes": [],
+            "supported_iframe_embedding": true,
+            "payment_templates": [],
+            "supported_payment_fields": {},
+            "required_payment_fields": {}
+        }
+    ],
+    "meta": {
+        "next_id": null,
+        "next_page": null
+    }
+}
