@@ -6,8 +6,8 @@ import {Navigator} from './src/navigation';
 import {SHA1} from './src/sha1';
 
 import {SplashScreen} from './src/splashScreen';
-import {TokenInput} from './src/screens/TokenInput';
-import {CardContext, TransactionContext, TokenContext} from './src/context';
+import {CredentialsInput} from './src/screens/credentialsInput';
+import {CardContext, TransactionContext, CredentialsContext} from './src/context';
 
 const getUniqueId = (username) => {
     // const shasum = crypto.createHash('sha1')
@@ -17,8 +17,41 @@ const getUniqueId = (username) => {
     const hash = SHA1(key);
     // const hash = shasum.digest('hex') // => "0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33" 
     return hash;
-    
 }
+
+const createSaltEdgeCustomer = async (name, token) => {
+    const apiKey = require('./src/apikey.json')
+    const url = "https://www.saltedge.com/api/v5/customers"
+    const data = {
+        data: {
+            identifier: name + '-' + token
+        }
+    }
+    try {
+        const res = await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json',
+                "App-id": apiKey['App-id'],
+                "Secret": apiKey['Secret']
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: JSON.stringify(data) // body data type must match "Content-Type" header
+        }).then(response => {
+            return response.json();
+        });
+        console.log(res);
+        return res['data']['id'];
+    } catch (err) {
+        console.error(err);
+        return Error;
+    }
+}
+
 
 const App = () => {
     console.log("Render App.js")
@@ -26,7 +59,7 @@ const App = () => {
     const [retrieving, setRetrieving] = React.useState(true);
     const [cardList, setCardList] = React.useState([]);
     const [transactionList, setTransactionList] = React.useState([]);
-    const [token, setToken] = React.useState({ id: null, name: null});
+    const [credentials, setCredentials] = React.useState({ token: null, name: null, saltEdgeID: null});
 
     const CardContextValue = React.useMemo(() => ({
         getCardList: () => {
@@ -58,13 +91,19 @@ const App = () => {
         }
     }))
 
-    const TokenContextValue = React.useMemo(() => ({
-        getToken: () => {
-            return token;
+    const CredentialsContextValue = React.useMemo(() => ({
+        getCredentials: () => {
+            return credentials;
         },
-        setTokenName: (name) => {
-            setToken({...prevState, 'name': name, 'id': getUniqueId(name)});
-            // create new customer on saltedge 
+        createNewUser: async (name) => {
+            const token = getUniqueId(name);
+            const saltEdgeID = await createSaltEdgeCustomer(name, token);
+            await AsyncStorage.setItem('userCredentials', JSON.stringify({...credentials, name: name, token: token, saltEdgeID: saltEdgeID}));
+            setCredentials((prevState) => ({...prevState, name: name, token: token, saltEdgeID: saltEdgeID}));
+        },
+        deleteCredentials: async () => {
+            await AsyncStorage.removeItem('userCredentials');            
+            setCredentials({ token: null, name: null, saltEdgeID: null});
         }
     }))
     
@@ -75,7 +114,6 @@ const App = () => {
             try {
                 fetchedCardList = await AsyncStorage.getItem('creditCardRecord');
                 fetchedTransactionList = await AsyncStorage.getItem('transactionHistory');
-
                 fetchedCredentials = await AsyncStorage.getItem('userCredentials');
             } catch (err) {
                 console.error(err);
@@ -83,7 +121,7 @@ const App = () => {
 
             setCardList(JSON.parse(fetchedCardList));
             if (fetchedCredentials !== null) {
-                setCredentials(fetchedCredentials);
+                setCredentials(JSON.parse(fetchedCredentials));
             }
     }
         getFromStorage();
@@ -100,16 +138,13 @@ const App = () => {
         )
     }
 
-    // console.log(token.id, token.name)
-
     return (
         <>
             <CardContext.Provider value = {CardContextValue}>
             <TransactionContext.Provider value = {TransactionContextValue}>
-            <TokenContext.Provider value = {TokenContextValue}>
-                {/* {token.name === null ?  <TokenInput/> : <Navigator/>} */}
-                <Navigator/>
-            </TokenContext.Provider>
+            <CredentialsContext.Provider value = {CredentialsContextValue}>
+                {credentials.name == null ?  <CredentialsInput/> : <Navigator/>}
+            </CredentialsContext.Provider>
             </TransactionContext.Provider>
             </CardContext.Provider>
         </>
