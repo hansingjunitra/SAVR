@@ -24,8 +24,7 @@ export const createSaltEdgeCustomer = async (name, token) => {
         }).then(response => {
             return response.json();
         });
-        console.log(res);
-        return res['data']['id'];
+        return [res['data']['id'], res['data']['secret']];
     } catch (err) {
         console.error(err);
         return Error;
@@ -39,10 +38,10 @@ export const createConnection = async (customerID, bank) => {
             customer_id: customerID,
             country_code: "SG", 
             provider_code: bank,
-            daily_refresh: true,
             consent: {
                 from_date: "2021-03-01", //start of month YYYY--MM--DD
-                scopes: [ "account_details", "transactions_details" ]
+                scopes: [ "account_details", "transactions_details" ],
+                daily_refresh: true,
             },
             attempt: { 
                 from_date: "2021-03-01", //one year?
@@ -70,8 +69,59 @@ export const createConnection = async (customerID, bank) => {
         }).then(response => {
             return response.json();
         });
-        console.log(res);
+        // console.log(res);
         return res['data']['connect_url'];
+    } catch (err) {
+        console.error(err);
+        return Error;
+    }
+}
+
+export const getCustomerConnections = async (customerID) => {
+    const url = `https://www.saltedge.com/api/v5/connections?customer_id=${customerID}`
+    try {
+        const res = await fetch(url, {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json',
+                "App-id": apiKey['App-id'],
+                "Secret": apiKey['Secret']
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        }).then(response => {
+            return response.json();
+        });
+        // console.log(res);
+        return res['data'];
+    } catch (err) {
+        console.error(err);
+        return Error;
+    }
+}
+
+export const getConnectionAccounts = async (connectionID) => {
+    const url = `https://www.saltedge.com/api/v5/accounts?connection_id=${connectionID}`
+    try {
+        const res = await fetch(url, {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json',
+                "App-id": apiKey['App-id'],
+                "Secret": apiKey['Secret']
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        }).then(response => {
+            return response.json();
+        });
+        return res['data'];
     } catch (err) {
         console.error(err);
         return Error;

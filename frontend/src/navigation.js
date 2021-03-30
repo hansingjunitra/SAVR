@@ -7,6 +7,7 @@ import { Icon } from 'react-native-elements';
 import {UserProfile} from './screens/userProfile';
 import {RebateProgress} from './screens/rebateProgress';
 import {ExpenseTracker} from './screens/expenseTracker';
+import {AddCard} from './screens/addCard';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,6 +36,7 @@ const ProfileTab = () => {
     return (
         <ProfileStack.Navigator>
             <ProfileStack.Screen name = {"Profile"} component = {UserProfile} options = {{headerShown: false}}/>
+            <ProfileStack.Screen name = {"AddCard"} component = {AddCard} options = {{headerShown: false}}/>
         </ProfileStack.Navigator>
     )
 }

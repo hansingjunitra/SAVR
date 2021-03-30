@@ -9,15 +9,12 @@ import {SplashScreen} from './src/splashScreen';
 import {CredentialsInput} from './src/screens/credentialsInput';
 import {CardContext, TransactionContext, CredentialsContext} from './src/context';
 
-import {createSaltEdgeCustomer} from './src/saltedge';
+import {createSaltEdgeCustomer, getCustomerConnections, getConnectionAccounts} from './src/saltedge';
 
 const getUniqueId = (username) => {
-    // const shasum = crypto.createHash('sha1')
     const date = new Date().getTime().toString();
     const key = username + date;
-    // shasum.update(date + username)
     const hash = SHA1(key);
-    // const hash = shasum.digest('hex') // => "0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33" 
     return hash;
 }
 
@@ -27,20 +24,55 @@ const App = () => {
     const [retrieving, setRetrieving] = React.useState(true);
     const [cardList, setCardList] = React.useState([]);
     const [transactionList, setTransactionList] = React.useState([]);
-    const [credentials, setCredentials] = React.useState({ token: null, name: null, saltEdgeID: null});
+    const [credentials, setCredentials] = React.useState({ token: null, secret:null, username: null, saltEdgeID: null, connectionIDList: []});
+    /*
+        {
+            id: ____ ,
+            accountList : [
+                {
+                    id: ____ ,
+                    account_name: ____
+
+                }
+            ]
+        }
+    */
+    const [saltEdgeAccount, setSaltEdgeAccount] = React.useState({id: null, connectionList: []})
 
     const CardContextValue = React.useMemo(() => ({
         getCardList: () => {
+            // console.log(cardList);
             return cardList;
         },
-        addCard: (card) => {
+        addCard: (newCardList) => {
             console.log('Adding new card');
+            AsyncStorage.setItem('creditCardRecord', JSON.stringify([...cardList, ...newCardList]));
+            setCardList((prevState) => [...prevState, ...newCardList]);
         },
-        deleteCard: (card) => {
+        deleteCard: (removedCard) => {
+            const updatedList = cardList.filter((card) => card.id !== removedCard.id)
+            AsyncStorage.setItem('creditCardRecord', JSON.stringify([...updatedList]));
+            setCardList(updatedList);
             console.log('Remove card');
         },
         updateCardListStorage: () => {
             console.log('Update Card List Storage');
+        },
+        flushCards: () => {
+            AsyncStorage.setItem('creditCardRecord', JSON.stringify([]));
+            setCardList([]);
+        },
+        updateCardConnectionID: () => {
+            // let updatedCardList = cardList;
+            // for (let i = 0; i < updatedCardList.length; i++){
+            //     console.log(updatedCardList[i].bank)
+            //     console.log(credentials.connectionIDList)
+            //     const connection = credentials.connectionIDList.find(connection => updatedCardList[i].bank == connection.bank);
+            //     // updatedCardList[i][saltEdge][connectionId] = connection.id;
+            //     console.log('connection' , connection)
+            // }
+            // console.log(updatedCardList);
+            // setCardList(updatedCardList);
         }
     }));
 
@@ -63,15 +95,32 @@ const App = () => {
         getCredentials: () => {
             return credentials;
         },
-        createNewUser: async (name) => {
-            const token = getUniqueId(name);
-            const saltEdgeID = await createSaltEdgeCustomer(name, token);
-            await AsyncStorage.setItem('userCredentials', JSON.stringify({...credentials, name: name, token: token, saltEdgeID: saltEdgeID}));
-            setCredentials((prevState) => ({...prevState, name: name, token: token, saltEdgeID: saltEdgeID}));
+        createNewUser: async (username) => {
+            const token = getUniqueId(username);
+            const [saltEdgeID, secret] = await createSaltEdgeCustomer(username, token);
+            await AsyncStorage.setItem('userCredentials', JSON.stringify({...credentials, username: username, token: token, saltEdgeID: saltEdgeID, secret: secret}));
+            setCredentials((prevState) => ({...prevState, username: username, token: token, saltEdgeID: saltEdgeID, secret: secret}));
         },
         deleteCredentials: async () => {
             await AsyncStorage.removeItem('userCredentials');            
-            setCredentials({ token: null, name: null, saltEdgeID: null});
+            setCredentials({ token: null, username: null, secret:null, saltEdgeID: null, connectionIDList: []});
+        },
+        getConnections: async () => {
+            const customerID = credentials.saltEdgeID;
+            const connectionList = await getCustomerConnections(customerID);
+            let connectionIDList = [];
+            
+            for (let i = 0; i < connectionList.length; i++) {
+                const connection = connectionList[i];
+                connectionIDList.push({id: connection.id , bank: connection.provider_name});
+            }
+            // console.log(connectionIDList)
+            setCredentials((prevState) => ({...prevState, connectionIDList: connectionIDList}))
+        },
+        getAccounts: async (connectionID) => {
+            // console.log(credentials);
+            const accountList = await getConnectionAccounts(connectionID);
+            console.log(accountList);
         }
     }))
     
@@ -87,11 +136,13 @@ const App = () => {
                 console.error(err);
             }
 
-            setCardList(JSON.parse(fetchedCardList));
+            if (fetchedCardList !== null) {
+                setCardList(JSON.parse(fetchedCardList));
+            }
             if (fetchedCredentials !== null) {
                 setCredentials(JSON.parse(fetchedCredentials));
             }
-    }
+        }
         getFromStorage();
         setTimeout(() => setRetrieving(false), 2000);
 
@@ -111,7 +162,7 @@ const App = () => {
             <CardContext.Provider value = {CardContextValue}>
             <TransactionContext.Provider value = {TransactionContextValue}>
             <CredentialsContext.Provider value = {CredentialsContextValue}>
-                {credentials.name == null ?  <CredentialsInput/> : <Navigator/>}
+                {credentials.username == null ?  <CredentialsInput/> : <Navigator/>}
             </CredentialsContext.Provider>
             </TransactionContext.Provider>
             </CardContext.Provider>

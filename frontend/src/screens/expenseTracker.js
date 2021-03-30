@@ -9,14 +9,13 @@ export const ExpenseTracker = () => {
     const transactionList = getTransactionList();
 
     // transcationList.push();
-    console.log(transactionList);
+    // console.log(transactionList);
     // Sort by date
     // Show header
 
     return (
         <View style= {{flex:1, justifyContent: 'center', alignItems:'center'}}>
             <Text style = {{fontSize: 40}}>Expense Tracker</Text>
-            {console.log()}
         </View>
     )
 }

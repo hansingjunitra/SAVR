@@ -2,41 +2,61 @@ import React from 'react';
 import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { CreditCardRecordContext } from '../util/context';
+import { CardContext } from '../context';
 
-const AddCardScreen = ({navigation}) => {
+const allcardList = require('../creditCards.json');
+export const AddCard = ({navigation}) => {
 
-    const allCreditCardList = require('../creditCards.json');
-    const [creditCardList, setCreditCardList] = React.useState([]);
-    const { addCreditCard, getCreditCardInformation } = React.useContext(CreditCardRecordContext);
+    const [cardList, setCardList] = React.useState([]);
+    const { addCard, getCardList } = React.useContext(CardContext);
 
-    // const allCreditCardList = getCreditCardInformation();
+    const ownedCardList = getCardList();
 
-    const addCreditCardHandler = (newCard) => {
-        setCreditCardList((prevState) => [
+    const addcardHandler = (newCard) => {
+        let cardDetail = {
+            id: newCard.id,
+            spendingBreakdown: {},
+            iBankingSync: false,
+            saltEdge: {
+                connectionID: null,
+                accountID: null,
+                lastTransactionIDFetched: null
+            }
+        };
+
+        newCard.categories.map((category, index) => {
+            cardDetail.spendingBreakdown[category.eligibility] = 0
+        })
+
+        setCardList((prevState) => [
             ...prevState,
-            newCard
+            cardDetail
         ]);
         // TODO: Check if credit card is owned
     }
 
-    const removeCreditCard = (removedCard) => {
-        const updatedCreditCardList = creditCardList.filter((card) => card.id !== removedCard.id)
-        updatedCreditCardList !== null ? setCreditCardList(updatedCreditCardList) : setCreditCardList([])  
+    const removecard = (removedCard) => {
+        const updatedcardList = cardList.filter((card) => card.id !== removedCard.id)
+        updatedcardList !== null ? setCardList(updatedcardList) : setCardList([])  
     }
 
-    const setCard = (card) => {
-        if (creditCardList.includes(card)){
-            removeCreditCard(card);
+    const selectCardHandler = (card) => {
+        if (ownedCardList.find((owned) => owned.id == card.id)){
+            console.log('Card is owned');
+            return
+        }
+
+        if (cardList.find((owned) => owned.id == card.id)){
+            removecard(card);
         } else {
-            addCreditCardHandler(card);
+            addcardHandler(card);
         }
     }
 
     return (
         <View>
             <View style = {{alignItems: 'center'}}>
-                <TouchableOpacity style = {styles.button1} onPress = {() => {addCreditCard(creditCardList); navigation.goBack();}}>
+                <TouchableOpacity style = {styles.button1} onPress = {() => {addCard(cardList); navigation.goBack();}}>
                     <View>
                         <Text>Add</Text>
                     </View>
@@ -44,12 +64,12 @@ const AddCardScreen = ({navigation}) => {
             </View>
             <ScrollView>
                 <View style = {{flexDirection: 'row', flexWrap:'wrap'}}>
-                    {allCreditCardList.map((card, index) => {
+                    {allcardList.map((card, index) => {
                         return (
                             <View key = {index} style = {styles.cardContainer}>
-                                <TouchableOpacity onPress = {() => setCard(card)}>
+                                <TouchableOpacity onPress = {() => selectCardHandler(card)}>
                                     <Image source = {{uri: card.image}} 
-                                            style = {[styles.cardImage, creditCardList.includes(card) ? {borderWidth: 4, borderColor: card.color.quartenary, borderRadius: 5} : null]}/>
+                                            style = {[styles.cardImage, cardList.find((owned) => owned.id == card.id) != undefined ? {borderWidth: 4, borderColor: card.color.quartenary, borderRadius: 5} : null]}/>
                                     <View style = {styles.cardTextContainer}>
                                         <Text style = {styles.cardText}>{card.name}</Text>
                                     </View>
@@ -93,5 +113,3 @@ const styles = StyleSheet.create({
         margin: 10
     }
 })
-
-export default AddCardScreen;

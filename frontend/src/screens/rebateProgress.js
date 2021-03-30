@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
-import {CardContext} from '../context';
+import { CardContext, CredentialsContext } from '../context';
 import { ProgressBar, Colors } from 'react-native-paper';
 import Swiper from 'react-native-swiper';
 import { Icon } from 'react-native-elements';
@@ -10,7 +10,15 @@ const cardDetailsJSON = require('../creditCards.json');
 
 export const RebateProgress = () => {
     console.log('Render RebateProgress.js');
-    const {getCardList, addCard, deleteCard} = React.useContext(CardContext);
+    const {getCredentials, getConnections, getAccounts} = React.useContext(CredentialsContext);
+    const {getCardList, addCard, deleteCard, updateCardConnectionID} = React.useContext(CardContext);
+
+    React.useEffect( () => {
+        getConnections();
+        updateCardConnectionID();
+    },[])
+
+    const credentials = getCredentials();
     const cardList = getCardList();
 
     const getProgress = (totalSpent, minmumSpending) => {
@@ -35,24 +43,33 @@ export const RebateProgress = () => {
         }
     }
 
-    const getTotalSpent = (breakdown) => {
+    const getTotalSpent = (card) => {
         let total = 0
-        // Object.keys(breakdown).forEach(function(key) {
-        //     total +=
-        //     console.log(key, obj[key]);
-          
-        //   });
-
+        card.categories.map((category) => {
+            total += card.spendingBreakdown[category.eligibility]
+        })
         return total
     }
+
+    const getBankSyncStatus = (bank) => {
+        const connection = credentials.connectionIDList.find(connection => bank == connection.bank);
+        if (connection != undefined) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 
     return (
         <ScrollView>
             <View style = {{flex: 1, alignItems: 'center', backgroundColor:'white'}}>
                 <View style = {{flex: 1}}>
-                    <Swiper autoplayTimeout = {10} autoplay = {true} showsPagination= {false}>
+                    {/* <Text>{JSON.stringify(cardList)}</Text> */}
+                    <Swiper autoplayTimeout = {10} autoplay = {true} showsPagination= {true}>
                         {cardList.map((card, index) => {
-                            {/* console.log(card.breakdown); */}
+                            {/* console.log(card) */}
                             let cardDetail = cardDetailsJSON.find(d => d.id == card.id);
                             card = {...cardDetail, ...card};
                             return (
@@ -63,17 +80,33 @@ export const RebateProgress = () => {
                                         <View style = {{alignItems: 'center'}}>
                                             <View style ={{height: 40, width: 200, borderRadius: 10}}>
                                                 <ProgressBar progress={getProgress(card.totalSpent, card.minimum_spending)} color={card.color.quartenary} style = {{height: '100%', borderRadius: 20}}/>
-                                                <Text style = {{position:'absolute', right: 10, top: 10}}>${card.totalSpent} / ${card.minimum_spending}</Text>
+                                                <Text style = {{position:'absolute', right: 10, top: 10}}>${getTotalSpent(card)} / ${card.minimum_spending}</Text>
                                             </View>
                                         </View>
                                     </View>
-                                    <View style = {{height: 50}}>
+                                    <View style = {{flexDirection: 'row', paddingVertical: 10}}>
+                                        <Text>Bank Sync Status: {getBankSyncStatus(card.bank) ? 'Sync' : 'Not Sync'}</Text>
+                                        <TouchableOpacity style = {{flex: 1}}>
+                                            <View style = {{alignItems: 'center', justifyContent: 'center'}}>
+                                                <Text style = {{fontSize: 14}}>Sync</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style = {{flexDirection: 'row', paddingVertical: 10}}>
+                                        <Text>Account Sync Status: {card.iBankingSync ? 'Sync' : 'Not Sync'}</Text>
+                                        <TouchableOpacity style = {{flex: 1}} onPress ={() => getAccounts()} >
+                                            <View style = {{alignItems: 'center', justifyContent: 'center'}}>
+                                                <Text style = {{fontSize: 14}}>Sync</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                    {/* <View style = {{height: 50}}>
                                         <TouchableOpacity>
                                             <View style = {{alignItems: 'center', justifyContent: 'center'}}>
                                                 <Text style = {{fontSize: 20}}>Sync</Text>
                                             </View>
                                         </TouchableOpacity>
-                                    </View>
+                                    </View> */}
                                     <View style= {{flexWrap: 'wrap', flexDirection:'row', flex: 3}}>
                                         {card.categories.map((category, index) => {
                                             return (
@@ -83,10 +116,10 @@ export const RebateProgress = () => {
                                                         <Icon name = {category.icon.name} type = {category.icon.type} size={15} color= {'black'} borderRadius= {10}/>
                                                     </View>
                                                     <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                                                        <Text style = {{fontSize: 24, fontWeight:'bold'}}>${card.breakdown[category.eligibility]}</Text>
+                                                        <Text style = {{fontSize: 24, fontWeight:'bold'}}>${card.spendingBreakdown[category.eligibility]}</Text>
                                                     </View>
                                                     <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                                                        <Text style = {{fontSize: 12, fontWeight:'bold'}}>Cashback: ${getCashback(category.percentage, card.breakdown[category.eligibility], category.cap)}</Text>
+                                                        <Text style = {{fontSize: 12, fontWeight:'bold'}}>Cashback: ${getCashback(category.percentage, card.spendingBreakdown[category.eligibility], category.cap)}</Text>
                                                     </View>
                                                 </View>
                                             )
