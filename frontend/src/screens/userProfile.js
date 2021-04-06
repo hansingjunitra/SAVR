@@ -49,7 +49,7 @@ const SyncButton = (props) => {
                     <Text>Sync bank</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress = {() => connections != undefined ? syncAccountHandler(connections.id): alert("Sync bank first")}>
+            <TouchableOpacity onPress = {() => connections != undefined ? syncAccountHandler(connections.id, card.card_name): alert("Sync bank first")}>
             <View>
                 <Text>Sync card</Text>
             </View>
@@ -109,7 +109,7 @@ export const UserProfile = ({navigation}) => {
                     return (
                         <View key={index} style = {{padding: 10, width: '100%', flexDirection: 'row'}}>
                             <View style ={{flex: 1}}>
-                                <Text>{card.name}</Text>
+                                <Text>{card.card_name}</Text>
                             </View>
                             <View style ={{flex: 1}}>
                                 <SyncButton props = {{credentials: credentials, card: card}}/>

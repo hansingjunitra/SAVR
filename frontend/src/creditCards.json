@@ -4,7 +4,7 @@
         "bank": "DBS",
         "bank_saltedge_code": "dbs_sg",
         "type": "credit",
-        "name": "DBS Live Fresh Card",
+        "card_name": "DBS Live Fresh Card",
         "minimum_spending": 800,
         "maximum_rebates": 60,
         "categories": [
@@ -52,7 +52,7 @@
         "bank": "OCBC",
         "bank_saltedge_code": "ocbc_sg",
         "type": "credit",
-        "name": "OCBC 365 Card",
+        "card_name": "OCBC 365 Credit Card",
         "minimum_spending": 800,
         "maximum_rebates": 80,
         "categories": [
@@ -141,7 +141,7 @@
         "bank": "Citibank",
         "bank_saltedge_code": "citibank_online_sg",
         "type": "credit",
-        "name": "Citi Cashback",
+        "card_name": "Citi Cash Back®",
         "minimum_spending": 800,
         "maximum_rebates": 80,
         "categories": [
@@ -199,7 +199,7 @@
         "bank": "OCBC",
         "bank_saltedge_code": "ocbc_sg",
         "type": "credit",
-        "name": "OCBC Frank",
+        "card_name": "FRANK Credit Card",
         "minimum_spending": 600,
         "maximum_rebates": 100,
         "categories": [
@@ -257,7 +257,7 @@
         "bank": "Maybank",
         "bank_saltedge_code": null,
         "type": "credit",
-        "name": "Maybank Family and Friends",
+        "card_name": "Maybank Family and Friends",
         "minimum_spending": 500,
         "maximum_rebates": 80,
         "categories": [
@@ -355,7 +355,7 @@
         "bank": "HSBC",
         "bank_saltedge_code": "hsbc_sg",
         "type": "credit",
-        "name": "HSBC Advance",
+        "card_name": "Advance Credit Card",
         "minimum_spending": 0,
         "maximum_rebates": 70,
         "categories": [
@@ -383,7 +383,7 @@
         "bank": "POSB",
         "bank_saltedge_code": null,
         "type": "credit",
-        "name": "POSB Everyday",
+        "card_name": "POSB Everyday",
         "minimum_spending": 0,
         "maximum_rebates": null,
         "categories": [
