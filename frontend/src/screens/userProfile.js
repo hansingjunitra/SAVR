@@ -19,16 +19,20 @@ const syncOnlineHandler = async (customerID, bankCode) => {
 const syncAccountHandler = async (connectionID, cardName) => {
     try {
         const accounts = await getConnectionAccounts(connectionID);
+        var found = 0;
         try {
-            const card = accounts.data[0].extra.account_name;
-            if (card == cardName) {
-                const accountID = accounts.data[0].id;
-                const transactions = await getTransactions(connectionID, accountID);
-                console.log(transactions);
-                // TODO stuff with transactions
+            const acc = accounts.data;
+            for (i=0; i<acc.length; i++) {
+                if (acc[i].extra.account_name==cardName) {
+                    found = 1;
+                    const accountID = accounts.data[0].id;
+                    const transactions = await getTransactions(connectionID, accountID);
+                    console.log(transactions);
+                    // TODO stuff with transactions
+                }
             }
-            else {
-                alert("Card not found");
+            if (found==0) {
+                alert('Card not found');
             }
         }
         catch {
