@@ -1,0 +1,42 @@
+{
+    "name": "DBS Live Fresh Card",
+    "minimum_spending": 800,
+    "maximum_rebates": 60,
+    "categories": [
+        {
+            "eligibility": "Online",
+            "percentage": 0.05,
+            "cap": 20,
+            "icon":  {
+                "name": "laptop",
+                "type": "material",
+                "color": "#CF4D6F"
+            }
+        },
+        {
+            "eligibility": "Contactless",
+            "percentage": 0.05,
+            "cap": 20,
+            "icon":  {
+                "name": "contactless-payment",
+                "type": "material-community",
+                "color": "#FFDA22"
+            }
+        },
+        {
+            "eligibility": "Others",
+            "percentage": 0.003,
+            "cap": 20,
+            "icon":  {
+                "name": "dots-horizontal",
+                "type": "material-community",
+                "color": "#E9EBF8"
+            }
+        }
+    ],
+    "spending_breakdown": {
+        "catA": 100,
+        "catB": 203
+    },
+    "getRebates": "function () {\n        let res = 0\n        res = res + ((this.paywave.spent * this.paywave.percentage) <= this.paywave.cap ? (this.paywave.spent * this.paywave.percentage) : this.paywave.cap)\n        res = res + ((this.online.spent * this.online.percentage) <= this.online.cap ? (this.online.spent * this.online.percentage) : this.online.cap)\n        res = res + ((this.excluded.spent * this.excluded.percentage) <= this.excluded.cap ? (this.excluded.spent * this.excluded.percentage) : this.excluded.cap)\n        return res\n        // return 10;\n    }"
+}

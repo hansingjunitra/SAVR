@@ -1,0 +1,462 @@
+[
+    {
+        "id": "0a3edbee018543f2f8dacaf367f4efd7",
+        "bank": "DBS",
+        "bank_saltedge_code": "dbs_sg",
+        "type": "credit",
+        "name": "DBS Live Fresh Card",
+        "minimum_spending": 800,
+        "maximum_rebates": 60,
+        "categories": [
+            {
+                "eligibility": "Online",
+                "percentage": 0.05,
+                "cap": 20,
+                "icon":  {
+                    "name": "laptop",
+                    "type": "material",
+                    "color": "#CF4D6F"
+                }
+            },
+            {
+                "eligibility": "Contactless",
+                "percentage": 0.05,
+                "cap": 20,
+                "icon":  {
+                    "name": "contactless-payment",
+                    "type": "material-community",
+                    "color": "#FFDA22"
+                }
+            },
+            {
+                "eligibility": "Others",
+                "percentage": 0.003,
+                "cap": 20,
+                "icon":  {
+                    "name": "dots-horizontal",
+                    "type": "material-community",
+                    "color": "#E9EBF8"
+                }
+            }
+        ],
+        "color": {
+            "primary": "#051112",
+            "secondary": "#f2f3f3",
+            "tertiary": "#e86354",
+            "quartenary": "#22afb6"
+        },
+    },
+    {
+        "id": "a6941304de7fafbf23902a51d2eab763",
+        "bank": "OCBC",
+        "bank_saltedge_code": "ocbc_sg",
+        "type": "credit",
+        "name": "OCBC 365 Card",
+        "minimum_spending": 800,
+        "maximum_rebates": 80,
+        "categories": [
+            {
+                "eligibility": "Dining",
+                "percentage": 0.05,
+                "cap": null,
+                "icon":  {
+                    "name": "local-dining",
+                    "type": "material",
+                    "color": "#CCFF66"
+                }
+            },
+            {
+                "eligibility": "Grocery",
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "local-grocery-store",
+                    "type": "material",
+                    "color": "#576490"
+                }
+            },
+            {
+                "eligibility": "Transport",
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "train",
+                    "type": "material-community",
+                    "color": "#FFB17A"
+                }
+            },
+            {
+                "eligibility": "Petrol",
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "gas-pump",
+                    "type": "font-awesome-5",
+                    "color": "#A18276"
+                }
+            },
+            {
+                "eligibility": "Travel",
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "plane",
+                    "type": "font-awesome-5",
+                    "color": "#201335"
+                }
+            },
+            {
+                "eligibility": "Recurring Bills",
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "lightning-bolt",
+                    "type": "material-community",
+                    "color": "#0FA3B1"
+                }
+                
+            },
+            {
+                "eligibility": "Others" ,
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "dots-horizontal",
+                    "type": "material-community",
+                    "color": "#E9EBF8"
+                }
+            }
+        ],
+        "color": {
+            "primary": "#d01714",
+            "secondary": "#bdbdc0",
+            "tertiary": "#dbdbdb",
+            "quartenary": "#8d1107"
+        },
+    },
+    {   
+        "id": "3a4138f67d4aac0452ddd8e8b27349e9",
+        "bank": "Citibank",
+        "bank_saltedge_code": "citibank_online_sg",
+        "type": "credit",
+        "name": "Citi Cashback",
+        "minimum_spending": 800,
+        "maximum_rebates": 80,
+        "categories": [
+            {
+                "eligibility": "Dining",
+                "percentage": 0.06,
+                "cap": null,
+                "icon":  {
+                    "name": "local-dining",
+                    "type": "material",
+                    "color": "#CCFF66"
+                }
+            },
+            {
+                "eligibility": "Grocery",
+                "percentage": 0.08,
+                "cap": null,
+                "icon":  {
+                    "name": "local-grocery-store",
+                    "type": "material",
+                    "color": "#576490"
+                }
+            },
+            {
+                "eligibility": "Petrol",
+                "percentage": 0.08,
+                "cap": null,
+                "icon":  {
+                    "name": "gas-pump",
+                    "type": "font-awesome-5",
+                    "color": "#A18276"
+                }
+            },
+            {
+                "eligibility": "Others" ,
+                "percentage": 0.025,
+                "cap": null,
+                "icon":  {
+                    "name": "dots-horizontal",
+                    "type": "material-community",
+                    "color": "#E9EBF8"
+                }
+            }
+        ],
+        "color": {
+            "primary": "#0874b3",
+            "secondary": "#dead7c",
+            "tertiary": "#264ca4",
+            "quartenary": "#44bdde"
+        },
+    },
+    {   
+        "id": "f4275ee30f5f4197785a443ab15e333c",
+        "bank": "OCBC",
+        "bank_saltedge_code": "ocbc_sg",
+        "type": "credit",
+        "name": "OCBC Frank",
+        "minimum_spending": 600,
+        "maximum_rebates": 100,
+        "categories": [
+            {
+                "eligibility": "Online",
+                "percentage": 0.06,
+                "cap": null,
+                "icon":  {
+                    "name": "laptop",
+                    "type": "material",
+                    "color": "#CF4D6F"
+                }
+            },
+            {
+                "eligibility": "Contacless",
+                "percentage": 0.06,
+                "cap": null,
+                "icon":  {
+                    "name": "contactless-payment",
+                    "type": "material-community",
+                    "color": "#FFDA22"
+                }
+            },
+            {
+                "eligibility": "Physical Forex Transaction",
+                "percentage": 0.06,
+                "cap": null,
+                "icon":  {
+                    "name": "attach-money",
+                    "type": "material",
+                    "color": "#FF9B42"
+                }
+            },
+            {
+                "eligibility": "Others" ,
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "dots-horizontal",
+                    "type": "material-community",
+                    "color": "#E9EBF8"
+                }
+            }
+        ],
+        "color": {
+            "primary": "#ad2c2a",
+            "secondary": "#29262d",
+            "tertiary": "#dcd9da",
+            "quartenary": "#bf7d7b"
+        },
+    },
+    {   
+        "id": "041c4d3fca29fe2ff3bfcf9fae4f4aee",
+        "bank": "Maybank",
+        "bank_saltedge_code": null,
+        "type": "credit",
+        "name": "Maybank Family and Friends",
+        "minimum_spending": 500,
+        "maximum_rebates": 80,
+        "categories": [
+            {
+                "eligibility": "Food Delivery",
+                "percentage": 0.05,
+                "cap": null,
+                "icon":  {
+                    "name": "delivery-dining",
+                    "type": "material",
+                    "color": "#FF715B"
+                }
+            },
+            {
+                "eligibility": "Fast Food",
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "hamburger",
+                    "type": "font-awesome-5",
+                    "color": "#E43F6F"
+                }
+            },
+            {
+                "eligibility": "Grocery",
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "local-grocery-store",
+                    "type": "material",
+                    "color": "#576490"
+                }
+            },
+            {
+                "eligibility": "Transport",
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "train",
+                    "type": "material-community",
+                    "color": "#FFB17A"
+                }
+            },
+            {
+                "eligibility": "Petrol",
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "gas-pump",
+                    "type": "font-awesome-5",
+                    "color": "#A18276"
+                }
+            },
+            {
+                "eligibility": "Learning/Retail",
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "book",
+                    "type": "font-awesome-5",
+                    "color": "#2D3319"
+                }
+            },
+            {
+                "eligibility": "Tele/Streaming",
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "television",
+                    "type": "material-community",
+                    "color": "#26547C"
+                }
+            },
+            {
+                "eligibility": "Others" ,
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "dots-horizontal",
+                    "type": "material-community",
+                    "color": "#E9EBF8"
+                }
+            }
+        ],
+        "color": {
+            "primary": "#2b292b",
+            "secondary": "#54545c",
+            "tertiary": "#757577",
+            "quartenary": "#cacacb"
+        },
+    },
+    {   
+        "id": "8146d27e770d506e0d852c644adcb9f0",
+        "bank": "HSBC",
+        "bank_saltedge_code": "hsbc_sg",
+        "type": "credit",
+        "name": "HSBC Advance",
+        "minimum_spending": 0,
+        "maximum_rebates": 70,
+        "categories": [
+            {
+                "eligibility": "Others" ,
+                "percentage": 0.015,
+                "cap": null,
+                "icon":  {
+                    "name": "dots-horizontal",
+                    "type": "material-community",
+                    "color": "#E9EBF8"
+                }
+            }
+        ],
+        "color": {
+            "primary": "#54545c",
+            "secondary": "#6e2120",
+            "tertiary": "#853535",
+            "quartenary": "#dc848a"
+        }
+    },
+    {   
+        "id": "ab3d753a2440046d2f8372e11ef73b2a",
+        "bank": "POSB",
+        "bank_saltedge_code": null,
+        "type": "credit",
+        "name": "POSB Everyday",
+        "minimum_spending": 0,
+        "maximum_rebates": null,
+        "categories": [
+            {
+                "eligibility": "Online",
+                "percentage": 0.03,
+                "cap": 15,
+                "icon":  {
+                    "name": "laptop",
+                    "type": "material",
+                    "color": "#CF4D6F"
+                }
+            },
+            {
+                "eligibility": "Food Delivery",
+                "percentage": 0.08,
+                "cap": 15,
+                "icon":  {
+                    "name": "delivery-dining",
+                    "type": "material",
+                    "color": "#FF715B"
+                }
+            },
+            {
+                "eligibility": "Dining",
+                "percentage": 0.03,
+                "cap": 15,
+                "icon":  {
+                    "name": "local-dining",
+                    "type": "material",
+                    "color": "#CCFF66"
+                }
+            },
+            {
+                "eligibility": "Grocery",
+                "percentage": 0.05,
+                "cap": 40,
+                "icon":  {
+                    "name": "local-grocery-store",
+                    "type": "material",
+                    "color": "#576490"
+                }
+            },
+            {
+                "eligibility": "Petrol",
+                "percentage": 0.1,
+                "cap": null,
+                "icon":  {
+                    "name": "gas-pump",
+                    "type": "font-awesome-5",
+                    "color": "#A18276"
+                }
+            },
+            {
+                "eligibility": "Certain Elec/Tele Bills",
+                "percentage": 0.01,
+                "cap": 1,
+                "icon":  {
+                    "name": "lightning-bolt",
+                    "type": "material-community",
+                    "color": "#0FA3B1"
+                }
+            },
+            {
+                "eligibility": "Others" ,
+                "percentage": 0.003,
+                "cap": null,
+                "icon":  {
+                    "name": "dots-horizontal",
+                    "type": "material-community",
+                    "color": "#E9EBF8"
+                }
+            }
+        ],
+        "color": {
+            "primary": "#045ba3",
+            "secondary": "#75b9e3",
+            "tertiary": "#05235c",
+            "quartenary": "#b7daea"
+        }
+    }
+]

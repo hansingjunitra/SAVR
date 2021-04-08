@@ -1,0 +1,44 @@
+{
+    "id": "f4275ee30f5f4197785a443ab15e333c",
+    "bank": "OCBC",
+    "type": "credit",
+    "name": "OCBC Frank",
+    "minimum_spending": 600,
+    "maximum_rebates": 100,
+    "categories": [
+        {
+            "eligibility": "Online",
+            "percentage": 0.06,
+            "cap": null,
+            "icon":  {
+                "name": "laptop",
+                "type": "material",
+                "color": "#CF4D6F"
+            }
+        },
+        {
+            "eligibility": "Contactless",
+            "percentage": 0.06,
+            "cap": null,
+            "icon":  {
+                "name": "contactless-payment",
+                "type": "material-community",
+                "color": "#FFDA22"
+            }
+    ],
+    "color": {
+        "primary": "#ad2c2a",
+        "secondary": "#29262d",
+        "tertiary": "#dcd9da",
+        "quartenary": "#bf7d7b"
+    },
+    "image": (base64 string),
+    "spending_breakdown": {
+        "Online": 100,
+        "Contactless": 189
+    }
+}
+
+
+
+
