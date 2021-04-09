@@ -50,10 +50,10 @@ const App = () => {
             setCardList((prevState) => [...prevState, ...newCardList]);
         },
         deleteCard: (removedCard) => {
+            console.log('Remove card');
             const updatedList = cardList.filter((card) => card.id !== removedCard.id)
             AsyncStorage.setItem('creditCardRecord', JSON.stringify([...updatedList]));
             setCardList(updatedList);
-            console.log('Remove card');
         },
         updateCardListStorage: () => {
             console.log('Update Card List Storage');
@@ -62,15 +62,25 @@ const App = () => {
             AsyncStorage.setItem('creditCardRecord', JSON.stringify([]));
             setCardList([]);
         },
-        updateCardConnectionID: () => {
-            // let updatedCardList = cardList;
-            // for (let i = 0; i < updatedCardList.length; i++){
-            //     console.log(updatedCardList[i].bank)
-            //     console.log(credentials.connectionIDList)
+        updateCardConnectionID: (accountID, connectionID, cardName) => {
+            let updatedCardList = cardList;
+            console.log(updatedCardList.length);
+            for (let i = 0; i < updatedCardList.length; i++){
+                if (cardName == updatedCardList[i].card_name) {
+                    // console.log(Object.keys(updatedCardList[i].saltEdge))
+                    updatedCardList[i].saltEdge.connectionID = connectionID
+                    updatedCardList[i].saltEdge.accountID = accountID
+                    console.log(updatedCardList)
+                    setCardList(updatedCardList);
+                    break;
+                }
+            }
+
+                // console.log(updatedCardList[i])
+                //     console.log(credentials.connectionIDList)
             //     const connection = credentials.connectionIDList.find(connection => updatedCardList[i].bank == connection.bank);
-            //     // updatedCardList[i][saltEdge][connectionId] = connection.id;
-            //     console.log('connection' , connection)
-            // }
+                // updatedCardList[i][saltEdge][connectionId] = connection.id;
+                // console.log('connection' , connection)
             // console.log(updatedCardList);
             // setCardList(updatedCardList);
         }
@@ -82,6 +92,16 @@ const App = () => {
         },
         addTransaction: (transaction) => {
             console.log("Add transaction");
+        },
+        importSaltEdgeTransactions: (transactions) => {
+            console.log("Import Trasaction List");
+
+            let transactionArray = [...transactionList, ...transactions]
+            console.log(transactionArray);
+            // Sort by date
+            // transactionArray.sort()
+
+            setTransactionList(transactionArray);
         },
         deleteTransaction: (transaction) => {
             console.log("Remove transaction");
@@ -144,7 +164,7 @@ const App = () => {
             }
         }
         getFromStorage();
-        setTimeout(() => setRetrieving(false), 2000);
+        setTimeout(() => setRetrieving(false), 500);
 
         return () => {
             console.log('Closing Application')

@@ -7,7 +7,7 @@ import { AddCard } from './addCard';
 
 const cardDetailsJSON = require('../creditCards.json');
 
-const syncOnlineHandler = async (customerID, bankCode) => {
+const syncBankHandler = async (customerID, bankCode) => {
     try {
         const res = await createConnection(customerID, bankCode)
         Linking.openURL(res);
@@ -16,7 +16,7 @@ const syncOnlineHandler = async (customerID, bankCode) => {
     }
 }
 
-const syncAccountHandler = async (connectionID, cardName) => {
+const syncAccountHandler = async (connectionID, cardName, updateCardConnectionID) => {
     console.log(connectionID, cardName)
     try {
         const accounts = await getConnectionAccounts(connectionID);
@@ -27,8 +27,13 @@ const syncAccountHandler = async (connectionID, cardName) => {
                 if (acc[i].extra.account_name==cardName) {
                     found = 1;
                     const accountID = acc[i].id;
-                    const transactions = await getTransactions(connectionID, accountID);
-                    console.log(transactions.length, transactions);
+                    
+                    updateCardConnectionID(accountID, connectionID, cardName)
+
+                    // return accountID;
+                    // Update 
+                    // const transactions = await getTransactions(connectionID, accountID);
+                    // console.log(transactions.length, transactions);
                     // TODO stuff with transactions
                     // return
                 }
@@ -48,14 +53,17 @@ const syncAccountHandler = async (connectionID, cardName) => {
 const SyncButton = (props) => {
     const {credentials, card} = props.props
     const connections = credentials.connectionIDList.find((connection) => connection.bank == card.bank)
+
+    const {updateCardConnectionID} = React.useContext(CardContext);
+
     return (
         <View>
-            <TouchableOpacity onPress = {() => card.bank_saltedge_code != null ? syncOnlineHandler(credentials.saltEdgeID, card.bank_saltedge_code): null}>
+            <TouchableOpacity onPress = {() => card.bank_saltedge_code != null ? syncBankHandler(credentials.saltEdgeID, card.bank_saltedge_code): null}>
                 <View>
                     <Text>Sync bank</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress = {() => connections != undefined ? syncAccountHandler(connections.id, card.card_name): alert("Sync bank first")}>
+            <TouchableOpacity onPress = {() => connections != undefined ? syncAccountHandler(connections.id, card.card_name, updateCardConnectionID): alert("Sync bank first")}>
             <View>
                 <Text>Sync card</Text>
             </View>
@@ -88,9 +96,10 @@ export const UserProfile = ({navigation}) => {
     const {getCardList, flushCards, deleteCard} = React.useContext(CardContext);
     const {getCredentials, getConnections, getAccounts} = React.useContext(CredentialsContext);
 
-    React.useEffect(() => {
-        getConnections();
-    }, [])
+    // React.useEffect(() => {
+        // console.log('Render userProfile.js UseEffect');
+        // getConnections();
+    // }, [])
     
     let cardList = getCardList();
     cardList.map((card, index) => {

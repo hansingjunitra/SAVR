@@ -3,6 +3,19 @@ import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpac
 
 import {TransactionContext} from '../context';
 
+const TransactionEntry = (props) => {
+    const {transaction} = props.props
+    return (
+        <View style ={{margin: 10}}>
+            <Text>Amount: {transaction.amount}</Text>
+            <Text>Category: {transaction.category}</Text>
+            <Text>Date: {transaction.date}</Text>
+            <Text>Description: {transaction.description}</Text>
+            <Text>Merchant: {transaction.merchant}</Text>
+        </View>
+    )
+}
+
 export const ExpenseTracker = () => {
     console.log('Render ExpenseTracker.js');
     const {getTransactionList, addTransation, deleteTransaction} = React.useContext(TransactionContext);
@@ -16,6 +29,14 @@ export const ExpenseTracker = () => {
     return (
         <View style= {{flex:1, justifyContent: 'center', alignItems:'center'}}>
             <Text style = {{fontSize: 40}}>Expense Tracker</Text>
+            {/* <Text>{JSON.stringify(transactionList)}</Text> */}
+            <ScrollView style ={{flex:1}}>
+                {transactionList.map((transaction, index) => {
+                    return (    
+                        <TransactionEntry props={{transaction: transaction}} key ={index}/>
+                    )
+                })}
+            </ScrollView>
         </View>
     )
 }
