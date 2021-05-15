@@ -31,7 +31,7 @@ export const createSaltEdgeCustomer = async (name, token) => {
     }
 }
 
-export const createConnection = async (customerID, bank, deepLink) => {
+export const createConnection = async (customerID, bank) => {
     const url = "https://www.saltedge.com/api/v5/connect_sessions/create"
     const data = {
         data: {
@@ -45,7 +45,7 @@ export const createConnection = async (customerID, bank, deepLink) => {
             },
             attempt: { 
                 from_date: "2021-03-01", //one year?
-                return_to: deepLink,
+                return_to: "savr://home",
                 fetch_scopes: [ "accounts", "transactions" ],
                 custom_fields: {
                     test: true
@@ -70,7 +70,7 @@ export const createConnection = async (customerID, bank, deepLink) => {
         }).then(response => {
             return response.json();
         });
-        // console.log(res);
+        //console.log(res);
         return res['data']['connect_url'];
     } catch (err) {
         console.error(err);
