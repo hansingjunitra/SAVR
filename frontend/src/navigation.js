@@ -8,6 +8,7 @@ import {UserProfile} from './screens/userProfile';
 import {RebateProgress} from './screens/rebateProgress';
 import {ExpenseTracker} from './screens/expenseTracker';
 import {AddCard} from './screens/addCard';
+import {EditTransaction} from './screens/editTransaction';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +28,7 @@ const HistoryTab = () => {
     return (
         <HistoryStack.Navigator>
             <HistoryStack.Screen name = {"Profile"} component = {ExpenseTracker} options = {{headerShown: false}}/>
+            <HistoryStack.Screen name = {"EditTransactionScreen"} component = {EditTransaction} options = {{headerShown: false}}/>
         </HistoryStack.Navigator>
     )
 }

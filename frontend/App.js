@@ -9,7 +9,7 @@ import {SplashScreen} from './src/splashScreen';
 import {CredentialsInput} from './src/screens/credentialsInput';
 import {CardContext, TransactionContext, CredentialsContext} from './src/context';
 
-import {createSaltEdgeCustomer, getCustomerConnections, getConnectionAccounts} from './src/saltedge';
+import {createSaltEdgeCustomer, getCustomerConnections, getConnectionAccounts, getTransactions} from './src/saltedge';
 
 const getUniqueId = (username) => {
     const date = new Date().getTime().toString();
@@ -37,8 +37,6 @@ const App = () => {
             ]
         }
     */
-    const [saltEdgeAccount, setSaltEdgeAccount] = React.useState({id: null, connectionList: []})
-
     const CardContextValue = React.useMemo(() => ({
         getCardList: () => {
             // console.log(cardList);
@@ -51,9 +49,9 @@ const App = () => {
         },
         deleteCard: (removedCard) => {
             console.log('Remove card');
-            const updatedList = cardList.filter((card) => card.id !== removedCard.id)
-            AsyncStorage.setItem('creditCardRecord', JSON.stringify([...updatedList]));
-            setCardList(updatedList);
+            const updatedCardList = cardList.filter((card) => card.id !== removedCard.id)
+            AsyncStorage.setItem('creditCardRecord', JSON.stringify([...updatedCardList]));
+            setCardList(updatedCardList);
         },
         updateCardListStorage: () => {
             console.log('Update Card List Storage');
@@ -62,27 +60,61 @@ const App = () => {
             AsyncStorage.setItem('creditCardRecord', JSON.stringify([]));
             setCardList([]);
         },
-        updateCardConnectionID: (accountID, connectionID, cardName) => {
+        // updateCardConnectionID: () => {
+            // let updatedCardList = cardList;
+            // for (let i = 0; i < updatedCardList.length; i++){
+            //     for (let j = 0; j < credentials.connectionIDList.length; j++){
+                    // if (updatedCardList[i]. == updatedCardList[i].card_name) {
+                    //     // console.log(Object.keys(updatedCardList[i].saltEdge))
+                    //     updatedCardList[i].saltEdge.connectionID = connectionID
+                    //     updatedCardList[i].saltEdge.accountID = accountID
+                    //     console.log(updatedCardList[i].saltEdge)
+                    //     // setCardList(updatedCardList);
+                    //     break;
+                    // }
+                    // console.log
+            //     }
+            // }
+            // console.log(updatedCardList, credentials.connectionIDList)
+        // },
+        updateCardConnectionID: (accountID, connectionID, cardID) => {
             let updatedCardList = cardList;
-            console.log(updatedCardList.length);
             for (let i = 0; i < updatedCardList.length; i++){
-                if (cardName == updatedCardList[i].card_name) {
-                    // console.log(Object.keys(updatedCardList[i].saltEdge))
+                if (updatedCardList[i].id == cardID) {
                     updatedCardList[i].saltEdge.connectionID = connectionID
                     updatedCardList[i].saltEdge.accountID = accountID
-                    console.log(updatedCardList)
-                    setCardList(updatedCardList);
-                    break;
                 }
             }
-
-                // console.log(updatedCardList[i])
-                //     console.log(credentials.connectionIDList)
-            //     const connection = credentials.connectionIDList.find(connection => updatedCardList[i].bank == connection.bank);
-                // updatedCardList[i][saltEdge][connectionId] = connection.id;
-                // console.log('connection' , connection)
-            // console.log(updatedCardList);
-            // setCardList(updatedCardList);
+            AsyncStorage.setItem('creditCardRecord', JSON.stringify([...updatedCardList]));
+            setCardList(updatedCardList);
+        },
+        getCardConnectionAccount: async (card) => {
+            for (let i = 0; i < credentials.connectionIDList.length; i++){
+                if (card.bank == credentials.connectionIDList[i].bank) {
+                    const connectionID = credentials.connectionIDList[i].id;
+                    try {
+                        const accounts = await getConnectionAccounts(connectionID);
+                        for (let i=0; i<accounts.data.length; i++) {
+                            //cardName = "DBS eMulti-Currency Autosave Account";
+                            if (accounts.data[i].extra.account_name==card.card_name) {
+                                const accountID = accounts.data[i].id;
+                                let updatedCardList = cardList;
+                                for (let i = 0; i < updatedCardList.length; i++){
+                                    if (updatedCardList[i].id == card.id) {
+                                        updatedCardList[i].saltEdge.connectionID = connectionID;
+                                        updatedCardList[i].saltEdge.accountID = accountID;
+                                        updatedCardList[i].saltEdge.iBankingSync = true;
+                                    }
+                                }
+                                AsyncStorage.setItem('creditCardRecord', JSON.stringify([...updatedCardList]));
+                                setCardList(updatedCardList);
+                            }
+                        }
+                    } catch (err) {
+                        console.error(err)
+                    }
+                }
+            }
         }
     }));
 
@@ -93,21 +125,59 @@ const App = () => {
         addTransaction: (transaction) => {
             console.log("Add transaction");
         },
-        importSaltEdgeTransactions: (transactions) => {
-            console.log("Import Trasaction List");
+        fetchTransactions: async (connectionID, accountID, card) => {
+            const transactions = await getTransactions(connectionID, accountID);
+            let parsedTransactions = []
+            let lastTransactionID = card.saltEdge.lastTransactionIDFetched
+            for (let i = 0; i < transactions.length; i++) {
 
-            let transactionArray = [...transactionList, ...transactions]
-            console.log(transactionArray);
-            // Sort by date
-            // transactionArray.sort()
+                console.log(lastTransactionID, transactions[i].id,  lastTransactionID < transactions[i].id)
+                if (lastTransactionID < transactions[i].id) {
+                    lastTransactionID = transactions[i].id
+                    parsedTransactions.push(
+                        {
+                            id: transactions[i].id,
+                            cardID: card.id,
+                            amount: transactions[i].amount,
+                            category: transactions[i].category,
+                            description: transactions[i].description,
+                            date:   transactions[i].made_on,
+                            merchant: transactions[i].extra.merchant_id
+                        }
+                    )
+                }
+            }
+                    
+            let updatedTransactionList = [...transactionList, ...parsedTransactions]
+            let updatedCardList = cardList;
+            for (let i = 0; i < updatedCardList.length; i++){
+                if (card.id == updatedCardList[i].id) {
+                    updatedCardList[i].saltEdge.lastTransactionIDFetched = lastTransactionID;
+                    break
+                }
+            }
+            setTransactionList(updatedTransactionList);
+            AsyncStorage.setItem('transactionHistory', JSON.stringify([...updatedTransactionList]));
+            setCardList(updatedCardList);
+            AsyncStorage.setItem('creditCardRecord', JSON.stringify([...updatedCardList]));
 
-            setTransactionList(transactionArray);
         },
         deleteTransaction: (transaction) => {
             console.log("Remove transaction");
         },
+        updateTransaction: (updatedTransaction) => {
+            const index = transactionList.findIndex((transaction) => transaction.id == updatedTransaction.id);
+            transactionList[index] = updatedTransaction;
+
+            setTransactionList(transactionList);
+
+        },
         updateTransationListStorage: () => {
             console.log('Update Transaction List Storage');
+        },
+        flushTransactions: () => {
+            setTransactionList([]);
+            AsyncStorage.setItem('transactionHistory', JSON.stringify([]));
         }
     }))
 
@@ -134,13 +204,17 @@ const App = () => {
                 const connection = connectionList[i];
                 connectionIDList.push({id: connection.id , bank: connection.provider_name});
             }
-            // console.log(connectionIDList)
             setCredentials((prevState) => ({...prevState, connectionIDList: connectionIDList}))
         },
         getAccounts: async (connectionID) => {
             // console.log(credentials);
             const accountList = await getConnectionAccounts(connectionID);
-            console.log(accountList);
+            console.log(accountList, connectionID);
+        },
+        // hard set credentials for development purpose
+        setCredentials: async () => {
+            await AsyncStorage.setItem('userCredentials', JSON.stringify({...credentials, username: "Bobby", token: "491f970e1c69c8b7fced01e89c810d93eabc9f3d", saltEdgeID: "424595968315361542", secret: "BTFCggxUJDBoPtMvjmKN-zcNWGY7xZUmIsdQps30eak"}));
+            setCredentials((prevState) => ({...prevState, username: "Bobby", token: "491f970e1c69c8b7fced01e89c810d93eabc9f3d", saltEdgeID: "424595968315361542", secret: "BTFCggxUJDBoPtMvjmKN-zcNWGY7xZUmIsdQps30eak"}));
         }
     }))
     
@@ -161,6 +235,9 @@ const App = () => {
             }
             if (fetchedCredentials !== null) {
                 setCredentials(JSON.parse(fetchedCredentials));
+            }
+            if (fetchedTransactionList !== null) {
+                setTransactionList(JSON.parse(fetchedTransactionList));
             }
         }
         getFromStorage();

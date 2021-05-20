@@ -8,11 +8,11 @@ const allcardList = require('../creditCards.json');
 export const AddCard = ({navigation}) => {
 
     const [cardList, setCardList] = React.useState([]);
-    const { addCard, getCardList } = React.useContext(CardContext);
+    const { addCard, getCardList, getCardConnectionAccount } = React.useContext(CardContext);
 
     const ownedCardList = getCardList();
 
-    const addcardHandler = (newCard) => {
+    const addCardHandler = (newCard) => {
         let cardDetail = {
             id: newCard.id,
             spendingBreakdown: {},
@@ -49,14 +49,18 @@ export const AddCard = ({navigation}) => {
         if (cardList.find((owned) => owned.id == card.id)){
             removecard(card);
         } else {
-            addcardHandler(card);
+            addCardHandler(card);
         }
+    }
+
+    const getCardConnectionAccountHandler = (cardList) => {
+        cardList.map((card) => getCardConnectionAccount(card)); 
     }
 
     return (
         <View>
             <View style = {{alignItems: 'center'}}>
-                <TouchableOpacity style = {styles.button1} onPress = {() => {addCard(cardList); navigation.goBack();}}>
+                <TouchableOpacity style = {styles.button1} onPress = {() => {getCardConnectionAccountHandler(cardList); addCard(cardList); navigation.goBack();}}>
                     <View>
                         <Text>Add</Text>
                     </View>

@@ -123,7 +123,7 @@ export const getConnectionAccounts = async (connectionID) => {
             return response.json();
         });
         return res;
-        return res['data'];
+        // return res['data'];
     } catch (err) {
         console.error(err);
         return Error;
@@ -146,6 +146,7 @@ export const getTransactions = async (connectionID, accountID) => {
             redirect: 'follow', // manual, *follow, error
             referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
         }).then(response => {
+            console.log(response)
             return response.json();
         });
         return res['data'];

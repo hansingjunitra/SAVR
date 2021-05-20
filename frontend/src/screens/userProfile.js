@@ -100,8 +100,8 @@ const SyncStatus = (props) => {
 export const UserProfile = ({navigation}) => {
     console.log("Render User Profile");
 
-    const {getCardList, flushCards, deleteCard} = React.useContext(CardContext);
-    const {getCredentials, getConnections, getAccounts} = React.useContext(CredentialsContext);
+    const {getCardList, flushCards, deleteCard, updateCardConnectionID} = React.useContext(CardContext);
+    const {getCredentials, getConnections, getAccounts, setCredentials} = React.useContext(CredentialsContext);
 
     // React.useEffect(() => {
         // console.log('Render userProfile.js UseEffect');
@@ -181,7 +181,19 @@ export const UserProfile = ({navigation}) => {
                     Delete Cards
                 </Text>
             </TouchableOpacity>
-        </View>
-            </ScrollView>
+            <TouchableOpacity onPress={()=> setCredentials()} style ={{margin: 10}}>
+                <Text>
+                    Edit Credentials
+                </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={()=> updateCardConnectionID()} style ={{margin: 10}}>
+                <Text>
+                    Update Card Connection
+                </Text>
+            </TouchableOpacity>
+            
+            </View>
+        </ScrollView>
     )
 }

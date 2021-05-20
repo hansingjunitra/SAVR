@@ -1,39 +1,59 @@
 import React, { createRef } from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Touchable } from 'react-native';
 
 import {TransactionContext} from '../context';
+import {EditTransaction} from './editTransaction';
 
 const TransactionEntry = (props) => {
-    const {transaction} = props.props
+    const {transaction, route, navigation} = props.props
     return (
-        <View style ={{margin: 10}}>
-            <Text>Amount: {transaction.amount}</Text>
-            <Text>Category: {transaction.category}</Text>
-            <Text>Date: {transaction.date}</Text>
-            <Text>Description: {transaction.description}</Text>
-            <Text>Merchant: {transaction.merchant}</Text>
-        </View>
+        <TouchableOpacity onPress = {()=> navigation.navigate("EditTransactionScreen", transaction)}>
+            <View style ={{margin: 10}}>
+                <Text>Amount: {transaction.amount}</Text>
+                <Text>Category: {transaction.category}</Text>
+                <Text>Date: {transaction.date}</Text>
+                <Text>Description: {transaction.description}</Text>
+                <Text>Merchant: {transaction.merchant}</Text>
+            </View>
+        </TouchableOpacity>
     )
 }
 
-export const ExpenseTracker = () => {
+export const ExpenseTracker = ({route, navigation}) => {
     console.log('Render ExpenseTracker.js');
-    const {getTransactionList, addTransation, deleteTransaction} = React.useContext(TransactionContext);
-    const transactionList = getTransactionList();
+    const {getTransactionList, addTransaction, deleteTransaction, flushTransactions} = React.useContext(TransactionContext);
 
+    const [refresh, setRefresh] = React.useState(false);
     // transcationList.push();
-    // console.log(transactionList);
+    const transactionList = getTransactionList().sort((a, b) => new Date(b.date) - new Date(a.date))
     // Sort by date
     // Show header
+
+    if (refresh) {
+        setRefresh(false);
+    }
 
     return (
         <View style= {{flex:1, justifyContent: 'center', alignItems:'center'}}>
             <Text style = {{fontSize: 40}}>Expense Tracker</Text>
-            {/* <Text>{JSON.stringify(transactionList)}</Text> */}
+            <View style = {{height: 50}}>
+                <TouchableOpacity onPress = {() => setRefresh(true)}>
+                    <View style = {{alignItems: 'center', justifyContent: 'center'}}>
+                        <Text style = {{fontSize: 20}}>Refresh</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+            <View style = {{height: 50}}>
+                <TouchableOpacity onPress = {() => flushTransactions()}>
+                    <View style = {{alignItems: 'center', justifyContent: 'center'}}>
+                        <Text style = {{fontSize: 20}}>Flush</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
             <ScrollView style ={{flex:1}}>
                 {transactionList.map((transaction, index) => {
                     return (    
-                        <TransactionEntry props={{transaction: transaction}} key ={index}/>
+                        <TransactionEntry props={{transaction: transaction, route: route, navigation: navigation}} key ={index}/>
                     )
                 })}
             </ScrollView>

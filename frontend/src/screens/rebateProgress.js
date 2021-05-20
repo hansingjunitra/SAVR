@@ -10,37 +10,19 @@ import {createConnection, getConnectionAccounts, getCustomerConnections, getTran
 
 const cardDetailsJSON = require('../creditCards.json'); 
 
-const fetchTransactions =  async (connectionID, accountID, importSaltEdgeTransactions) => {
-    const transactions = await getTransactions(connectionID, accountID);
-    // console.log(transactions.length, transactions);
-    let parsedTransactions = []
-
-    for (let i = 0; i < transactions.length; i++) {
-        parsedTransactions.push(
-            {
-                amount: transactions[i].amount,
-                category: transactions[i].category,
-                description: transactions[i].description,
-                date:   transactions[i].made_on,
-                merchant: transactions[i].extra.merchant_id
-            }
-        )
-    }
-
-    importSaltEdgeTransactions(parsedTransactions);
-}
-
 export const RebateProgress = () => {
     console.log('Render RebateProgress.js');
     const {getCredentials, getConnections, getAccounts} = React.useContext(CredentialsContext);
-    const {getCardList, addCard, deleteCard, updateCardConnectionID} = React.useContext(CardContext);
-    const {importSaltEdgeTransactions} = React.useContext(TransactionContext);
+    const {getCardList, addCard, deleteCard, updateCardConnectionID, getCardConnectionAccount} = React.useContext(CardContext);
+    const {fetchTransactions} = React.useContext(TransactionContext);
 
     React.useEffect( () => {
         console.log('Render RebateProgress.js UseEffect');
         getConnections();
         updateCardConnectionID();
     }, [])
+
+    const [refresh, setRefresh] = React.useState(false);
 
     const credentials = getCredentials();
     const cardList = getCardList();
@@ -84,14 +66,42 @@ export const RebateProgress = () => {
         }
     }
 
+    // const fetchTransactions =  async (connectionID, accountID) => {
+    //     const transactions = await getTransactions(connectionID, accountID);
+    //     let parsedTransactions = []
+
+    //     for (let i = 0; i < transactions.length; i++) {
+    //         console.log(transactions[i])
+    //         parsedTransactions.push(
+    //             {
+    //                 amount: transactions[i].amount,
+    //                 category: transactions[i].category,
+    //                 description: transactions[i].description,
+    //                 date:   transactions[i].made_on,
+    //                 merchant: transactions[i].extra.merchant_id
+    //             }
+    //         )
+    //     }
+                
+
+
+    // }
+
+    if (refresh) {
+        setRefresh(false)
+    }
+
     return (
         <ScrollView>
             <View style = {{flex: 1, alignItems: 'center', backgroundColor:'white'}}>
                 <View style = {{flex: 1}}>
                     <Swiper autoplayTimeout = {10} autoplay = {true} showsPagination= {true}>
-                        {cardList.map((card, index) => {
+                        {getCardList().map((card, index) => {
                             let cardDetail = cardDetailsJSON.find(d => d.id == card.id);
                             card = {...cardDetail, ...card};
+                            // If the bank exists in the credentials.connectionList -- then automatically try to fetch if card exist in the account.
+                            getCardConnectionAccount(card);
+
                             return (
                                 <View style = {{flex: 1, justifyContent: 'center'}} key ={index}>
                                     <View style = {{alignItems: 'center', flex: 2, justifyContent: 'center'}}> 
@@ -113,17 +123,24 @@ export const RebateProgress = () => {
                                         </TouchableOpacity>
                                     </View>
                                     <View style = {{flexDirection: 'row', paddingVertical: 10}}>
-                                        <Text>Account Sync Status: {card.iBankingSync ? 'Sync' : 'Not Sync'}</Text>
-                                        <TouchableOpacity style = {{flex: 1}} onPress ={() => getAccounts()} >
+                                        <Text>Account Sync Status: {card.saltEdge.iBankingSync ? 'Sync' : 'Not Sync'}</Text>
+                                        <TouchableOpacity style = {{flex: 1}} onPress ={() => console.log(card)} >
                                             <View style = {{alignItems: 'center', justifyContent: 'center'}}>
                                                 <Text style = {{fontSize: 14}}>Sync</Text>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
                                     <View style = {{height: 50}}>
-                                        <TouchableOpacity onPress = {() => fetchTransactions(card.saltEdge.connectionID, card.saltEdge.accountID, importSaltEdgeTransactions)}>
+                                        <TouchableOpacity onPress = {() => fetchTransactions(card.saltEdge.connectionID, card.saltEdge.accountID, card)}>
                                             <View style = {{alignItems: 'center', justifyContent: 'center'}}>
                                                 <Text style = {{fontSize: 20}}>Fetch</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style = {{height: 50}}>
+                                        <TouchableOpacity onPress = {() => setRefresh(true)}>
+                                            <View style = {{alignItems: 'center', justifyContent: 'center'}}>
+                                                <Text style = {{fontSize: 20}}>Refresh</Text>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
@@ -145,9 +162,6 @@ export const RebateProgress = () => {
                                             )
                                         })}
                                     </View>
-                                    <Text>{JSON.stringify(Object.keys(card))}</Text>
-                                    <Text>{JSON.stringify(Object.keys(card.saltEdge))}</Text>
-                                    <Text>{card.saltEdge.accountID}   {card.saltEdge.connectionID}</Text>
                                 </View>
                             )
                         })}
@@ -157,32 +171,3 @@ export const RebateProgress = () => {
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    title: {
-        fontSize: 20
-    },
-    button1: {
-        padding: 10,
-        borderRadius: 10,
-        paddingHorizontal: 10,
-        alignSelf: 'flex-start',
-        margin: 10,
-        backgroundColor:'#73AEBB',
-        alignItems: 'center'    
-    },
-    modalViewContainer: {
-        borderTopRightRadius: 30, 
-        borderTopLeftRadius: 30,
-        height: '75%',
-        paddingHorizontal: 20, 
-        paddingVertical: 10,
-        backgroundColor: 'white',
-        alignItems: 'center',
-    },
-    titleContainer: {
-        alignItems: 'center', 
-        height: '15%', 
-        justifyContent: 'center'
-    }
-})
