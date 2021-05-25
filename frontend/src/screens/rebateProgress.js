@@ -7,6 +7,7 @@ import { Icon } from 'react-native-elements';
 import { color } from 'react-native-reanimated';
 
 import {createConnection, getConnectionAccounts, getCustomerConnections, getTransactions} from '../saltedge';
+import {rebateFuncMap} from '../util/rebateCalculation'
 
 const cardDetailsJSON = require('../creditCards.json'); 
 
@@ -14,7 +15,7 @@ export const RebateProgress = () => {
     console.log('Render RebateProgress.js');
     const {getCredentials, getConnections, getAccounts} = React.useContext(CredentialsContext);
     const {getCardList, addCard, deleteCard, updateCardConnectionID, getCardConnectionAccount} = React.useContext(CardContext);
-    const {fetchTransactions} = React.useContext(TransactionContext);
+    const {fetchTransactions, getTransactionList, flushTransactions} = React.useContext(TransactionContext);
 
     React.useEffect( () => {
         console.log('Render RebateProgress.js UseEffect');
@@ -101,6 +102,14 @@ export const RebateProgress = () => {
                             card = {...cardDetail, ...card};
                             // If the bank exists in the credentials.connectionList -- then automatically try to fetch if card exist in the account.
                             getCardConnectionAccount(card);
+                            var totalRebates = 0;
+                            var totalSpend = 0;
+                            try {
+                                totalRebates, totalSpend = rebateFuncMap[card](getTransactionList());
+                            }
+                            catch {
+                                console.log("Card not found")
+                            }
 
                             return (
                                 <View style = {{flex: 1, justifyContent: 'center'}} key ={index}>
@@ -109,10 +118,11 @@ export const RebateProgress = () => {
                                         <Text style = {{fontSize: 18, padding :5, fontWeight: 'bold'}}>{cardDetail.card_name}</Text>
                                         <View style = {{alignItems: 'center'}}>
                                             <View style ={{height: 40, width: 200, borderRadius: 10}}>
-                                                <ProgressBar progress={getProgress(card.totalSpent, card.minimum_spending)} color={card.color.quartenary} style = {{height: '100%', borderRadius: 20}}/>
+                                                <ProgressBar progress={getProgress(totalSpend, card.minimum_spending)} color={card.color.quartenary} style = {{height: '100%', borderRadius: 20}}/>
                                                 <Text style = {{position:'absolute', right: 10, top: 10}}>${getTotalSpent(card)} / ${card.minimum_spending}</Text>
                                             </View>
                                         </View>
+                                        <Text style = {{fontSize: 12, padding :5, fontWeight: 'bold'}}>Current Total Rebate: ${totalRebates} / ${card.maximum_rebates}</Text>
                                     </View>
                                     <View style = {{flexDirection: 'row', paddingVertical: 10}}>
                                         <Text>Bank Sync Status: {getBankSyncStatus(card.bank) ? 'Sync' : 'Not Sync'}</Text>
@@ -147,7 +157,7 @@ export const RebateProgress = () => {
                                     <View style= {{flexWrap: 'wrap', flexDirection:'row', flex: 3}}>
                                         {card.categories.map((category, index) => {
                                             return (
-                                                <View key={index} style = {{width: '29%', height: '30%', alignItems: 'center', margin: '2%', borderWidth: 2, borderColor: 'grey', borderRadius: 10}}>
+                                                <View key={index} style = {{width: '29%', height: '30%', alignItems: 'center', margin: '2%', borderWidth: 2, borderColor: 'grey', borderRadius: 10, backgroundColor: 'white'}}>
                                                     <View style = {{flex: 1, flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center'}}>
                                                         <Text style = {{fontSize: 10, flex: 1}}>{category.eligibility}</Text>
                                                         <Icon name = {category.icon.name} type = {category.icon.type} size={15} color= {'black'} borderRadius= {10}/>

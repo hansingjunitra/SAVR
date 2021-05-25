@@ -1,4 +1,4 @@
-export const ocbc365 = function(transactions) {
+const ocbc365 = function(transactions) {
     const rebateCategory = {"dining":0.06, "groceries":0.03 ,"transport":0.03 ,"petrol":0.05 ,"utilities":0.03 ,"onlinetravel":0.03, "excluded":0}
     var totalRebate = 0;
     var totalSpend = 0;
@@ -15,15 +15,12 @@ export const ocbc365 = function(transactions) {
             totalRebate += rebate;
         }
     }
-    if (totalRebate<80) {
-        return totalRebate
-    }
-    else {
-        return 80
-    }
+    if (totalRebate>80) {totalRebate = 80}
+
+    return totalRebate, totalSpend
 }
 
-export const dbsLiveFresh = function(transactions) {
+const dbsLiveFresh = function(transactions) {
     var onlineRebate = 0;
     var contactlessRebate = 0;
     var otherRebate = 0;
@@ -48,10 +45,10 @@ export const dbsLiveFresh = function(transactions) {
     if (onlineRebate>20) {onlineRebate = 20;}
     if (contactlessRebate>20) {contactlessRebate = 20;}
     if (otherRebate>20) {otherRebate = 20;}
-    return onlineRebate+contactlessRebate+otherRebate
+    return onlineRebate+contactlessRebate+otherRebate, totalSpend
 }
 
-export const maybankFandF = function(transactions) {
+const maybankFandF = function(transactions) {
     const rebateCategory = ["food delivery", "fast food", "groceries", "transport", "petrol", "learning/retail", "tele/streaming"]
     var totalRebate = 0;
     var totalSpend = 0;
@@ -77,7 +74,7 @@ export const maybankFandF = function(transactions) {
     }
 }
 
-export const hsbcAdvance = function(transactions, deposit) {
+const hsbcAdvance = function(transactions, deposit) {
     var totalSpend = 0;
 
     for (var i=0; i<transactions.length; i++) {totalSpend += transactions[i].amount * -1}
@@ -96,3 +93,28 @@ export const hsbcAdvance = function(transactions, deposit) {
     }
 }
 
+const test = function() {
+    return 'test'
+}
+
+export const rebateFuncMap = {
+    "ocbc365" : ocbc365,
+    "dbsLiveFresh" : dbsLiveFresh,
+    "maybankFandF" : maybankFandF,
+    "hsbcAdvance" : hsbcAdvance,
+    "test" : test
+}
+
+
+// Test cases
+const testTransactionList = [   {"category" : "dining", "amount" : -200},
+                                {"category" : "others", "amount" : -30},
+                                {"category" : "groceries", "amount" : -500},
+                                {"category" : "petrol", "amount" : -100},
+                                {"category" : "transport", "amount" : -1000}]
+
+const testCategoryDining = [{"category" : "dining", "amount" : -10000}]
+const testCategoryOthers = [{"category" : "others", "amount" : -10000}]
+
+rebate, totalspend = ocbc365(testTransactionList)
+console.log("test")

@@ -4,7 +4,6 @@ import {CardContext, CredentialsContext, TransactionContext} from '../context';
 
 import {createConnection, getConnectionAccounts, getCustomerConnections, getTransactions} from '../saltedge';
 import { AddCard } from './addCard';
-import {ocbc365} from '../util/rebateCalculation'
 
 const cardDetailsJSON = require('../creditCards.json');
 
@@ -26,22 +25,10 @@ const syncAccountHandler = async (connectionID, cardName, updateCardConnectionID
             const acc = accounts.data;
             var i;
             for (i=0; i<acc.length; i++) {
-                //cardName = "DBS eMulti-Currency Autosave Account";
                 if (acc[i].extra.account_name==cardName) {
                     found = 1;
-                    const accountID = acc[i].id;
-                    
+                    const accountID = acc[i].id;                 
                     updateCardConnectionID(accountID, connectionID, cardName)
-
-                    // return accountID;
-                    // Update 
-                    const transactions = await getTransactions(connectionID, accountID);
-                    //console.log(transactions.length, transactions);
-                    // TODO stuff with transactions
-
-                    var rebate = ocbc365(transactions);
-                    console.log("rebate:", rebate);
-                    // return
                 }
             }
             if (found==0) {
