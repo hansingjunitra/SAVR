@@ -16,7 +16,7 @@ const WalletStack = createStackNavigator();
 const WalletTab = () => {
     return (
         <WalletStack.Navigator>
-            <WalletStack.Screen name ={ "Home"} component = {RebateProgress} options = {{headerShown: false}}/>
+            <WalletStack.Screen name ={"Home"} component = {RebateProgress} options = {{headerShown: false}}/>
             {/* <HomeStack.Screen name = "AddCardScreen" component = {AddCardScreen} options = {{title: 'Select a card'}}/> */}
             {/* <Stack.Screen name = "History" component = {History} options = {{headerShown: false}}/> */}
         </WalletStack.Navigator>

@@ -23,10 +23,10 @@ export const EditTransaction = ({route, navigation}) => {
     const [newTransaction, setNewTransaction] = React.useState(transaction)
 
     const onChangeAmount = (amount) => {
-        if (amount !== null) {
+        if (parseInt(amount) !== null) {
             setNewTransaction(prevState => {return {
                 ...prevState,
-                amount: parseInt(amount) 
+                amount:  parseInt(amount)
             }})
         } else {
             setNewTransaction(prevState => {return {

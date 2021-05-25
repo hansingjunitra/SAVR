@@ -4,7 +4,6 @@ import {CardContext, CredentialsContext, TransactionContext} from '../context';
 
 import {createConnection, getConnectionAccounts, getCustomerConnections, getTransactions} from '../saltedge';
 import { AddCard } from './addCard';
-import {ocbc365} from '../util/rebateCalculation'
 
 const cardDetailsJSON = require('../creditCards.json');
 
@@ -18,43 +17,31 @@ const syncBankHandler = async (customerID, bankCode) => {
 }
 
 const syncAccountHandler = async (connectionID, cardName, updateCardConnectionID) => {
-    console.log(connectionID, cardName)
-    try {
-        const accounts = await getConnectionAccounts(connectionID);
-        var found = 0;
-        try {
-            const acc = accounts.data;
-            var i;
-            for (i=0; i<acc.length; i++) {
-                //cardName = "DBS eMulti-Currency Autosave Account";
-                if (acc[i].extra.account_name==cardName) {
-                    found = 1;
-                    const accountID = acc[i].id;
-                    
-                    updateCardConnectionID(accountID, connectionID, cardName)
-
-                    // return accountID;
-                    // Update 
-                    const transactions = await getTransactions(connectionID, accountID);
-                    //console.log(transactions.length, transactions);
-                    // TODO stuff with transactions
-
-                    var rebate = ocbc365(transactions);
-                    console.log("rebate:", rebate);
-                    // return
-                }
-            }
-            if (found==0) {
-                alert('Card not found');
-            }
-        }
-        catch {
-            console.error("connectionID not found");
-            console.log(accounts.data[0].id);
-        }
-    } catch (err) {
-        console.error(err);
-    }
+    // console.log(connectionID, cardName)
+    // try {
+    //     const accounts = await getConnectionAccounts(connectionID);
+    //     var found = 0;
+    //     try {
+    //         const acc = accounts.data;
+    //         var i;
+    //         for (i=0; i<acc.length; i++) {
+    //             if (acc[i].extra.account_name==cardName) {
+    //                 found = 1;
+    //                 const accountID = acc[i].id;                 
+    //                 updateCardConnectionID(accountID, connectionID, cardName)
+    //             }
+    //         }
+    //         if (found==0) {
+    //             alert('Card not found');
+    //         }
+    //     }
+    //     catch {
+    //         console.error("connectionID not found");
+    //         console.log(accounts.data[0].id);
+    //     }
+    // } catch (err) {
+    //     console.error(err);
+    // }
 }
 
 const SyncButton = (props) => {
