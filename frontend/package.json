@@ -17,6 +17,7 @@
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
     "crypto": "^1.0.1",
+    "intl": "^1.2.5",
     "moment": "^2.29.1",
     "react": "16.13.1",
     "react-native": "^0.64.1",

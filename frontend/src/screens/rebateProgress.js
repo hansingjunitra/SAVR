@@ -93,24 +93,31 @@ export const RebateProgress = () => {
 
     return (
         <ScrollView>
-            <View style = {{flex: 1, alignItems: 'center', backgroundColor:'white'}}>
-                <View style = {{flex: 1}}>
+            <View style = {{flex: 1, backgroundColor:'white'}}>
+                <View style = {{alignItems: 'flex-end', justifyContent: 'flex-end', margin: 10}}>
+                    <TouchableOpacity onPress = {() => setRefresh(true)} style = {{alignItems: 'flex-end', justifyContent: 'flex-end'}}>
+                        <Icon name = {'refresh'} type = {'font-awesome'} size={20} color= {'black'} borderRadius= {20}/>
+                    </TouchableOpacity>
+                </View>
+                <View style = {{flex: 1 , alignItems: 'center'}}>
                     <Swiper autoplayTimeout = {10} autoplay = {true} showsPagination= {true}>
                         {getCardList().map((card, index) => {
                             let cardDetail = cardDetailsJSON.find(d => d.id == card.id);
                             card = {...cardDetail, ...card};
+                            {/* console.log(card); */}
                             // If the bank exists in the credentials.connectionList -- then automatically try to fetch if card exist in the account.
                             getCardConnectionAccount(card);
 
                             return (
                                 <View style = {{flex: 1, justifyContent: 'center'}} key ={index}>
-                                    <View style = {{alignItems: 'center', flex: 2, justifyContent: 'center'}}> 
+                                    <View style = {{alignItems: 'center', flex: 2, justifyContent: 'center', }}> 
                                         <Image source = {{uri: cardDetail.image}} style = {{height: 120, width: 200, borderRadius: 10}}/>
                                         <Text style = {{fontSize: 18, padding :5, fontWeight: 'bold'}}>{cardDetail.card_name}</Text>
                                         <View style = {{alignItems: 'center'}}>
                                             <View style ={{height: 40, width: 200, borderRadius: 10}}>
                                                 <ProgressBar progress={getProgress(card.totalSpent, card.minimum_spending)} color={card.color.quartenary} style = {{height: '100%', borderRadius: 20}}/>
-                                                <Text style = {{position:'absolute', right: 10, top: 10}}>${getTotalSpent(card)} / ${card.minimum_spending}</Text>
+                                                {/* <Text style = {{position:'absolute', right: 10, top: 10}}>${getTotalSpent(card)} / ${card.minimum_spending}</Text> */}
+                                                <Text style = {{position:'absolute', right: 10, top: 10}}>${card.totalSpent} / ${card.minimum_spending}</Text>
                                             </View>
                                         </View>
                                     </View>
@@ -127,20 +134,14 @@ export const RebateProgress = () => {
                                         <TouchableOpacity style = {{flex: 1}} onPress ={() => console.log(card)} >
                                             <View style = {{alignItems: 'center', justifyContent: 'center'}}>
                                                 <Text style = {{fontSize: 14}}>Sync</Text>
+                                                <Text style = {{fontSize: 14}}>{card.saltEdge.iBankingSync}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
-                                    <View style = {{height: 50}}>
-                                        <TouchableOpacity onPress = {() => fetchTransactions(card.saltEdge.connectionID, card.saltEdge.accountID, card)}>
+                                    <View style = {{height: 50, alignItems: 'center', justifyContent: 'center'}} flexDirection = 'row'>
+                                        <TouchableOpacity onPress = {() => fetchTransactions(card.saltEdge.connectionID, card.saltEdge.accountID, card)} style = {{flex : 1}}>
                                             <View style = {{alignItems: 'center', justifyContent: 'center'}}>
                                                 <Text style = {{fontSize: 20}}>Fetch</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style = {{height: 50}}>
-                                        <TouchableOpacity onPress = {() => setRefresh(true)}>
-                                            <View style = {{alignItems: 'center', justifyContent: 'center'}}>
-                                                <Text style = {{fontSize: 20}}>Refresh</Text>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
@@ -153,7 +154,7 @@ export const RebateProgress = () => {
                                                         <Icon name = {category.icon.name} type = {category.icon.type} size={15} color= {'black'} borderRadius= {10}/>
                                                     </View>
                                                     <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                                                        <Text style = {{fontSize: 24, fontWeight:'bold'}}>${card.spendingBreakdown[category.eligibility]}</Text>
+                                                        <Text style = {{fontSize: 20, fontWeight:'bold'}}>${card.spendingBreakdown[category.eligibility]}</Text>
                                                     </View>
                                                     <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                                                         <Text style = {{fontSize: 12, fontWeight:'bold'}}>Cashback: ${getCashback(category.percentage, card.spendingBreakdown[category.eligibility], category.cap)}</Text>
@@ -162,6 +163,9 @@ export const RebateProgress = () => {
                                             )
                                         })}
                                     </View>
+                                    {/* <Text>
+                                        {JSON.stringify(card.saltEdge)}
+                                    </Text> */}
                                 </View>
                             )
                         })}

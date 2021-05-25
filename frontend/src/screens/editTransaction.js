@@ -14,10 +14,9 @@ const cardDetailsJSON = require('../creditCards.json');
 export const EditTransaction = ({route, navigation}) => {
 
     // const selectedCreditCard = route.params;
-    const transaction = route.params
+    const {transaction, setRefresh} = route.params
     const card = cardDetailsJSON.find(d => d.id == transaction.cardID);
-
-    console.log(transaction)
+    // console.log(card);
     // const { updateTotalSpent } = React.useContext(CreditCardRecordContext);
     const { updateTransaction } = React.useContext(TransactionContext);
 
@@ -27,26 +26,23 @@ export const EditTransaction = ({route, navigation}) => {
         if (amount !== null) {
             setNewTransaction(prevState => {return {
                 ...prevState,
-                amount: {
-                    ...prevState.amount,
-                    value: amount
-                }
+                amount: parseInt(amount) 
             }})
         } else {
             setNewTransaction(prevState => {return {
                 ...prevState,
-                amount: {
-                    ...prevState.amount,
-                    value: 0
-                }
+                amount: 0
             }})
         }
     }
 
     const onSelectCategory = (selectedCategory) => {
+        // const selectedCategoryIcon = card.categories.find((category) => category.elgitibility)
+
         setNewTransaction((prevState) => { return {
             ...prevState,
-            category: selectedCategory.eligibility
+            category: selectedCategory.eligibility,
+            icon: selectedCategory.icon
         }});
         setCategoryModal(false);
     }
@@ -54,21 +50,36 @@ export const EditTransaction = ({route, navigation}) => {
     const onAddTransactionHandler = () => {
         updateTransaction(newTransaction);
         // updateTotalSpent(selectedCreditCard, newTransaction);
+        setRefresh(true);
         navigation.goBack();
     }
 
     const onChangeDescription = (description) => {
-        if (description !== null) {
-            setNewTransaction(prevState => {return {
-                ...prevState,
-                description: description    
-            }})
-        } else {
-            setNewTransaction(prevState => {return {
-                ...prevState,
-                description: 'None'
-            }})
-        }
+        setNewTransaction(prevState => {return {
+            ...prevState,
+            description: description    
+        }})
+        // if (description !== null) {
+        // } else {
+        //     setNewTransaction(prevState => {return {
+        //         ...prevState,
+        //         description: null
+        //     }})
+        // }
+    }
+
+    const onChangeAlias = (alias) => {
+        setNewTransaction(prevState => {return {
+            ...prevState,
+            alias: alias    
+        }})
+        // if (alias !== null) {
+        // } else {
+        //     setNewTransaction(prevState => {return {
+        //         ...prevState,
+        //         alias: null
+        //     }})
+        // }
     }
 
     // const [selectedDate, setSelectedDate] = React.useState(moment());
@@ -105,7 +116,16 @@ export const EditTransaction = ({route, navigation}) => {
                     <View style = {{flexDirection: 'row', justifyContent: 'center'}}>
                         <View  style = {{flex: 1, justifyContent: 'center'}}>
                             <Text style = {{fontSize: 20}}> Description </Text>
-                        <TextInput placeholder={'None'} defaultValue = {transaction.description} style = {{padding: 0, margin: 0}} placeholderTextColor = {'black'} onChangeText = {(merchant) => onChangeDescription(merchant)}/>
+                        {/* <TextInput placeholder={'None'} defaultValue = {transaction.description} style = {{padding: 0, margin: 0}} placeholderTextColor = {'black'} onChangeText = {(merchant) => onChangeDescription(merchant)}/> */}
+                        <Text>{transaction.description}</Text>
+                        </View>
+                    </View>
+                </View>
+                <View style = {{marginVertical: 10}}>
+                    <View style = {{flexDirection: 'row', justifyContent: 'center'}}>
+                        <View  style = {{flex: 1, justifyContent: 'center'}}>
+                            <Text style = {{fontSize: 20}}> Alias </Text>
+                        <TextInput placeholder={'None'} defaultValue = {transaction.alias} style = {{padding: 0, margin: 0}} placeholderTextColor = {'black'} onChangeText = {(alias) => onChangeAlias(alias)}/>
                         </View>
                     </View>
                 </View>

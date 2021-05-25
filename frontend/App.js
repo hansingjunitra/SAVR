@@ -10,6 +10,7 @@ import {CredentialsInput} from './src/screens/credentialsInput';
 import {CardContext, TransactionContext, CredentialsContext} from './src/context';
 
 import {createSaltEdgeCustomer, getCustomerConnections, getConnectionAccounts, getTransactions} from './src/saltedge';
+import { monthsShort } from 'moment';
 
 const getUniqueId = (username) => {
     const date = new Date().getTime().toString();
@@ -92,9 +93,15 @@ const App = () => {
             for (let i = 0; i < credentials.connectionIDList.length; i++){
                 if (card.bank == credentials.connectionIDList[i].bank) {
                     const connectionID = credentials.connectionIDList[i].id;
+                    let accounts;
                     try {
-                        const accounts = await getConnectionAccounts(connectionID);
-                        for (let i=0; i<accounts.data.length; i++) {
+                        accounts = await getConnectionAccounts(connectionID);
+                        // console.log(accounts)
+                        if ('error' in accounts) {
+                            console.log("ERROR: " + accounts.error.message)
+                            return
+                        }
+                        for (let i=0; i < accounts.data.length; i++) {
                             //cardName = "DBS eMulti-Currency Autosave Account";
                             if (accounts.data[i].extra.account_name==card.card_name) {
                                 const accountID = accounts.data[i].id;
@@ -111,6 +118,7 @@ const App = () => {
                             }
                         }
                     } catch (err) {
+                        console.log(accounts)
                         console.error(err)
                     }
                 }
@@ -125,24 +133,44 @@ const App = () => {
         addTransaction: (transaction) => {
             console.log("Add transaction");
         },
-        fetchTransactions: async (connectionID, accountID, card) => {
+        fetchTransactions: async (connectionID, accountID, transactionCard) => {
             const transactions = await getTransactions(connectionID, accountID);
             let parsedTransactions = []
-            let lastTransactionID = card.saltEdge.lastTransactionIDFetched
-            for (let i = 0; i < transactions.length; i++) {
 
-                console.log(lastTransactionID, transactions[i].id,  lastTransactionID < transactions[i].id)
-                if (lastTransactionID < transactions[i].id) {
-                    lastTransactionID = transactions[i].id
+            let updatedTransactionID = transactionCard.saltEdge.lastTransactionIDFetched;
+            let updatedTotalSpent = transactionCard.totalSpent;
+            let updatedSpendingBreakdown = transactionCard.spendingBreakdown;
+            const today = new Date();
+
+            // console.log(transactionCard)
+
+            for (let i = 0; i < transactions.length; i++) {
+                // if transaction has not been fetched and is an expense
+                if (updatedTransactionID < transactions[i].id && transactions[i].amount < 0) {
+                    const amount =  Math.abs(transactions[i].amount);
+                    const category = transactions[i].category in transactionCard.saltedgeCategory ? transactionCard.saltedgeCategory[transactions[i].category] : "Others"
+                    const transactionDate = new Date(transactions[i].made_on); 
+                    const icon = transactionCard.categories.find((c) => c.eligibility == category).icon;
+
+                    updatedTransactionID = transactions[i].id;
+
+                    // if the transaction is from the current month
+                    if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
+                        updatedTotalSpent += amount
+                        updatedSpendingBreakdown[category] += amount
+                    }
+                    
                     parsedTransactions.push(
                         {
                             id: transactions[i].id,
-                            cardID: card.id,
-                            amount: transactions[i].amount,
-                            category: transactions[i].category,
+                            cardID: transactionCard.id,
+                            amount: amount,
+                            category: category,
                             description: transactions[i].description,
                             date:   transactions[i].made_on,
-                            merchant: transactions[i].extra.merchant_id
+                            merchant: transactions[i].extra.merchant_id,
+                            icon: icon,
+                            alias: null
                         }
                     )
                 }
@@ -150,12 +178,13 @@ const App = () => {
                     
             let updatedTransactionList = [...transactionList, ...parsedTransactions]
             let updatedCardList = cardList;
-            for (let i = 0; i < updatedCardList.length; i++){
-                if (card.id == updatedCardList[i].id) {
-                    updatedCardList[i].saltEdge.lastTransactionIDFetched = lastTransactionID;
-                    break
-                }
-            }
+
+            const cardIndex = updatedCardList.findIndex((card) => card.id == transactionCard.id);
+            
+            // update card information
+            updatedCardList[cardIndex].saltEdge.lastTransactionIDFetched = updatedTransactionID;
+            updatedCardList[cardIndex].totalSpent = updatedTotalSpent;
+
             setTransactionList(updatedTransactionList);
             AsyncStorage.setItem('transactionHistory', JSON.stringify([...updatedTransactionList]));
             setCardList(updatedCardList);
@@ -166,17 +195,48 @@ const App = () => {
             console.log("Remove transaction");
         },
         updateTransaction: (updatedTransaction) => {
-            const index = transactionList.findIndex((transaction) => transaction.id == updatedTransaction.id);
-            transactionList[index] = updatedTransaction;
+            console.log(updatedTransaction);
+            let updatedTransactionList = transactionList;
+            let updatedCardList = cardList;
 
-            setTransactionList(transactionList);
+            const transactionIndex = updatedTransactionList.findIndex((transaction) => transaction.id == updatedTransaction.id);
+            const oldTransaction = transactionList[transactionIndex]
+            const newCategory = updatedTransaction.category
+            
+            updatedTransactionList[transactionIndex] = updatedTransaction;
+            const cardIndex = updatedCardList.findIndex((card) => card.id == updatedTransaction.cardID);
+            let updatedCard = updatedCardList[cardIndex];
 
+            let updatedSpendingBreakdown = updatedCard.spendingBreakdown;
+
+
+            const today = new Date();
+            const transactionDate = new Date(updatedTransaction.date); 
+            // if (oldCategory != newCategory) {
+            if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
+                updatedSpendingBreakdown[oldTransaction.category] -= oldTransaction.amount
+                updatedSpendingBreakdown[newCategory] += updatedTransaction.amount
+            }
+            console.log(updatedTransaction);
+            // }
+
+            updatedCard.spendingBreakdown = updatedSpendingBreakdown;            
+            updatedCardList[cardIndex] = updatedCard;
+            setTransactionList(updatedTransactionList);
+            setCardList(updatedCardList);
+
+            AsyncStorage.setItem('transactionHistory', JSON.stringify([...updatedTransactionList]));
+            AsyncStorage.setItem('creditCardRecord', JSON.stringify([...updatedCardList]));
         },
         updateTransationListStorage: () => {
             console.log('Update Transaction List Storage');
         },
         flushTransactions: () => {
             setTransactionList([]);
+            let updatedCardList = cardList;
+            for (let i = 0; i < updatedCardList.length; i++){
+                updatedCardList[i].saltEdge.lastTransactionIDFetched = null;
+            } 
             AsyncStorage.setItem('transactionHistory', JSON.stringify([]));
         }
     }))

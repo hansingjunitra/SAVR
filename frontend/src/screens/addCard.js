@@ -15,6 +15,7 @@ export const AddCard = ({navigation}) => {
     const addCardHandler = (newCard) => {
         let cardDetail = {
             id: newCard.id,
+            totalSpent: 0,
             spendingBreakdown: {},
             iBankingSync: false,
             saltEdge: {
