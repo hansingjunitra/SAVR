@@ -105,7 +105,6 @@ export const RebateProgress = () => {
                         {cardList.map((card, index) => {
                             let cardDetail = cardDetailsJSON.find(d => d.id == card.id);
                             card = {...cardDetail, ...card};
-                            {/* console.log(card); */}
                             // If the bank exists in the credentials.connectionList -- then automatically try to fetch if card exist in the account.
                             getCardConnectionAccount(card);
                             var totalRebates = 0;

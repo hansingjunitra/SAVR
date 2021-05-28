@@ -4,6 +4,8 @@ import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpac
 import {TransactionContext} from '../context';
 import {EditTransaction} from './editTransaction';
 import { Icon } from 'react-native-elements';
+import { FAB } from 'react-native-paper';
+import { Swipeable } from 'react-native-gesture-handler';
 
 import 'intl';
 import 'intl/locale-data/jsonp/en'; // or any other locale you need
@@ -48,6 +50,8 @@ export const ExpenseTracker = ({route, navigation}) => {
     // Sort by date
     // Show header
     let latestMonth = null
+    let latestDate = null
+    let latestDay = null
 
     if (refresh) {
         setRefresh(false);
@@ -55,26 +59,27 @@ export const ExpenseTracker = ({route, navigation}) => {
 
     return (
         <View style= {{flex:1, justifyContent: 'center'}}>
-            <Text style = {{fontSize: 40}}>Expense Tracker</Text>
-            <View style = {{height: 50}}>
-                <TouchableOpacity onPress = {() => setRefresh(true)}>
+            {/* <Text style = {{fontSize: 40}}>Expense Tracker</Text> */}
+            <View style = {{alignItems: 'center', justifyContent: 'space-between', flexDirection:'row', margin: 10}}>
+                <TouchableOpacity style = {{width: 100, borderWidth: 2}} onPress = {() => flushTransactions()}>
                     <View style = {{alignItems: 'center', justifyContent: 'center'}}>
-                        <Text style = {{fontSize: 20}}>Refresh</Text>
+                        <Text style = {{fontSize: 16}}>Flush</Text>
                     </View>
                 </TouchableOpacity>
-            </View>
-            <View style = {{height: 50}}>
-                <TouchableOpacity onPress = {() => flushTransactions()}>
-                    <View style = {{alignItems: 'center', justifyContent: 'center'}}>
-                        <Text style = {{fontSize: 20}}>Flush</Text>
-                    </View>
+                <TouchableOpacity onPress = {() => setRefresh(true)} style = {{alignItems: 'flex-end'}}>
+                    <Icon name = {'refresh'} type = {'font-awesome'} size={20} color= {'black'} borderRadius= {20}/>
                 </TouchableOpacity>
             </View>
             <ScrollView style ={{flex:1}}>
                 {transactionList.map((transaction, index) => {
                     let currentDate = new Date(transaction.date)
+                    {/* console.log(currentDate.getDate()) */}
                     let currentMonth = new Intl.DateTimeFormat('en-US', {month: 'long'}).format(currentDate)
+                    {/* let currentMonth = currentDate.getMonth(); */}
+                    {/* let currentDay = currentDate.getDate(); */}
                     if (currentMonth != latestMonth) {
+                    {/* if (currentMonth != latestMonth && currentDay != latestDate) { */}
+                        {/* latestDate = currentDay */}
                         latestMonth = currentMonth
                         return (   
                             <View key ={index} style = {{flex: 1}}>
@@ -84,13 +89,25 @@ export const ExpenseTracker = ({route, navigation}) => {
                         )
                     } else {
                         return (
+                            <Swipeable renderRightActions = {() => (
+                                                    <TouchableOpacity onPress = {() => {
+                                                            console.log('swipe')
+                                                        }}>                                              
+                                                        <View style = {{width: 50, justifyContent: 'center', alignContent: 'center'}}>
+                                                            <Icon  name = 'delete' type= 'materials' style={{justifyContent: 'center', alignContent: 'center'}}/>
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                    )} key = {index}>
                                 <TransactionEntry props={{transaction: transaction, route: route, navigation: navigation, setRefresh: setRefresh}} key ={index}/>
+                            </Swipeable>  
                         )
                             {/* <View key ={index} style = {{flex: 1}}> */}
                             {/* </View> */}
                     }
                 })}
             </ScrollView>
+            {/* <FAB style ={{position: 'absolute',margin: 16,right: 0,bottom: 0,}} small icon="plus" onPress={() => console.log('Pressed')}/> */}
+
         </View>
     )
 }
