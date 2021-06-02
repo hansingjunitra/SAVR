@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {Linking} from 'react-native';
 import { SafeAreaView, View, TouchableOpacity, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Navigator} from './src/navigation';
@@ -9,7 +9,7 @@ import {SplashScreen} from './src/splashScreen';
 import {CredentialsInput} from './src/screens/credentialsInput';
 import {CardContext, TransactionContext, CredentialsContext} from './src/context';
 
-import {createSaltEdgeCustomer, getCustomerConnections, getConnectionAccounts, getTransactions} from './src/saltedge';
+import {createSaltEdgeCustomer, getCustomerConnections, getConnectionAccounts, getTransactions, refreshCustomerConnection} from './src/saltedge';
 import { monthsShort } from 'moment';
 
 const getUniqueId = (username) => {
@@ -250,6 +250,10 @@ const App = () => {
             const [saltEdgeID, secret] = await createSaltEdgeCustomer(username, token);
             await AsyncStorage.setItem('userCredentials', JSON.stringify({...credentials, username: username, token: token, saltEdgeID: saltEdgeID, secret: secret}));
             setCredentials((prevState) => ({...prevState, username: username, token: token, saltEdgeID: saltEdgeID, secret: secret}));
+        },
+        refreshConnection: async (connectionID) => {
+            const res = await refreshCustomerConnection(connectionID);     
+            Linking.openURL(res);       
         },
         deleteCredentials: async () => {
             await AsyncStorage.removeItem('userCredentials');            
