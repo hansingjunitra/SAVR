@@ -9,6 +9,7 @@ import { Swipeable } from 'react-native-gesture-handler';
 
 import 'intl';
 import 'intl/locale-data/jsonp/en'; // or any other locale you need
+import { SafeAreaView } from 'react-native';
 
 const TransactionEntry = (props) => {
     const {transaction, route, navigation, setRefresh} = props.props
@@ -59,6 +60,7 @@ export const ExpenseTracker = ({route, navigation}) => {
 
     return (
         <SafeAreaView style= {{flex:1, justifyContent: 'center'}}>
+            <SafeAreaView>
             {/* <Text style = {{fontSize: 40}}>Expense Tracker</Text> */}
             <View style = {{alignItems: 'center', justifyContent: 'space-between', flexDirection:'row', margin: 10}}>
                 <TouchableOpacity style = {{width: 100, borderWidth: 2}} onPress = {() => flushTransactions()}>
@@ -108,6 +110,7 @@ export const ExpenseTracker = ({route, navigation}) => {
             </ScrollView>
             {/* <FAB style ={{position: 'absolute',margin: 16,right: 0,bottom: 0,}} small icon="plus" onPress={() => console.log('Pressed')}/> */}
 
+            </SafeAreaView>
         </SafeAreaView>
     )
 }
