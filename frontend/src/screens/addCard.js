@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Image, StyleSheet, SafeAreaView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { CardContext } from '../context';
@@ -59,7 +59,7 @@ export const AddCard = ({navigation}) => {
     }
 
     return (
-        <View>
+        <SafeAreaView>
             <View style = {{alignItems: 'center'}}>
                 <TouchableOpacity style = {styles.button1} onPress = {() => {getCardConnectionAccountHandler(cardList); addCard(cardList); navigation.goBack();}}>
                     <View>
@@ -84,7 +84,7 @@ export const AddCard = ({navigation}) => {
                     })}
                 </View>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     )
 }
 

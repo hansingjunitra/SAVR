@@ -148,7 +148,7 @@ export const RebateProgress = () => {
                                                         </TouchableOpacity>
                                                     </View>
                                                     <View style = {{alignItems: 'center', justifyContent: 'center', flex:1}}>
-                                                        <Text style={{height:20, fontSize: 12, margin: 10}}>Last Fetched: </Text>
+                                                        <Text style={{height:20, fontSize: 12, margin: 10}}>Last Refreshed: </Text>
                                                         <TouchableOpacity onPress = {() => refreshConnection(card.saltEdge.connectionID)} style = {{padding: 5, marginHorizontal:10, borderRadius: 20, paddingHorizontal: 20, borderWidth: 2}}>
                                                             <View style = {{alignItems: 'center', justifyContent: 'center'}}>
                                                                 <Text style = {{fontSize: 14}}>Refresh</Text>
