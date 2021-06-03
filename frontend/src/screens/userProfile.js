@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Linking, ScrollView} from 'react-native';
+import {View, Text, TouchableOpacity, Linking, ScrollView, SafeAreaView} from 'react-native';
 import {CardContext, CredentialsContext, TransactionContext} from '../context';
 
 import {createConnection, getConnectionAccounts, getCustomerConnections, getTransactions} from '../saltedge';

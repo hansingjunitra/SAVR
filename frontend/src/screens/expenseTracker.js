@@ -59,7 +59,6 @@ export const ExpenseTracker = ({route, navigation}) => {
     }
 
     return (
-        <SafeAreaView style= {{flex:1, justifyContent: 'center'}}>
             <SafeAreaView>
             {/* <Text style = {{fontSize: 40}}>Expense Tracker</Text> */}
             <View style = {{alignItems: 'center', justifyContent: 'space-between', flexDirection:'row', margin: 10}}>
@@ -72,7 +71,7 @@ export const ExpenseTracker = ({route, navigation}) => {
                     <Icon name = {'refresh'} type = {'font-awesome'} size={20} color= {'black'} borderRadius= {20}/>
                 </TouchableOpacity>
             </View>
-            <ScrollView style ={{flex:1}}>
+            <ScrollView>
                 {transactionList.map((transaction, index) => {
                     let currentDate = new Date(transaction.date)
                     {/* console.log(currentDate.getDate()) */}
@@ -111,7 +110,6 @@ export const ExpenseTracker = ({route, navigation}) => {
             {/* <FAB style ={{position: 'absolute',margin: 16,right: 0,bottom: 0,}} small icon="plus" onPress={() => console.log('Pressed')}/> */}
 
             </SafeAreaView>
-        </SafeAreaView>
     )
 }
 
