@@ -164,6 +164,7 @@ const App = () => {
                         {
                             id: transactions[i].id,
                             cardID: transactionCard.id,
+                            cardName: transactionCard.card_name,
                             amount: amount,
                             category: category,
                             description: transactions[i].description,

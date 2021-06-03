@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, KeyboardAvoidingView, TouchableOpacity, ScrollView, StyleSheet, Alert, TextInput, Image } from 'react-native';
+import { View, Text, KeyboardAvoidingView, TouchableOpacity, ScrollView, StyleSheet, Alert, TextInput, Image, SafeAreaView } from 'react-native';
 
 import { Icon } from 'react-native-elements';
 import CalendarPicker from 'react-native-calendar-picker';
@@ -16,7 +16,8 @@ export const EditTransaction = ({route, navigation}) => {
     // const selectedCreditCard = route.params;
     const {transaction, setRefresh} = route.params
     const card = cardDetailsJSON.find(d => d.id == transaction.cardID);
-    // console.log(card);
+    console.log(transaction);
+
     // const { updateTotalSpent } = React.useContext(CreditCardRecordContext);
     const { updateTransaction } = React.useContext(TransactionContext);
 

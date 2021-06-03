@@ -1,7 +1,7 @@
 import React, { createRef } from 'react';
 import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Touchable } from 'react-native';
 
-import {TransactionContext} from '../context';
+import {CardContext, TransactionContext} from '../context';
 import {EditTransaction} from './editTransaction';
 import { Icon } from 'react-native-elements';
 import { FAB } from 'react-native-paper';
@@ -17,7 +17,7 @@ const TransactionEntry = (props) => {
         setRefresh(true);        
     }
     return (
-        <TouchableOpacity onPress = {()=> navigation.navigate("EditTransactionScreen", {transaction:transaction, setRefresh:setRefresh})} style = {{backgroundColor:'white', margin: 3, marginHorizontal: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.5, shadowRadius: 5,  elevation: 4, borderRadius: 20, height: 50, justifyContent: 'center'}}>
+        <TouchableOpacity onPress = {()=> navigation.navigate("EditTransactionScreen", {transaction:transaction, setRefresh:setRefresh})} style = {{backgroundColor:'white', margin: 3, marginHorizontal: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.5, shadowRadius: 5,  elevation: 4, borderRadius: 20, height: 70, justifyContent: 'center'}}>
             <View style = {{flexDirection: 'row',}}>
                 <View style = {{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems:'center'}}>
                     <View>
@@ -28,6 +28,7 @@ const TransactionEntry = (props) => {
                     <View>
                         <Text numberOfLines={1}>{transaction.description}</Text>
                         <Text style ={{color: 'grey'}}>{transaction.category}</Text>
+                        <Text style ={{color: 'grey'}}>{transaction.cardName}</Text>
                     </View>
                 </View>
                 <View style = {{flex: 2, flexDirection: 'row', alignItems: 'center'}}>
@@ -44,6 +45,7 @@ const TransactionEntry = (props) => {
 export const ExpenseTracker = ({route, navigation}) => {
     console.log('Render ExpenseTracker.js');
     const {getTransactionList, addTransaction, deleteTransaction, flushTransactions} = React.useContext(TransactionContext);
+    const {getCardList} = React.useContext(CardContext);
 
     const [refresh, setRefresh] = React.useState(false);
     // transcationList.push();
@@ -59,7 +61,7 @@ export const ExpenseTracker = ({route, navigation}) => {
     }
 
     return (
-            <SafeAreaView>
+            <SafeAreaView style = {{flex: 1}}>
             {/* <Text style = {{fontSize: 40}}>Expense Tracker</Text> */}
             <View style = {{alignItems: 'center', justifyContent: 'space-between', flexDirection:'row', margin: 10}}>
                 <TouchableOpacity style = {{width: 100, borderWidth: 2}} onPress = {() => flushTransactions()}>
@@ -67,6 +69,11 @@ export const ExpenseTracker = ({route, navigation}) => {
                         <Text style = {{fontSize: 16}}>Flush</Text>
                     </View>
                 </TouchableOpacity>
+                {/* <TouchableOpacity style = {{width: 100, borderWidth: 2}} onPress = {() => ()}>
+                    <View style = {{alignItems: 'center', justifyContent: 'center'}}>
+                        <Text style = {{fontSize: 12}}>Add Transactions</Text>
+                    </View>
+                </TouchableOpacity> */}
                 <TouchableOpacity onPress = {() => setRefresh(true)} style = {{alignItems: 'flex-end'}}>
                     <Icon name = {'refresh'} type = {'font-awesome'} size={20} color= {'black'} borderRadius= {20}/>
                 </TouchableOpacity>
@@ -91,14 +98,12 @@ export const ExpenseTracker = ({route, navigation}) => {
                     } else {
                         return (
                             <Swipeable renderRightActions = {() => (
-                                                    <TouchableOpacity onPress = {() => {
-                                                            console.log('swipe')
-                                                        }}>                                              
-                                                        <View style = {{width: 50, justifyContent: 'center', alignContent: 'center'}}>
-                                                            <Icon  name = 'delete' type= 'materials' style={{justifyContent: 'center', alignContent: 'center'}}/>
-                                                        </View>
-                                                    </TouchableOpacity>
-                                                    )} key = {index}>
+                                <TouchableOpacity onPress = {() => { console.log('swipe')}}>
+                                    <View style = {{width: 50, justifyContent: 'center', alignContent: 'center', flex: 1}}>
+                                        <Icon  name = 'delete' type= 'materials' style={{justifyContent: 'center', alignContent: 'center'}} size={30}/>
+                                    </View>
+                                </TouchableOpacity>
+                                    )} key = {index}>
                                 <TransactionEntry props={{transaction: transaction, route: route, navigation: navigation, setRefresh: setRefresh}} key ={index}/>
                             </Swipeable>  
                         )
