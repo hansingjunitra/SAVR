@@ -107,10 +107,10 @@ export const RebateProgress = () => {
                             card = {...cardDetail, ...card};
                             // If the bank exists in the credentials.connectionList -- then automatically try to fetch if card exist in the account.
                             getCardConnectionAccount(card);
+                            
                             var totalRebates = 0;
-                            var totalSpend = 0;
                             try {
-                                totalRebates, totalSpend = rebateFuncMap[card](getTransactionList());
+                                totalRebates = rebateFuncMap[card](card);
                             }
                             catch {
                                 console.log("Card not found")
