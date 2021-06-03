@@ -87,7 +87,7 @@ export const EditTransaction = ({route, navigation}) => {
     const [categoryModal, setCategoryModal] = React.useState(false);
 
     return (
-        <View style = {{margin: 15, flex: 1}}>
+        <SafeAreaView style = {{margin: 15, flex: 1}}>
             <View style = {{flex: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
                 <Image source = {{uri: card.image}} style = {{height: 150, width: 240, borderRadius: 20}}></Image>
             </View>
@@ -169,7 +169,7 @@ export const EditTransaction = ({route, navigation}) => {
                     </View>
                 </View>
             </Modal>
-        </View>
+        </SafeAreaView>
     )
     
 }

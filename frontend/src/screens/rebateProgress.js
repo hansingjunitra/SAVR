@@ -94,7 +94,7 @@ export const RebateProgress = () => {
 
     return (
         <ScrollView>
-            <View style = {{flex: 1, backgroundColor:'white'}}>
+            <SafeAreaView style = {{flex: 1, backgroundColor:'white'}}>
                 <View style = {{alignItems: 'flex-end', justifyContent: 'flex-end', paddingHorizontal: 10, marginVertical: 2}}>
                     <TouchableOpacity onPress = {() => setRefresh(true)} style = {{alignItems: 'flex-end', justifyContent: 'flex-end'}}>
                         <Icon name = {'refresh'} type = {'font-awesome'} size={20} color= {'black'} borderRadius= {20}/>
@@ -204,7 +204,7 @@ export const RebateProgress = () => {
                         })}
                     </Swiper>
                 </View>
-            </View> 
+            </SafeAreaView> 
         </ScrollView>
     )
 }

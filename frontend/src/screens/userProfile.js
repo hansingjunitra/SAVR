@@ -109,7 +109,7 @@ export const UserProfile = ({navigation}) => {
 
     return (
         <ScrollView>
-        <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <SafeAreaView style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <Text style= {{fontSize: 40}}>Hi {credentials.username}</Text>
             <Text style= {{fontSize: 24}}>Cashback Earned: </Text>
             <Text style= {{fontSize: 24}}>User Owned</Text>
@@ -180,7 +180,7 @@ export const UserProfile = ({navigation}) => {
                 </Text>
             </TouchableOpacity>
             
-            </View>
+            </SafeAreaView>
         </ScrollView>
     )
 }

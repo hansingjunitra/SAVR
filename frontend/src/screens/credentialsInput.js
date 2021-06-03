@@ -6,7 +6,7 @@ export const CredentialsInput = () => {
     const [name, setName] = React.useState(null);
     const {createNewUser} = React.useContext(CredentialsContext);
     return (
-        <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <SafeAreaView style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <Text style ={{fontSize: 36}}>Enter username</Text>
             <TextInput onChangeText={(input) => setName(() =>input)} value={name} placeholder={'Username'} style= {{alignSelf: 'center', width: '80%', height: 40, margin: 12, borderWidth: 1}}/>    
             <TouchableOpacity onPress = {() => createNewUser(name)}>
@@ -14,7 +14,7 @@ export const CredentialsInput = () => {
                 <Text>Confirm</Text>
               </View>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
   )
 } 
 

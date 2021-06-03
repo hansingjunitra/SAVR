@@ -58,7 +58,7 @@ export const ExpenseTracker = ({route, navigation}) => {
     }
 
     return (
-        <View style= {{flex:1, justifyContent: 'center'}}>
+        <SafeAreaView style= {{flex:1, justifyContent: 'center'}}>
             {/* <Text style = {{fontSize: 40}}>Expense Tracker</Text> */}
             <View style = {{alignItems: 'center', justifyContent: 'space-between', flexDirection:'row', margin: 10}}>
                 <TouchableOpacity style = {{width: 100, borderWidth: 2}} onPress = {() => flushTransactions()}>
@@ -108,7 +108,7 @@ export const ExpenseTracker = ({route, navigation}) => {
             </ScrollView>
             {/* <FAB style ={{position: 'absolute',margin: 16,right: 0,bottom: 0,}} small icon="plus" onPress={() => console.log('Pressed')}/> */}
 
-        </View>
+        </SafeAreaView>
     )
 }
 
