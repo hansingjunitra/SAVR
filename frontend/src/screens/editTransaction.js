@@ -12,15 +12,11 @@ var moment = require('moment');
 const cardDetailsJSON = require('../creditCards.json'); 
 
 export const EditTransaction = ({route, navigation}) => {
-
-    // const selectedCreditCard = route.params;
-    const {transaction, setRefresh} = route.params
-    const card = cardDetailsJSON.find(d => d.id == transaction.cardID);
-    // console.log(transaction);
-
-    // const { updateTotalSpent } = React.useContext(CreditCardRecordContext);
+    const { transaction, setRefresh } = route.params;
     const { updateTransaction } = React.useContext(TransactionContext);
-
+    const card = cardDetailsJSON.find(d => d.id == transaction.cardID);
+    console.log(transaction, card);
+    
     const [newTransaction, setNewTransaction] = React.useState(transaction)
 
     const onChangeAmount = (amount) => {
@@ -38,8 +34,6 @@ export const EditTransaction = ({route, navigation}) => {
     }
 
     const onSelectCategory = (selectedCategory) => {
-        // const selectedCategoryIcon = card.categories.find((category) => category.elgitibility)
-
         setNewTransaction((prevState) => { return {
             ...prevState,
             category: selectedCategory.eligibility,
