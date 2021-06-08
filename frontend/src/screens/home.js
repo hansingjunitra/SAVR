@@ -43,26 +43,7 @@ const Home = ({navigation}) => {
             <View style = {{alignItems: 'center', justifyContent: 'center', flex: 1}}>
                 <Text style = {styles.title}>Transaction History</Text>
             </View>
-            {/* <View style = {{flex: 8}}>
-                <ScrollView style = {{flex: 1}}>
-                    {
-                        <View> 
-                            {transactionList === null || transactionList === [] ? 'No Transaction Recorded' : transactionList.map((transaction, index) => {
-                                console.log(transactionList)
-                                return (
-                                    <Swipeable ref = {(ref) => {refsList[index] = ref}} key= {index} renderRightActions = {() => ( 
-                                        <TouchableOpacity onPress = {() => { deleteTransactionHandler(transaction)}}>
-                                            <View style = {{width: 50, height: 50, margin:3, justifyContent: 'center', alignContent: 'center'}}>
-                                                <Icon  name = 'delete' type= 'materials'/>
-                                            </View>
-                                        </TouchableOpacity>)} key = {index}>
-                                        <TransactionCard transaction = {transaction}/> 
-                                    </Swipeable>   
-                            )})}
-                        </View>
-                    }
-                </ScrollView>
-            </View> */}
+
             <View style = {{flex: 1, alignItems: 'center'}}>
                 <TouchableOpacity onPress = {() => setModalVisibility(true)}>
                     <View style = {styles.button1}>

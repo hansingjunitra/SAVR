@@ -9,6 +9,7 @@ import {RebateProgress} from './screens/rebateProgress';
 import {ExpenseTracker} from './screens/expenseTracker';
 import {AddCard} from './screens/addCard';
 import {EditTransaction} from './screens/editTransaction';
+import {AddTransaction} from './screens/addTransaction';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,6 +30,7 @@ const HistoryTab = () => {
         <HistoryStack.Navigator>
             <HistoryStack.Screen name = {"Profile"} component = {ExpenseTracker} options = {{headerShown: false}}/>
             <HistoryStack.Screen name = {"EditTransactionScreen"} component = {EditTransaction} options = {{headerShown: false}}/>
+            <HistoryStack.Screen name = {"AddTransactionScreen"} component = {AddTransaction} options = {{headerShown: false}}/>
         </HistoryStack.Navigator>
     )
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TextInput, Text, TouchableOpacity} from 'react-native';
+import {View, TextInput, Text, TouchableOpacity, SafeAreaView} from 'react-native';
 import {CredentialsContext} from '../context';
 
 export const CredentialsInput = () => {
@@ -17,6 +17,3 @@ export const CredentialsInput = () => {
         </SafeAreaView>
   )
 } 
-
-        {/*  */}
-          {/* </View> */}

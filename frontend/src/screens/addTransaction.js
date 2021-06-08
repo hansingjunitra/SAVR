@@ -8,11 +8,11 @@ import { TransactionRecordContext, CreditCardRecordContext } from '../util/conte
 
 var moment = require('moment');
 
-const AddTransaction = ({route, navigation}) => {
+export const AddTransaction = ({route, navigation}) => {
 
     const selectedCreditCard = route.params;
-    const { updateTotalSpent } = React.useContext(CreditCardRecordContext);
-    const { addTransaction } = React.useContext(TransactionRecordContext);
+    // const { updateTotalSpent } = React.useContext(CreditCardRecordContext);
+    // const { addTransaction } = React.useContext(TransactionRecordContext);
 
     const [newTransaction, setNewTransaction] = React.useState({
         id: Math.round(Math.random() * 10000000000 ),
@@ -169,5 +169,3 @@ const AddTransaction = ({route, navigation}) => {
     )
     
 }
-
-export default AddTransaction

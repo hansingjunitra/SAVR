@@ -16,7 +16,7 @@ export const EditTransaction = ({route, navigation}) => {
     // const selectedCreditCard = route.params;
     const {transaction, setRefresh} = route.params
     const card = cardDetailsJSON.find(d => d.id == transaction.cardID);
-    console.log(transaction);
+    // console.log(transaction);
 
     // const { updateTotalSpent } = React.useContext(CreditCardRecordContext);
     const { updateTransaction } = React.useContext(TransactionContext);

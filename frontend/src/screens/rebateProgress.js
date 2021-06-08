@@ -8,7 +8,7 @@ import { color } from 'react-native-reanimated';
 
 import {createConnection, getConnectionAccounts, getCustomerConnections, getTransactions} from '../saltedge';
 import { SafeAreaView } from 'react-native';
-// import {rebateFuncMap} from '../util/rebateCalculation'
+import {rebateFuncMap} from '../util/rebateCalculation'
 
 const cardDetailsJSON = require('../creditCards.json'); 
 
@@ -115,7 +115,8 @@ export const RebateProgress = () => {
                                 try {
                                     totalRebates = rebateFuncMap[card](card);
                                 }
-                                catch {
+                                catch (err) {
+                                    console.log(err)
                                     console.log("Card not found")
                                 }
 
