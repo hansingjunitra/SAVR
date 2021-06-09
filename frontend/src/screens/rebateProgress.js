@@ -113,11 +113,11 @@ export const RebateProgress = () => {
                                 
                                 var totalRebates = 0;
                                 try {
-                                    totalRebates = rebateFuncMap[card](card);
+                                    totalRebates = rebateFuncMap[card.card_name](card);
                                 }
                                 catch (err) {
                                     console.log(err)
-                                    console.log("Card not found")
+                                    console.log(card.card_name, "Card not found")
                                 }
 
                                 return (
