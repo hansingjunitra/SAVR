@@ -1,51 +1,69 @@
 
 const ocbc365 = function(card) {
-    const rebateCategory = {"Dining":0.06, "Groceries":0.03 ,"Transport":0.03 ,"Petrol":0.05 ,"Utilities":0.03 ,"Travel":0.03, "Others":0.003}
-    var totalRebate = 0;
+    const rebateCategory = {"Dining":0.06, "Groceries":0.03 ,"Transport":0.03 ,"Petrol":0.05 ,"Utilities":0.03 ,"Travel":0.03}
     var totalSpend = card.totalSpent;
+    var othersRebate = 0;
+    var categoryRebate = 0;
 
     for (const category in card.spendingBreakdown) {
-        if (category in rebateCategory && totalSpend>=800) {
+        if (category in rebateCategory && totalSpend>=800 && categoryRebate<=80) {
             var rebate = card.spendingBreakdown[category] * rebateCategory[category]
-            totalRebate += rebate;
+            categoryRebate += rebate;
+            if (categoryRebate > 80) {
+                var excess = (categoryRebate - 80) / rebateCategory[category]
+                categoryRebate = 80
+                othersRebate += excess * 0.003
+            }
         }
         else {
-            totalRebate = totalSpend * 0.003
+            var rebate = card.spendingBreakdown[category] * 0.003
+            othersRebate += rebate
         }
     }
-    if (totalRebate>80) {totalRebate = 80}
 
-    return totalRebate
+    return categoryRebate + othersRebate
 }
 
 const dbsLiveFresh = function(card) {
-    const rebateCategory = {"Online":0.05, "Contactless":0.05, "Others":0.003};
+    const rebateCategory = {"Online":0.05, "Contactless":0.05};
     var totalRebate = 0;
     var totalSpend = card.totalSpent;
+    var othersRebate = 0;
 
     for (const category in card.spendingBreakdown) {
         if (category in rebateCategory && totalSpend>=600) {
             var rebate = card.spendingBreakdown[category] * rebateCategory[category]
-            if (rebate>20) {rebate = 20}
+            if (rebate>20) {
+                var excess = (rebate - 20) / rebateCategory[category]
+                rebate = 20
+                if (othersRebate<=20) {
+                    othersRebate += excess * 0.003
+                }
+            }
             totalRebate += rebate;
         }
         else {
-            totalRebate = totalSpend * 0.003
+            var rebate = card.spendingBreakdown[category] * 0.003
+            othersRebate += rebate
         }
     }
+    if (othersRebate>20) {othersRebate = 20}
 
-    return totalRebate
+    return totalRebate + othersRebate
 }
 
 const maybankFandF = function(card) {
     const rebateCategory = ["Food Delivery", "Fast Food", "Groceries", "Transport", "Petrol", "Learning/Retail", "Tele/Streaming"]
     var totalRebate = 0;
     var totalSpend = card.totalSpent;
+    var totalSpendCategory = 0;
 
     for (const category in card.spendingBreakdown) {
         if (category in rebateCategory) {
             if (totalRebate<80) {
-                if (totalSpend>=800) {var rebate = card.spendingBreakdown[category] * 0.08}
+                if (totalSpend>=800) {
+                    var rebate = card.spendingBreakdown[category] * 0.08
+                }
                 else if (totalSpend>=500) {var rebate = card.spendingBreakdown[category] * 0.05}
                 else {var rebate = card.spendingBreakdown[category] * 0.003}
             }
@@ -53,9 +71,12 @@ const maybankFandF = function(card) {
             totalRebate += rebate;
         }
         else {
-            totalRebate = totalSpend * 0.003
+            rebate = car.spendingBreakdown[category] * 0.003
+            totalRebate += rebate
         }
     }
+
+    return totalRebate
 }
 
 const hsbcAdvance = function(card, deposit) {
@@ -77,41 +98,56 @@ const hsbcAdvance = function(card, deposit) {
 }
 
 const citiCashback = function(card) {
-    const rebateCategory = {"Dining":0.06, "Groceries":0.08, "Petrol":0.08, "Others":0.0025}
-    var totalRebate = 0;
+    const rebateCategory = {"Dining":0.06, "Groceries":0.08, "Petrol":0.08}
     var totalSpend = card.totalSpent;
+    var othersRebate = 0;
+    var categoryRebate = 0;
 
     for (const category in card.spendingBreakdown) {
-        if (category in rebateCategory && totalSpend>=800) {
+        if (category in rebateCategory && totalSpend>=800 && categoryRebate<=80) {
             var rebate = card.spendingBreakdown[category] * rebateCategory[category]
-            totalRebate += rebate;
+            categoryRebate += rebate;
+            if (categoryRebate > 80) {
+                var excess = (categoryRebate - 80) / rebateCategory[category]
+                categoryRebate = 80
+                othersRebate += excess * 0.0025
+            }
         }
         else {
-            totalRebate = totalSpend * 0.0025
+            var rebate = card.spendingBreakdown[category] * 0.0025
+            othersRebate += rebate
         }
     }
-    if (totalRebate>80) {totalRebate = 80}
 
-    return totalRebate
+    return categoryRebate + othersRebate
 }
 
 const frank = function(card) {
-    const rebateCategory = {"Online":0.06, "Contactless/Forex":0.06, "Others":0.003}
-    var totalRebate = 0;
+    const rebateCategory = {"Online":0.06, "Contactless/Forex":0.06}
     var totalSpend = card.totalSpent;
+    var totalRebate = 0;
+    var othersRebate = 0;
 
     for (const category in card.spendingBreakdown) {
         if (category in rebateCategory && totalSpend>=600) {
             var rebate = card.spendingBreakdown[category] * rebateCategory[category]
-            if (rebate>25) {rebate = 25}
+            if (rebate>25) {
+                var excess = (rebate - 25) / rebateCategory[category]
+                rebate = 25
+                if (othersRebate<=25) {
+                    othersRebate += excess * 0.003
+                }
+            }
             totalRebate += rebate;
         }
         else {
-            totalRebate = totalSpend * 0.003
+            var rebate = card.spendingBreakdown[category] * 0.003
+            othersRebate += rebate
         }
     }
+    if (othersRebate>25) {othersRebate = 25}
 
-    return totalRebate
+    return totalRebate + othersRebate
 }
 
 const posb = function(transactions) {
@@ -121,7 +157,7 @@ const posb = function(transactions) {
 export const rebateFuncMap = {
     "OCBC 365 Credit Card" : ocbc365,
     "DBS Live Fresh Card" : dbsLiveFresh,
-    "Maybank Family and Friends" : maybankFandF, //still doesnt work
+    "Maybank Family and Friends" : maybankFandF, //t&c updated, wrong calc now
     "Advance Credit Card" : hsbcAdvance,
     "Citi Cash Back®" : citiCashback,
     "POSB Everyday" : posb, //still doesnt work
