@@ -50,14 +50,14 @@ export const Navigator = () => {
         <NavigationContainer>
             <Tab.Navigator>
                 <Tab.Screen
-                    name = "History"
-                    component = {HistoryTab}
-                    options = {{tabBarIcon: () =>  <Icon name = {'account'} type = {'material-community'}/>}}
-                />
-                <Tab.Screen
                     name = "Wallet"
                     component = {WalletTab}
                     options = {{tabBarIcon: () => <Icon name = {'wallet'} type = {'material-community'}/>}}
+                />
+                <Tab.Screen
+                    name = "History"
+                    component = {HistoryTab}
+                    options = {{tabBarIcon: () =>  <Icon name = {'account'} type = {'material-community'}/>}}
                 />
                 <Tab.Screen
                     name = "Profile"
