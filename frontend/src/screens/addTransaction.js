@@ -10,7 +10,6 @@ var moment = require('moment');
 const cardDetailsJSON = require('../creditCards.json'); 
 
 export const AddTransaction = ({route, navigation}) => {
-    console.log(route.params);
     const {selectedCard, setRefresh} = route.params;
     const [selectedDate, setSelectedDate] = React.useState(moment());
     const [calendarModal, setCalendarModal] = React.useState(false);
@@ -18,8 +17,8 @@ export const AddTransaction = ({route, navigation}) => {
     const [newTransaction, setNewTransaction] = React.useState({
         alias: null, 
         amount: 0, 
-        cardID: selectedCard.cardID, 
-        cardName: selectedCard.cardName, 
+        cardID: selectedCard.id, 
+        cardName: selectedCard.card_name, 
         category: null, 
         date: selectedDate.format("YYYY-MM-DD"), 
         description: null, 
@@ -90,8 +89,6 @@ export const AddTransaction = ({route, navigation}) => {
         //     }})
         // }
     }
-
-    console.log(selectedCard);
 
     return (
         <View style = {{margin: 15, flex: 1}}>

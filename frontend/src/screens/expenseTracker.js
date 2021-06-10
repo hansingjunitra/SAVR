@@ -55,12 +55,8 @@ export const ExpenseTracker = ({route, navigation}) => {
 
 const TransactionScrollView = ({props, navigation}) => {
     console.log("Render Scroll View")
-    console.log(props)
 
     const {route, setRefresh} = props;
-
-    console.log(navigation);
-
     const {getTransactionList, addTransaction, deleteTransaction, flushTransactions} = React.useContext(TransactionContext);
     const transactionList = getTransactionList().sort((a, b) => new Date(b.date) - new Date(a.date));
     // Sort by date
@@ -80,6 +76,7 @@ const TransactionScrollView = ({props, navigation}) => {
                         <View key ={index} style = {{flex: 1}}>
                             <Text style = {{fontSize: 14, margin: 10}}>{latestMonth} {currentDate.getFullYear()}</Text>
                             {/* <TransactionEntry navigation = {navigation} props={{transaction: transaction, route: route, setRefresh: setRefresh}} /> */}
+                            <TransactionEntry props={{transaction: transaction, route: route, setRefresh: setRefresh}} navigation= {navigation}/>
                         </View>
                     )
                 } else {
@@ -113,8 +110,8 @@ const TransactionEntry = ({props, navigation}) => {
                 <View style = {{flex: 3, flexDirection: 'row', alignItems: 'center'}}>
                     <View>
                         <Text numberOfLines={1}>{transaction.description}</Text>
-                        <Text style ={{color: 'grey'}}>{transaction.category}</Text>
-                        <Text style ={{color: 'grey'}}>{transaction.cardName}</Text>
+                        <Text numberOfLines={1} style ={{color: 'grey'}}>{transaction.category}</Text>
+                        <Text numberOfLines={1} style ={{color: 'grey'}}>{transaction.cardName}</Text>
                     </View>
                 </View>
                 <View style = {{flex: 2, flexDirection: 'row', alignItems: 'center'}}>
@@ -130,7 +127,6 @@ const TransactionEntry = ({props, navigation}) => {
 
 
 const SelectCardModal = React.forwardRef(({props, navigation}, ref) => {
-    console.log(navigation);
     const [modalVisibility, setModalVisibility] = React.useState(false);
     const [selectedCard, setSelectedCard] = React.useState(null)
 

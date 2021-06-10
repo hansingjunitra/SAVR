@@ -24,7 +24,7 @@ const App = () => {
 
     const [retrieving, setRetrieving] = React.useState(true);
     const [cardList, setCardList] = React.useState([]);
-    const [transactionList, setTransactionList] = React.useState([]);
+    const [transactionList, setTransactionList] = React.useState([]);7
     const [credentials, setCredentials] = React.useState({ token: null, secret:null, username: null, saltEdgeID: null, connectionIDList: []});
     /*
         {
@@ -43,6 +43,7 @@ const App = () => {
             // console.log(cardList);
             return cardList;
         },
+        cardList: cardList,
         addCard: (newCardList) => {
             console.log('Adding new card');
             AsyncStorage.setItem('creditCardRecord', JSON.stringify([...cardList, ...newCardList]));
@@ -130,8 +131,22 @@ const App = () => {
         getTransactionList: () => {
             return transactionList;
         },
+        transactionList: transactionList,
         addTransaction: (transaction) => {
-            console.log("Add transaction");
+            // console.log(transaction);
+            let updatedTransactionList = transactionList;
+            updatedTransactionList.push(transaction);
+            
+            let updatedCardList = cardList;
+            const cardIndex = updatedCardList.findIndex((card) => card.id == transaction.cardID);
+            // console.log(updatedCardList[cardIndex]);
+            updatedCardList[cardIndex].spendingBreakdown[transaction.category] += transaction.amount;
+            updatedCardList[cardIndex].totalSpent += transaction.amount;
+            
+            setTransactionList(updatedTransactionList);
+            AsyncStorage.setItem('transactionHistory', JSON.stringify([...updatedTransactionList]));            
+            setCardList(updatedCardList);
+            AsyncStorage.setItem('creditCardRecord', JSON.stringify([...updatedCardList]));
         },
         fetchTransactions: async (connectionID, accountID, transactionCard) => {
             const transactions = await getTransactions(connectionID, accountID);
@@ -141,8 +156,6 @@ const App = () => {
             let updatedTotalSpent = transactionCard.totalSpent;
             let updatedSpendingBreakdown = transactionCard.spendingBreakdown;
             const today = new Date();
-
-            // console.log(transactionCard)
 
             for (let i = 0; i < transactions.length; i++) {
                 // if transaction has not been fetched and is an expense
