@@ -238,6 +238,7 @@ const App = () => {
                 <Image source = {splashScreen} style = {{height: windowHeight, width: windowWidth, alignSelf: 'center'}}></Image>
                 {/* 4688 x 10150 */}
             </View> : null}
+            <Text>hello</Text>
             <CreditCardRecordContext.Provider value = {creditCardRecordContext} >
             <TransactionRecordContext.Provider value = {transactionRecordContext}>
                 <NavigationContainer>
