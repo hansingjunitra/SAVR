@@ -1,9 +1,11 @@
 
-const ocbc365 = function(card) {
+const ocbc365 = function(card, mode) {
     const rebateCategory = {"Dining":0.06, "Groceries":0.03 ,"Transport":0.03 ,"Petrol":0.05 ,"Utilities":0.03 ,"Travel":0.03}
     var totalSpend = card.totalSpent;
     var othersRebate = 0;
     var categoryRebate = 0;
+
+    if (mode == 1) {totalSpend=1000}
 
     for (const category in card.spendingBreakdown) {
         if (category in rebateCategory && totalSpend>=800 && categoryRebate<=80) {
@@ -24,11 +26,13 @@ const ocbc365 = function(card) {
     return categoryRebate + othersRebate
 }
 
-const dbsLiveFresh = function(card) {
+const dbsLiveFresh = function(card, mode) {
     const rebateCategory = {"Online":0.05, "Contactless":0.05};
     var totalRebate = 0;
     var totalSpend = card.totalSpent;
     var othersRebate = 0;
+
+    if (mode == 1) {totalSpend=1000}
 
     for (const category in card.spendingBreakdown) {
         if (category in rebateCategory && totalSpend>=600) {
@@ -97,11 +101,13 @@ const hsbcAdvance = function(card, deposit) {
     }
 }
 
-const citiCashback = function(card) {
+const citiCashback = function(card, mode) {
     const rebateCategory = {"Dining":0.06, "Groceries":0.08, "Petrol":0.08}
     var totalSpend = card.totalSpent;
     var othersRebate = 0;
     var categoryRebate = 0;
+
+    if (mode == 1) {totalSpend=1000}
 
     for (const category in card.spendingBreakdown) {
         if (category in rebateCategory && totalSpend>=800 && categoryRebate<=80) {
@@ -122,11 +128,13 @@ const citiCashback = function(card) {
     return categoryRebate + othersRebate
 }
 
-const frank = function(card) {
+const frank = function(card, mode) {
     const rebateCategory = {"Online":0.06, "Contactless/Forex":0.06}
     var totalSpend = card.totalSpent;
     var totalRebate = 0;
     var othersRebate = 0;
+
+    if (mode == 1) {totalSpend=1000}
 
     for (const category in card.spendingBreakdown) {
         if (category in rebateCategory && totalSpend>=600) {

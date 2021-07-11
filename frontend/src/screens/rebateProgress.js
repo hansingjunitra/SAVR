@@ -111,9 +111,11 @@ export const RebateProgress = () => {
                                 // If the bank exists in the credentials.connectionList -- then automatically try to fetch if card exist in the account.
                                 getCardConnectionAccount(card);
                                 
-                                var totalRebates = 0;
+                                var realisedRebates = 0;
                                 try {
-                                    totalRebates = rebateFuncMap[card.card_name](card);
+                                    realisedRebates = rebateFuncMap[card.card_name](card);
+                                    unrealisedRebates = rebateFuncMap[card.card_name](card, 1);
+                                    console.log(realisedRebates, unrealisedRebates)
                                 }
                                 catch (err) {
                                     console.log(err)
@@ -134,7 +136,7 @@ export const RebateProgress = () => {
                                                     {/* <Text style = {{position:'absolute', right: 10, top: 10}}>${getTotalSpent(card)} / ${card.minimum_spending}</Text> */}
                                                 </View>
                                             </View>
-                                            <Text style = {{fontSize: 12, marginTop :5, fontWeight: 'bold'}}>Current Total Rebate: ${totalRebates} / ${card.maximum_rebates}</Text>
+                                            <Text style = {{fontSize: 12, marginTop :5, fontWeight: 'bold'}}>Current Total Rebate: ${realisedRebates.toFixed(2)} / ${card.maximum_rebates}</Text>
                                         </View>
                                         <View style= {{height:80,}}>
 
