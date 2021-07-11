@@ -4,6 +4,7 @@ import {CardContext, CredentialsContext, TransactionContext} from '../context';
 
 import {createConnection, getConnectionAccounts, getCustomerConnections, getTransactions} from '../saltedge';
 import { AddCard } from './addCard';
+import { savrAlgo } from '../util/algo';
 
 const cardDetailsJSON = require('../creditCards.json');
 
@@ -86,6 +87,7 @@ const SyncStatus = (props) => {
 
 export const UserProfile = ({navigation}) => {
     console.log("Render User Profile");
+    //savrAlgo();
 
     const {getCardList, flushCards, deleteCard, updateCardConnectionID} = React.useContext(CardContext);
     const {getCredentials, getConnections, getAccounts, setCredentials} = React.useContext(CredentialsContext);
