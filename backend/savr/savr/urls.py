@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.views import Index, savrAlgo
+from api.views import savrAlgo, userAlgo
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Index),
     path('algo/', savrAlgo),
+    path('algo/<str:user>', userAlgo),
 ]
