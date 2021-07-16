@@ -71,7 +71,7 @@ const maybankFandF = function(card) {
             totalRebate += rebate;
         }
         else {
-            rebate = car.spendingBreakdown[category] * 0.003
+            rebate = card.spendingBreakdown[category] * 0.003
             totalRebate += rebate
         }
     }

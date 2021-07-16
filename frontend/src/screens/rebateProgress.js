@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Text, Image, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import React, { useContext } from 'react';
+import {View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback} from 'react-native';
 import { CardContext, CredentialsContext, TransactionContext } from '../context';
 import { ProgressBar, Colors } from 'react-native-paper';
 import Swiper from 'react-native-swiper';
@@ -25,8 +25,14 @@ export const RebateProgress = () => {
     }, [])
 
     const [refresh, setRefresh] = React.useState(false);
+    const ref = React.useRef(null);
 
     const credentials = getCredentials();
+    let swiperObj
+    const setSwiperHandler = (i) => {
+        swiperObj.scrollTo(i)
+    }
+
     // const cardList = getCardList();
 
     const getProgress = (totalSpent, minmumSpending) => {
@@ -95,16 +101,18 @@ export const RebateProgress = () => {
 
     return (
         <SafeAreaView>
-
             <ScrollView>
                 <SafeAreaView style = {{flex: 1, backgroundColor:'white'}}>
-                    <View style = {{alignItems: 'flex-end', justifyContent: 'flex-end', paddingHorizontal: 10, marginVertical: 2}}>
-                        <TouchableOpacity onPress = {() => setRefresh(true)} style = {{alignItems: 'flex-end', justifyContent: 'flex-end'}}>
+                    <View style = {{flexDirection: 'row', justifyContent: 'space-between' ,paddingHorizontal: 10, marginVertical: 2}}>
+                        <TouchableOpacity onPress = {() => ref.current.setModalVisibility(true)} style = {{alignItems: 'flex-start', justifyContent: 'flex-end'}}>
+                            <Icon name = {'wallet'} type = {'entypo'}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => setRefresh(true)} style = {{alignSelf: 'flex-end', justifySelf: 'flex-end'}}>
                             <Icon name = {'refresh'} type = {'font-awesome'} size={20} color= {'black'} borderRadius= {20}/>
                         </TouchableOpacity>
                     </View>
                     <View style = {{flex: 1 , alignItems: 'center'}}>
-                        <Swiper autoplayTimeout = {10} autoplay = {false} showsPagination= {true}>
+                        <Swiper ref={component => swiperObj = component} loop={true} autoplayTimeout = {10} autoplay = {false} showsPagination= {true} paginationStyle={{bottom: undefined, left: undefined, top: -100, right: 0}} style = {{alignSelf: 'flex-start'}}>
                             {cardList.map((card, index) => {
                                 let cardDetail = cardDetailsJSON.find(d => d.id == card.id);
                                 card = {...cardDetail, ...card};
@@ -185,7 +193,7 @@ export const RebateProgress = () => {
                                                 </View>
                                             </TouchableOpacity>
                                         </View> */}
-                                        <View style= {{flexWrap: 'wrap', flexDirection:'row', flex: 3}}>
+                                        <View style= {{flexWrap: 'wrap', flexDirection:'row', flex: 3,}}>
                                             {card.categories.map((category, index) => {
                                                 return (
                                                     <View key={index} style = {{width: '29%', height: '30%', alignItems: 'center', margin: '2%', borderWidth: 2, borderColor: 'grey', borderRadius: 10, backgroundColor: 'white'}}>
@@ -210,6 +218,62 @@ export const RebateProgress = () => {
                     </View>
                 </SafeAreaView> 
             </ScrollView>
+            <SelectCardModal ref = {ref} setSwiperHandler = {setSwiperHandler}/>
         </SafeAreaView>
     )
 }
+
+const SelectCardModal = React.forwardRef((props, ref) => {
+    const { getCardList } = useContext(CardContext);
+    const [modalVisibility, setModalVisibility] = React.useState(false);
+    const {setSwiperHandler} = props;
+    const cardList = getCardList();
+    const [selectedCardIndex, setSelectedCardIndex] = React.useState(null);
+    React.useImperativeHandle(ref, () => {
+        return {
+            setModalVisibility: setModalVisibility,
+            modalVisibility: modalVisibility
+        }
+    })   
+    
+    const confirmButtonHandler = () => {
+        setModalVisibility(false); 
+        selectedCardIndex !== null ? setSwiperHandler(selectedCardIndex + 1) : null
+        setSelectedCardIndex(null);
+    }
+    
+    return (
+        <Modal animationType="none" transparent={true} visible={modalVisibility} onRequestClose={() => { Alert.alert("Modal has been closed.");   setModalVisibility(!modalVisibility); }}>
+            <View style= {{flex: 1, justifyContent: "flex-end", alignItems: "center", }}>
+                <TouchableWithoutFeedback onPress={()=> setModalVisibility(false)}>
+                    <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)'}} />
+                </TouchableWithoutFeedback>
+                <View style={{width:"100%" , height: "70%", backgroundColor: "white",  borderTopRightRadius: 30,  borderTopLeftRadius: 30, paddingHorizontal: 25, paddingTop: 25, alignItems: "center", shadowColor: "#000", shadowOffset: {width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 4, elevation: 5}}>
+                    <View style = {{alignItems: 'center', marginBottom: 20}}>
+                        <Text style = {{fontSize: 28}}>Select Card</Text>
+                        <Text>Which card did you use for spending?</Text>
+                    </View>
+                    <ScrollView>
+                        <View style = {{ alignContent: 'stretch',  flex: 1, flexWrap: "wrap",flexDirection: "row"} }>
+                            {cardList.map((card, index) => {
+                                return (
+                                    <View style = {{width : '50%', padding: 5, height: 100}} key = {index}>
+                                        <TouchableOpacity style = {[(selectedCardIndex !== null) && (selectedCardIndex === index) ? {borderWidth: 3, borderColor: card.color.quartenary, backgroundColor: card.colorCode, borderRadius: 15} : null]} onPress = {() => setSelectedCardIndex(index)}>
+                                        {/* <TouchableOpacity> */}
+                                            <Image style = {{height: '100%', width: '100%', borderRadius: 10}} source = {{uri: card.image}}></Image>
+                                        </TouchableOpacity>
+                                    </View>
+                                )
+                            })}
+                        </View>
+                    </ScrollView>
+                    <View style = {{height: '15%', justifyContent: 'center', width: '40%'}}>
+                        <TouchableOpacity style = {{margin:5, padding: 10, backgroundColor: '#2196F3', borderRadius: 10, alignItems: 'center'}} onPress = {() => confirmButtonHandler()}>
+                                <Text style = {{color: 'white'}}>Confirm</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        </Modal>
+    )
+})

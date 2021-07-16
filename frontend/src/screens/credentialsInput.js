@@ -15,5 +15,5 @@ export const CredentialsInput = () => {
               </View>
             </TouchableOpacity>
         </SafeAreaView>
-  )
+    )
 } 

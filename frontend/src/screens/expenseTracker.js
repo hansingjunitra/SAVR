@@ -125,7 +125,6 @@ const TransactionEntry = ({props, navigation}) => {
     )
 }
 
-
 const SelectCardModal = React.forwardRef(({props, navigation}, ref) => {
     const [modalVisibility, setModalVisibility] = React.useState(false);
     const [selectedCard, setSelectedCard] = React.useState(null)

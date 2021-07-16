@@ -1,109 +1,44 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { React, useContext } from 'react';
+import { View, Text } from 'react-native';
+import { CardContext } from '../context';
 
-import { ProgressBar, Colors } from 'react-native-paper';
-import { CreditCardRecordContext, TransactionRecordContext } from '../util/context';
+const Wallet = (props) => {
+    const { getCardList } = useContext(CardContext);
 
-import Swiper from 'react-native-swiper';
-import { ScrollView } from 'react-native-gesture-handler';
-
-const Wallet = ({navigation}) => {
-    const { getCreditCardList } = React.useContext(CreditCardRecordContext);
-    const { getTransactionList } = React.useContext(TransactionRecordContext);
-    const randomPick = () => {
-        return Math.floor(Math.random() * 3)
-    }
-
-    const randomAdd = () => {
-        return Math.floor(Math.random() * 10) * Math.floor(Math.random() * 10)
-    }
-
-    const creditCardList = getCreditCardList();
-
-    const getCashback = (cashback) => {
-        let value = cashback.percentage * cashback.spent
-        if (cashback.cap !== null ) {
-            if (value >= cashback.cap) {
-                let num = 23
-                console.log(num.toFixed(2))
-                return (cashback.cap).toFixed(2)
-            }
-        } else {
-            return value.toFixed(2)
-        }
-    }
-
-    const getProgress = (spent, minimum) => {
-        let value = spent / minimum;
-        if (value > 1) {
-            return 1;
-        } else {
-            return value;
-        }
-    }
-    
     return (
-        <View style = {{flex:1}}>
-            <View style = {{flex: 1, alignItems: 'center', borderBottomLeftRadius: 20, borderBottomRightRadius: 20}}>
-                <TouchableOpacity onPress = {() => navigation.navigate('AddCardScreen')}>
-                    <View style = {styles.button1}>
-                        <Text>Add Credit Card</Text>
+        <Modal animationType="none" transparent={true} visible={modalVisibility} onRequestClose={() => { Alert.alert("Modal has been closed.");   setModalVisibility(!modalVisibility); }}>
+            <View style= {{flex: 1, justifyContent: "flex-end", alignItems: "center", }}>
+                <TouchableWithoutFeedback onPress={()=> setModalVisibility(false)}>
+                    <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)'}} />
+                </TouchableWithoutFeedback>
+                <View style={{width:"100%" , height: "70%", backgroundColor: "white",  borderTopRightRadius: 30,  borderTopLeftRadius: 30, paddingHorizontal: 25, paddingTop: 25, alignItems: "center", shadowColor: "#000", shadowOffset: {width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 4, elevation: 5}}>
+                    <View style = {{alignItems: 'center', marginBottom: 20}}>
+                        <Text style = {{fontSize: 28}}>Select Card</Text>
+                        <Text>Which card did you use for spending?</Text>
                     </View>
-                </TouchableOpacity>
-            </View>
-            {/* <TouchableOpacity onPress = {() => 
-                    updateCards((prevState) => ({
-                        ...prevState,
-                        totalSpent : prevState.totalSpent + randomAdd() 
-                    }))}>
-                <View style = {{height: 100, width: 100, backgroundColor: 'black'}}>
-                        <Text>Add</Text>
+                    <ScrollView>
+                        <View style = {{ alignContent: 'stretch',  flex: 1, flexWrap: "wrap",flexDirection: "row"} }>
+                            {cardList.map((card, index) => {
+                                return (
+                                    <View style = {{width : '50%', padding: 5, height: 100}} key = {index}>
+                                        <TouchableOpacity style = {[(selectedCard !== null) && (selectedCard.id === card.id) ? {borderWidth: 3, borderColor: card.color.quartenary, backgroundColor: card.colorCode, borderRadius: 15} : null]} onPress = {() => setSelectedCard(card)}>
+                                        {/* <TouchableOpacity> */}
+                                            <Image style = {{height: '100%', width: '100%', borderRadius: 10}} source = {{uri: card.image}}></Image>
+                                        </TouchableOpacity>
+                                    </View>
+                                )
+                            })}
+                        </View>
+                    </ScrollView>
+                    <View style = {{height: '15%', justifyContent: 'center', width: '40%'}}>
+                        <TouchableOpacity style = {{margin:5, padding: 10, backgroundColor: '#2196F3', borderRadius: 10, alignItems: 'center'}} onPress = {() => {setModalVisibility(false); navigation.navigate('AddTransactionScreen', {selectedCard:selectedCard, setRefresh:setRefresh})}}>
+                                <Text style = {{color: 'white'}}>Confirm</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </TouchableOpacity> */}
-            <View style = {{flex: 6, paddingTop: 25}}>
-                <Swiper autoplayTimeout = {10} autoplay = {true} showsPagination= {true}>
-                    {creditCardList.map((card, index) => {
-                        return (
-                            <View key = {index} style = {{flex: 1}}>
-                                <ScrollView>
-                                    <View style = {{alignItems: 'center'}}>
-                                        <Image source = {{uri: card.image}} style = {{height: 120, width: 200, borderRadius: 10}}/>
-                                        <Text style = {{fontSize: 18, padding :5, fontWeight: 'bold'}}>{card.name}</Text>
-                                    </View>
-                                    <View style = {{alignItems: 'center'}}>
-                                        <View style ={{height: 40, width: 200, borderRadius: 10}}>
-                                            <ProgressBar progress={getProgress(card.totalSpent, card.minimum_spending)} color={card.color.quartenary} style = {{height: '100%', borderRadius: 20}}/>
-                                            <Text style = {{position:'absolute', right: 10, top: 10}}>${card.totalSpent} / ${card.minimum_spending}</Text>
-                                        </View>
-                                    </View>
-                                    <View style = {{flexWrap: 'wrap', flexDirection: 'row'}}>
-                                        {card.cashbacks.map((cashback, index) => {return (
-                                            <View style ={{width: '33%', height: 100, justifyContent: 'center', alignItems: 'center'}} key = {index}>
-                                                <Text style = {{fontSize: 20}}>$ {cashback.spent}</Text>
-                                                <Text style = {{textAlign: 'center', fontSize: 10}}>{cashback.eligibility}</Text>
-                                                <Text style = {{fontSize: 8}}>Cashback: {getCashback(cashback)}</Text>
-                                            </View>
-                                        )})}
-                                    </View>
-                                </ScrollView>
-                            </View>
-                        )
-                    })}
-                </Swiper>
             </View>
-        </View>
+        </Modal>
     )
 }
-
-const styles = StyleSheet.create({
-    button1: {
-        padding: 10,
-        borderWidth: 1,
-        borderRadius: 10,
-        paddingHorizontal: 10,
-        alignSelf: 'flex-start',
-        margin: 10
-    }
-})
 
 export default Wallet;
