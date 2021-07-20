@@ -1,6 +1,7 @@
-from backend.savr.api.RecommendationAlgo import getBestCard
+from api.RecommendationAlgo import getBestCard
 from django.shortcuts import render, HttpResponse
-import RecommendationAlgo
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 import json
 
 # Create your views here.
@@ -9,17 +10,29 @@ def savrAlgo(request):
     if request.method == "GET":
         return HttpResponse("Coming soon...")
 
-
+@csrf_exempt
+@api_view(['PATCH', 'GET', 'POST', 'TEST'])
 def userAlgo(request, user):
     if request.method == "POST":
         filename = user+".json"
         data = request.data
         with open(filename, 'w') as f:
             json.dump(data, f)
-            
-    elif request.method == "GET":
-        spend = request.META['spend']
-        category = request.META['category']
+        spend = request.META['HTTP_SPEND']
+        category = request.META['HTTP_CATEGORY']
         filename = user+".json"
         bestcard = getBestCard(filename, spend, category)
         return HttpResponse(bestcard)
+            
+    elif request.method == "GET":
+        spend = request.META['HTTP_SPEND']
+        category = request.META['HTTP_CATEGORY']
+        filename = user+".json"
+        bestcard = getBestCard(filename, spend, category)
+        return HttpResponse(bestcard)
+
+    elif request.method == "TEST":
+        spend = request.META['HTTP_SPEND']
+        data = request.data
+        print(data)
+        return HttpResponse(data)

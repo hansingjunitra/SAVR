@@ -64,4 +64,4 @@ def SAVRAlgo(spend, category, cards):                               # recommends
 
     return bestcard
 
-SAVRAlgo(100,'Dining')
+# SAVRAlgo(100,'Dining')
