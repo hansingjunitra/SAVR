@@ -87,7 +87,7 @@ const SyncStatus = (props) => {
 
 export const UserProfile = ({navigation}) => {
     console.log("Render User Profile");
-    //savrAlgo();
+    savrAlgo(10, 'dining', 'test');
 
     const {getCardList, flushCards, deleteCard, updateCardConnectionID} = React.useContext(CardContext);
     const {getCredentials, getConnections, getAccounts, setCredentials} = React.useContext(CredentialsContext);

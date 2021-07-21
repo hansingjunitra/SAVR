@@ -20,6 +20,14 @@ def getBestCard(filename, spend, category):
             
         return SAVRAlgo(spend, category, cards)
 
+def getBestCardv2(data, spend, category):
+    allcards = data
+    cards = []
+    for card in allcards: 
+        cards.append(deepcopy(card))
+        
+    return SAVRAlgo(spend, category, cards)
+
 def SAVRAlgo(spend, category, cards):                               # recommends which card to use
 
     highest_utility = 0
@@ -64,4 +72,6 @@ def SAVRAlgo(spend, category, cards):                               # recommends
 
     return bestcard
 
-SAVRAlgo(100,'Dining')
+# SAVRAlgo(100,'Dining')
+
+
