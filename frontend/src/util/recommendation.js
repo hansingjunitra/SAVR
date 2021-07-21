@@ -4,10 +4,14 @@ import { KeyboardAvoidingView } from 'react-native';
 import { Alert } from 'react-native';
 import { View, Text, Modal, TextInput, TouchableOpacity, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { CardContext } from '../context';
+
+import { savrAlgo } from './algo';
 
 const InputModal = (props) => {
     const {setModal, setViewCategory, selectedCategory, closeModalHandler, setAmountSpent, amountSpent} = props
     // const [amountSpent, setAmountSpent] = React.useState(0);
+    const {getCardList} = React.useContext(CardContext);
 
     const setAmountSpentHandler = (amount) => {
         setAmountSpent(parseInt(amount))
@@ -35,6 +39,7 @@ const InputModal = (props) => {
                 break
             default:
                 console.log("Fire API")
+                savrAlgo(amountSpent, selectedCategory, "uid", getCardList());
         }
     }
 
