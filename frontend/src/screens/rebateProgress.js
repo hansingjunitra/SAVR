@@ -115,19 +115,20 @@ export const RebateProgress = () => {
                         <Swiper ref={component => swiperObj = component} loop={true} autoplayTimeout = {10} autoplay = {false} showsPagination= {true} paginationStyle={{bottom: undefined, left: undefined, top: -100, right: 0}} style = {{alignSelf: 'flex-start'}}>
                             {cardList.map((card, index) => {
                                 let cardDetail = cardDetailsJSON.find(d => d.id == card.id);
+                                {/* console.log(card); */}
                                 card = {...cardDetail, ...card};
                                 // If the bank exists in the credentials.connectionList -- then automatically try to fetch if card exist in the account.
                                 getCardConnectionAccount(card);
                                 
                                 var realisedRebates = 0;
                                 try {
-                                    realisedRebates = rebateFuncMap[card.card_name](card);
-                                    unrealisedRebates = rebateFuncMap[card.card_name](card, 1);
-                                    console.log(realisedRebates, unrealisedRebates)
+                                    realisedRebates = rebateFuncMap[cardDetail.card_name](card);
+                                    unrealisedRebates = rebateFuncMap[cardDetail.card_name](card, 1);
+                                    {/* console.log(realisedRebates, unrealisedRebates, cardDetail.card_name) */}
                                 }
                                 catch (err) {
                                     console.log(err)
-                                    console.log(card.card_name, "Card not found")
+                                    console.log(cardDetail.card_name, "Card not found")
                                 }
 
                                 return (
@@ -238,9 +239,9 @@ const SelectCardModal = React.forwardRef((props, ref) => {
         }
     })   
     
-    const confirmButtonHandler = () => {
+    const selectCardHandler = (index) => {
         setModalVisibility(false); 
-        selectedCardIndex !== null ? setSwiperHandler(selectedCardIndex + 1) : null
+        setSwiperHandler(index + 1);
         setSelectedCardIndex(null);
     }
     
@@ -252,15 +253,14 @@ const SelectCardModal = React.forwardRef((props, ref) => {
                 </TouchableWithoutFeedback>
                 <View style={{width:"100%" , height: "70%", backgroundColor: "white",  borderTopRightRadius: 30,  borderTopLeftRadius: 30, paddingHorizontal: 25, paddingTop: 25, alignItems: "center", shadowColor: "#000", shadowOffset: {width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 4, elevation: 5}}>
                     <View style = {{alignItems: 'center', marginBottom: 20}}>
-                        <Text style = {{fontSize: 28}}>Select Card</Text>
-                        <Text>Which card did you use for spending?</Text>
+                        <Text style = {{fontSize: 28}}>Your Wallet</Text>
                     </View>
                     <ScrollView>
                         <View style = {{ alignContent: 'stretch',  flex: 1, flexWrap: "wrap",flexDirection: "row"} }>
                             {cardList.map((card, index) => {
                                 return (
                                     <View style = {{width : '50%', padding: 5, height: 100}} key = {index}>
-                                        <TouchableOpacity style = {[(selectedCardIndex !== null) && (selectedCardIndex === index) ? {borderWidth: 3, borderColor: card.color.quartenary, backgroundColor: card.colorCode, borderRadius: 15} : null]} onPress = {() => setSelectedCardIndex(index)}>
+                                        <TouchableOpacity style = {[(selectedCardIndex !== null) && (selectedCardIndex === index) ? {borderWidth: 3, borderColor: card.color.quartenary, backgroundColor: card.colorCode, borderRadius: 15} : null]} onPress = {() => selectCardHandler(index)}>
                                         {/* <TouchableOpacity> */}
                                             <Image style = {{height: '100%', width: '100%', borderRadius: 10}} source = {{uri: card.image}}></Image>
                                         </TouchableOpacity>
@@ -269,11 +269,6 @@ const SelectCardModal = React.forwardRef((props, ref) => {
                             })}
                         </View>
                     </ScrollView>
-                    <View style = {{height: '15%', justifyContent: 'center', width: '40%'}}>
-                        <TouchableOpacity style = {{margin:5, padding: 10, backgroundColor: '#2196F3', borderRadius: 10, alignItems: 'center'}} onPress = {() => confirmButtonHandler()}>
-                                <Text style = {{color: 'white'}}>Confirm</Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
             </View>
         </Modal>

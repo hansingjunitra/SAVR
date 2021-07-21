@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, Image, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, FlatList, KeyboardAvoidingView, Image, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 
 import {CardContext, TransactionContext} from '../context';
 import {EditTransaction} from './editTransaction';
@@ -37,18 +37,29 @@ export const ExpenseTracker = ({route, navigation}) => {
                             <Text style = {{fontSize: 16}}>Flush</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style = {{width: 100, borderWidth: 2}} onPress = {() => ref.current.setModalVisibility(true)}>
-                        <View style = {{alignItems: 'center', justifyContent: 'center'}}>
-                            <Text style = {{fontSize: 16}}>Add</Text>
-                        </View>
-                    </TouchableOpacity>
                     <TouchableOpacity onPress = {() => setRefresh(true)} style = {{alignItems: 'flex-end'}}>
                         <Icon name = {'refresh'} type = {'font-awesome'} size={20} color= {'black'} borderRadius= {20}/>
                     </TouchableOpacity>
                 </View>
-                <TransactionScrollView props = {{route: route, setRefresh: setRefresh}} navigation = {navigation}/>
+                <TransactionScrollView props = {{route: route, setRefresh: setRefresh}} ref={ref} navigation = {navigation}/>
                 <SelectCardModal ref = {ref} navigation = {navigation} props= {{setRefresh: setRefresh}}/>
-            {/* <FAB style ={{position: 'absolute',margin: 16,right: 0,bottom: 0,}} small icon="plus" onPress={() => console.log('Pressed')}/> */}
+                <TouchableOpacity
+                    activeOpacity={.7}
+                    style={{                
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 60,
+                    position: 'absolute',
+                    bottom: 20,
+                    right: 20,
+                    height: 60,
+                    backgroundColor: '#01a699',
+                    borderRadius: 100,
+                    }}
+                    onPress = {() => ref.current.setModalVisibility(true)}
+                >
+                    <Icon name='add' type = {'material'} size={25} color='#fff' />
+                </TouchableOpacity>
         </SafeAreaView>
     )
 }
@@ -56,7 +67,7 @@ export const ExpenseTracker = ({route, navigation}) => {
 const TransactionScrollView = ({props, navigation}) => {
     console.log("Render Scroll View")
 
-    const {route, setRefresh} = props;
+    const {route, setRefresh, ref} = props;
     const {getTransactionList, addTransaction, deleteTransaction, flushTransactions} = React.useContext(TransactionContext);
     const transactionList = getTransactionList().sort((a, b) => new Date(b.date) - new Date(a.date));
     // Sort by date
@@ -66,7 +77,37 @@ const TransactionScrollView = ({props, navigation}) => {
     let latestDay = null
 
     return (
-        <ScrollView>
+        <FlatList
+            data = {transactionList}
+            renderItem = {({item, index}) => {
+                    const transaction = item;
+                    let currentDate = new Date(transaction.date)                 
+                    let currentMonth = new Intl.DateTimeFormat('en-US', {month: 'long'}).format(currentDate)
+                    if (currentMonth != latestMonth) {
+                        latestMonth = currentMonth
+                        return (   
+                            <View key ={index} style = {{flex: 1}}>
+                                <Text style = {{fontSize: 14, margin: 10}}>{latestMonth} {currentDate.getFullYear()}</Text>
+                                <TransactionEntry props={{transaction: transaction, route: route, setRefresh: setRefresh}} navigation= {navigation}/>
+                            </View>
+                        )
+                    } else {
+                        return (
+                            <Swipeable renderRightActions = {() => (
+                                <TouchableOpacity onPress = {() => { console.log('swipe')}}>
+                                    <View style = {{width: 50, justifyContent: 'center', alignContent: 'center', flex: 1}}>
+                                        <Icon  name = 'delete' type= 'materials' style={{justifyContent: 'center', alignContent: 'center'}} size={30}/>
+                                    </View>
+                                </TouchableOpacity>
+                                    )} key = {index}>
+                                <TransactionEntry props={{transaction: transaction, route: route, setRefresh: setRefresh}} navigation= {navigation} key ={index}/>
+                            </Swipeable>  
+                        )
+                    }
+                
+            }}
+        />
+        /* <ScrollView>
             {transactionList.map((transaction, index) => {
                 let currentDate = new Date(transaction.date)                 
                 let currentMonth = new Intl.DateTimeFormat('en-US', {month: 'long'}).format(currentDate)
@@ -75,7 +116,6 @@ const TransactionScrollView = ({props, navigation}) => {
                     return (   
                         <View key ={index} style = {{flex: 1}}>
                             <Text style = {{fontSize: 14, margin: 10}}>{latestMonth} {currentDate.getFullYear()}</Text>
-                            {/* <TransactionEntry navigation = {navigation} props={{transaction: transaction, route: route, setRefresh: setRefresh}} /> */}
                             <TransactionEntry props={{transaction: transaction, route: route, setRefresh: setRefresh}} navigation= {navigation}/>
                         </View>
                     )
@@ -93,7 +133,7 @@ const TransactionScrollView = ({props, navigation}) => {
                     )
                 }
             })}
-        </ScrollView>
+        </ScrollView> */
     )
 }
 

@@ -149,7 +149,7 @@ const App = () => {
             AsyncStorage.setItem('creditCardRecord', JSON.stringify([...updatedCardList]));
         },
         fetchTransactions: async (connectionID, accountID, transactionCard) => {
-            const transactions = await getTransactions(connectionID, accountID);
+            const {transactions, lastFetchedID} = await getTransactions(connectionID, accountID,  transactionCard.saltEdge.lastTransactionIDFetched );
             let parsedTransactions = []
 
             let updatedTransactionID = transactionCard.saltEdge.lastTransactionIDFetched;

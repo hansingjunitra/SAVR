@@ -91,7 +91,7 @@ export const AddTransaction = ({route, navigation}) => {
     }
 
     return (
-        <View style = {{margin: 15, flex: 1}}>
+        <KeyboardAvoidingView style = {{margin: 15, flex: 1}}>
             <View style = {{flex: 3, alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
                 <Image source = {{uri: selectedCard.image}} style = {{height: 160, width: 240, borderRadius: 20}}></Image>
             </View>
@@ -164,7 +164,7 @@ export const AddTransaction = ({route, navigation}) => {
                     </View>
                 </View>
             </Modal>
-        </View>
+        </KeyboardAvoidingView>
     )
     
 }

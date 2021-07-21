@@ -56,7 +56,7 @@ const InputModal = (props) => {
                 </View>                
                 <View style = {{alignItems: 'center', marginVertical: 10}}>
                     <Text>
-                        Date: {moment().format("0d-mm-yyyy")}
+                        Date: {moment(new Date()).format("DD/MM/YYYY")}
                     </Text>
                 </View>
                 {/* <View style = {{alignItems: 'center', marginVertical: 5}}>

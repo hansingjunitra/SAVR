@@ -107,10 +107,13 @@ export const Navigator = () => {
                                 alignItems: 'center',
                                 }}>
                                 <Image
-                                source={require('../src/assets/recommendationlogo-01.png')}
+                                source={require('../src/assets/recommendationlogo-01-01.png')}
                                 style = {{
                                     width: 75,
                                     height: 75,
+                                    borderWidth: 2, 
+                                    borderRadius: 75,
+                                    borderColor: '#efefef'
                                 }}
                                 />
                                 {/* <Icon name = {'circle-outline'} type = {'material-community'}  style={{

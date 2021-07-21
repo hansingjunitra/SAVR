@@ -170,8 +170,13 @@ export const refreshCustomerConnection = async (connectionID) => {
     }
 }
 
-export const getTransactions = async (connectionID, accountID) => {
-    const url = `https://www.saltedge.com/api/v5/transactions?connection_id=${connectionID}&account_id=${accountID}`
+export const getTransactions = async (connectionID, accountID, lastFetchedID) => {
+    // console.log(connectionID, accountID)
+    let url = `https://www.saltedge.com/api/v5/transactions?connection_id=${connectionID}&account_id=${accountID}`
+    if (lastFetchedID !== null) {
+        url = url + `&from_id=${lastFetchedID.toString()}`
+    }
+
     try {
         const res = await fetch(url, {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
@@ -188,7 +193,8 @@ export const getTransactions = async (connectionID, accountID) => {
         }).then(response => {
             return response.json();
         });
-        return res['data'];
+        console.log(res['meta'])
+        return {transactions: res['data'], lastFetchedID: res['meta']['next_id']};
     } catch (err) {
         console.error(err);
         return Error;
