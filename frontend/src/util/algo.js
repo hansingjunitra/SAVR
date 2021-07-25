@@ -1,17 +1,19 @@
 
-export const savrAlgo = async (spend, category, uid) => {
-    const url = "http://192.168.86.31:80/algo/"+uid
-    
+export const savrAlgo = async (amount, category, uid, data) => {
+    const url = "http://127.0.0.1:8000/algo/"
+    console.log(JSON.stringify({amount: amount, category: category}))
     try {
-        console.log('sending');
+        console.log('sending', amount, category);
         const res = await fetch(url, {
-            method: 'TEST',
+            method: 'POST',
             headers: {
                 'Content-Type': "application/json",
-                spend: spend,
-                category: category
             },
-            body: JSON.stringify("test")
+            body: JSON.stringify({
+                amount: amount, 
+                category: "Online",
+                data: data
+            })
         })
         .then(response => {
             return response.text();

@@ -61,7 +61,7 @@
             {
                 "eligibility": "Dining",
                 "percentage": 0.05,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "local-dining",
                     "type": "material",
@@ -71,7 +71,7 @@
             {
                 "eligibility": "Grocery",
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "local-grocery-store",
                     "type": "material",
@@ -81,7 +81,7 @@
             {
                 "eligibility": "Transport",
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "train",
                     "type": "material-community",
@@ -91,7 +91,7 @@
             {
                 "eligibility": "Petrol",
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "gas-pump",
                     "type": "font-awesome-5",
@@ -101,7 +101,7 @@
             {
                 "eligibility": "Travel",
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "plane",
                     "type": "font-awesome-5",
@@ -111,7 +111,7 @@
             {
                 "eligibility": "Recurring Bills",
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "lightning-bolt",
                     "type": "material-community",
@@ -122,7 +122,7 @@
             {
                 "eligibility": "Others" ,
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "dots-horizontal",
                     "type": "material-community",
@@ -152,7 +152,7 @@
             {
                 "eligibility": "Dining",
                 "percentage": 0.06,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "local-dining",
                     "type": "material",
@@ -162,7 +162,7 @@
             {
                 "eligibility": "Grocery",
                 "percentage": 0.08,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "local-grocery-store",
                     "type": "material",
@@ -172,7 +172,7 @@
             {
                 "eligibility": "Petrol",
                 "percentage": 0.08,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "gas-pump",
                     "type": "font-awesome-5",
@@ -181,8 +181,8 @@
             },
             {
                 "eligibility": "Others" ,
-                "percentage": 0.025,
-                "cap": null,
+                "percentage": 0.0025,
+                "cap": 99999,
                 "icon":  {
                     "name": "dots-horizontal",
                     "type": "material-community",
@@ -216,7 +216,7 @@
             {
                 "eligibility": "Online",
                 "percentage": 0.06,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "laptop",
                     "type": "material",
@@ -226,7 +226,7 @@
             {
                 "eligibility": "Contacless",
                 "percentage": 0.06,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "contactless-payment",
                     "type": "material-community",
@@ -236,7 +236,7 @@
             {
                 "eligibility": "Physical Forex Transaction",
                 "percentage": 0.06,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "attach-money",
                     "type": "material",
@@ -246,7 +246,7 @@
             {
                 "eligibility": "Others" ,
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "dots-horizontal",
                     "type": "material-community",
@@ -276,7 +276,7 @@
             {
                 "eligibility": "Food Delivery",
                 "percentage": 0.05,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "delivery-dining",
                     "type": "material",
@@ -286,7 +286,7 @@
             {
                 "eligibility": "Fast Food",
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "hamburger",
                     "type": "font-awesome-5",
@@ -296,7 +296,7 @@
             {
                 "eligibility": "Grocery",
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "local-grocery-store",
                     "type": "material",
@@ -306,7 +306,7 @@
             {
                 "eligibility": "Transport",
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "train",
                     "type": "material-community",
@@ -316,7 +316,7 @@
             {
                 "eligibility": "Petrol",
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "gas-pump",
                     "type": "font-awesome-5",
@@ -326,7 +326,7 @@
             {
                 "eligibility": "Learning/Retail",
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "book",
                     "type": "font-awesome-5",
@@ -336,7 +336,7 @@
             {
                 "eligibility": "Tele/Streaming",
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "television",
                     "type": "material-community",
@@ -346,7 +346,7 @@
             {
                 "eligibility": "Others" ,
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "dots-horizontal",
                     "type": "material-community",
@@ -376,7 +376,7 @@
             {
                 "eligibility": "Others" ,
                 "percentage": 0.015,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "dots-horizontal",
                     "type": "material-community",
@@ -446,7 +446,7 @@
             {
                 "eligibility": "Petrol",
                 "percentage": 0.1,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "gas-pump",
                     "type": "font-awesome-5",
@@ -466,7 +466,7 @@
             {
                 "eligibility": "Others" ,
                 "percentage": 0.003,
-                "cap": null,
+                "cap": 99999,
                 "icon":  {
                     "name": "dots-horizontal",
                     "type": "material-community",

@@ -14,7 +14,11 @@ const InputModal = (props) => {
     const {getCardList} = React.useContext(CardContext);
 
     const setAmountSpentHandler = (amount) => {
-        setAmountSpent(parseInt(amount))
+        if (amount != "") {
+            setAmountSpent(parseInt(amount))
+        } else {
+            setAmountSpent(0);
+        }
     }
 
     const optimizeButtonHandler = () => {

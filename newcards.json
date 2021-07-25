@@ -1,0 +1,295 @@
+[
+    {
+        "bank": "DBS",
+        "type": "credit",
+        "name": "DBS Live Fresh Card",
+        "minimum_spending": 800,
+        "maximum_rebates": 60,
+        "total_spend": 0,
+        "total_rebate": 0,
+        "categories": [
+            {
+                "eligibility": "Online",
+                "percentage": 0.05,
+                "cap": 20,
+                "rebate": 0
+
+            },
+            {
+                "eligibility": "Contactless",
+                "percentage": 0.05,
+                "cap": 20,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Others",
+                "percentage": 0.003,
+                "cap": 20,
+                "rebate": 0
+            }
+        ]
+    },
+    {
+        "bank": "OCBC",
+        "type": "credit",
+        "name": "OCBC 365 Card",
+        "minimum_spending": 800,
+        "maximum_rebates": 80,
+        "total_spend": 0,
+        "total_rebate": 0,
+        "categories": [
+            {
+                "eligibility": "Dining",
+                "percentage": 0.05,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Grocery",
+                "percentage": 0.003,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Transport",
+                "percentage": 0.003,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Petrol",
+                "percentage": 0.003,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Travel",
+                "percentage": 0.003,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Recurring Bills",
+                "percentage": 0.003,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Others" ,
+                "percentage": 0.003,
+                "cap": 9999,
+                "rebate": 0
+            }
+        ]
+    },
+    {   
+        "bank": "Citibank",
+        "type": "credit",
+        "name": "Citi Cashback",
+        "minimum_spending": 800,
+        "maximum_rebates": 80,
+        "total_spend": 0,
+        "total_rebate": 0,
+        "categories": [
+            {
+                "eligibility": "Dining",
+                "percentage": 0.06,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Grocery",
+                "percentage": 0.08,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Petrol",
+                "percentage": 0.08,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Others" ,
+                "percentage": 0.025,
+                "cap": 9999,
+                "rebate": 0
+            }
+        ]
+    },
+    {   
+        "bank": "OCBC",
+        "type": "credit",
+        "name": "OCBC Frank",
+        "minimum_spending": 600,
+        "maximum_rebates": 100,
+        "total_spend": 0,
+        "total_rebate": 0,
+        "categories": [
+            {
+                "eligibility": "Online",
+                "percentage": 0.06,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Contacless",
+                "percentage": 0.06,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Physical Forex Transaction",
+                "percentage": 0.06,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Others",
+                "percentage": 0.003,
+                "cap": 9999,
+                "rebate": 0
+            }
+        ]
+    },
+    {   
+        "bank": "Maybank",
+        "type": "credit",
+        "name": "Maybank Family and Friends",
+        "minimum_spending": 500,
+        "maximum_rebates": 80,
+        "total_spend": 0,
+        "total_rebate": 0,
+        "categories": [
+            {
+                "eligibility": "Food Delivery",
+                "percentage": 0.05,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Fast Food",
+                "percentage": 0.05,
+                "percenage2": 0.08,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Grocery",
+                "percentage": 0.05,
+                "percenage2": 0.08,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Transport",
+                "percentage": 0.05,
+                "percenage2": 0.08,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Petrol",
+                "percentage": 0.05,
+                "percenage2": 0.08,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Learning/Retail",
+                "percentage": 0.05,
+                "percenage2": 0.08,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Tele/Streaming",
+                "percentage": 0.05,
+                "percenage2": 0.08,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Others" ,
+                "percentage": 0.003,
+                "cap": 9999,
+                "rebate": 0
+            }
+        ],
+        "spending_breakdown": {
+            "Food Delivery": 10,
+            "Dining": 20
+        }
+
+    },
+    {   
+        "bank": "HSBC",
+        "type": "credit",
+        "name": "HSBC Advance",
+        "minimum_spending": 0,
+        "maximum_rebates": 70,
+        "total_spend": 0,
+        "total_rebate": 0,
+        "categories": [
+            {
+                "eligibility": "Others" ,
+                "percentage": 0.015,
+                "cap": 9999,
+                "rebate": 0
+            }
+        ]
+    },
+    {   
+        "bank": "POSB",
+        "type": "credit",
+        "name": "POSB Everyday",
+        "minimum_spending": 0,
+        "maximum_rebates": 9999,
+        "total_spend": 0,
+        "total_rebate": 0,
+        "categories": [
+            {
+                "eligibility": "Online",
+                "percentage": 0.03,
+                "cap": 15,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Food Delivery",
+                "percentage": 0.08,
+                "cap": 15,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Dining",
+                "percentage": 0.03,
+                "cap": 15,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Grocery",
+                "percentage": 0.05,
+                "cap": 40,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Petrol",
+                "percentage": 0.1,
+                "cap": 9999,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Certain Elec/Tele Bills",
+                "percentage": 0.01,
+                "cap": 1,
+                "rebate": 0
+            },
+            {
+                "eligibility": "Others" ,
+                "percentage": 0.003,
+                "cap": 9999,
+                "rebate": 0
+            }
+        ]
+    }
+]
