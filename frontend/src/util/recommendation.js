@@ -4,7 +4,7 @@ import { KeyboardAvoidingView } from 'react-native';
 import { Alert } from 'react-native';
 import { View, Text, Modal, TextInput, TouchableOpacity, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { CardContext } from '../context';
+import { CardContext } from '../context/context';
 
 import { savrAlgo } from './algo';
 

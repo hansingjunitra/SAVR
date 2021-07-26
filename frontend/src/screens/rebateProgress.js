@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import {View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback} from 'react-native';
-import { CardContext, CredentialsContext, TransactionContext } from '../context';
+import { CardContext, CredentialsContext, TransactionContext } from '../context/context';
 import { ProgressBar, Colors } from 'react-native-paper';
 import Swiper from 'react-native-swiper';
 import { Icon } from 'react-native-elements';

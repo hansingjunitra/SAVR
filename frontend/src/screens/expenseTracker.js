@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, KeyboardAvoidingView, Image, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 
-import {CardContext, TransactionContext} from '../context';
+import {CardContext, TransactionContext} from '../context/context';
 import {EditTransaction} from './editTransaction';
 import {AddTransaction} from './addTransaction';
 import { Icon } from 'react-native-elements';

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import {useState, useEffect, useMemo} from 'react';
 import {Linking} from 'react-native';
 import { SafeAreaView, View, TouchableOpacity, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -6,8 +7,8 @@ import {Navigator} from './src/navigation';
 import {SHA1} from './src/sha1';
 
 import {SplashScreen} from './src/splashScreen';
-import {CredentialsInput} from './src/screens/credentialsInput';
-import {CardContext, TransactionContext, CredentialsContext} from './src/context';
+import {SignUp} from './src/screens/signUp';
+import {CardContext, TransactionContext, CredentialsContext, AppContextProvider, AppContext, AppContextConsumer} from './src/context/context';
 
 import {createSaltEdgeCustomer, getCustomerConnections, getConnectionAccounts, getTransactions, refreshCustomerConnection} from './src/saltedge';
 import { monthsShort } from 'moment';
@@ -22,23 +23,12 @@ const getUniqueId = (username) => {
 const App = () => {
     console.log("Render App.js")
 
-    const [retrieving, setRetrieving] = React.useState(true);
-    const [cardList, setCardList] = React.useState([]);
-    const [transactionList, setTransactionList] = React.useState([]);7
-    const [credentials, setCredentials] = React.useState({ token: null, secret:null, username: null, saltEdgeID: null, connectionIDList: []});
-    /*
-        {
-            id: ____ ,
-            accountList : [
-                {
-                    id: ____ ,
-                    account_name: ____
+    const [retrieving, setRetrieving] = useState(true);
+    const [cardList, setCardList] = useState([]);
+    const [transactionList, setTransactionList] = useState([]);
+    const [credentials, setCredentials] = useState({ token: null, secret:null, username: null, saltEdgeID: null, connectionIDList: []});
 
-                }
-            ]
-        }
-    */
-    const CardContextValue = React.useMemo(() => ({
+    const CardContextValue = useMemo(() => ({
         getCardList: () => {
             // console.log(cardList);
             return cardList;
@@ -127,7 +117,7 @@ const App = () => {
         }
     }));
 
-    const TransactionContextValue = React.useMemo(() => ({
+    const TransactionContextValue = useMemo(() => ({
         getTransactionList: () => {
             return transactionList;
         },
@@ -255,7 +245,7 @@ const App = () => {
         }
     }))
 
-    const CredentialsContextValue = React.useMemo(() => ({
+    const CredentialsContextValue = useMemo(() => ({
         getCredentials: () => {
             return credentials;
         },
@@ -296,7 +286,7 @@ const App = () => {
         }
     }))
     
-    React.useEffect(() => {
+    useEffect(() => {
         console.log('Fetching Data From Internal Storage');
         const getFromStorage = async () => {
             let fetchedCardList, fetchedTransactionList, fetchedCredentials = null;
@@ -318,7 +308,7 @@ const App = () => {
                 setTransactionList(JSON.parse(fetchedTransactionList));
             }
         }
-        getFromStorage();
+        // getFromStorage();
         setTimeout(() => setRetrieving(false), 500);
 
         return () => {
@@ -332,12 +322,15 @@ const App = () => {
         )
     }
 
+    const {state, dispatch} = useContext(AppContext);
+    console.log("APP", state);
+    
     return (
         <>
             <CardContext.Provider value = {CardContextValue}>
             <TransactionContext.Provider value = {TransactionContextValue}>
             <CredentialsContext.Provider value = {CredentialsContextValue}>
-                {credentials.username == null ?  <CredentialsInput/> : <Navigator/>}
+                {state.username === null ?  <SignUp/> : <Navigator/>}
             </CredentialsContext.Provider>
             </TransactionContext.Provider>
             </CardContext.Provider>

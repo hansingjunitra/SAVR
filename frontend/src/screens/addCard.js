@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, Image, StyleSheet, SafeAreaView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { CardContext } from '../context';
+import { CardContext } from '../context/context';
 
 const allcardList = require('../creditCards.json');
 export const AddCard = ({navigation}) => {

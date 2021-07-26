@@ -13,6 +13,7 @@ import {EditTransaction} from './screens/editTransaction';
 import {AddTransaction} from './screens/addTransaction';
 import {TrackProgress} from './screens/trackProgress';
 import {Recommendation} from './util/recommendation';
+import { SAVRRecommendationButton } from './components/savrRecommendationButton';
 
 const Tab = createBottomTabNavigator();
 
@@ -95,37 +96,7 @@ export const Navigator = () => {
                                 setModal(true);
                             },
                         }}
-                        options = {{tabBarIcon: () =>  
-                            <View
-                                style={{
-                                position: 'absolute',
-                                bottom: 0, // space from bottombar
-                                height: 75,
-                                width: 75,
-                                borderRadius: 75,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                }}>
-                                <Image
-                                source={require('../src/assets/recommendationlogo-01-01.png')}
-                                style = {{
-                                    width: 75,
-                                    height: 75,
-                                    borderWidth: 2, 
-                                    borderRadius: 75,
-                                    borderColor: '#efefef'
-                                }}
-                                />
-                                {/* <Icon name = {'circle-outline'} type = {'material-community'}  style={{
-                                    width: 40,
-                                    height: 40,
-                                    tintColor: '#f1f6f9',
-                                    alignContent: 'center',
-                                }}/> */}
-                            </View>
-                        , 
-                                    tabBarLabel: () => null, 
-                                    }}
+                        options = {{tabBarIcon: () =>  <SAVRRecommendationButton/>, tabBarLabel: () => null, }}
                     />
                     <Tab.Screen
                         name = "Track"

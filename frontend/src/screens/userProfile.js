@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, Linking, ScrollView, SafeAreaView} from 'react-native';
-import {CardContext, CredentialsContext, TransactionContext} from '../context';
+import {CardContext, CredentialsContext, TransactionContext} from '../context/context';
 
 import {createConnection, getConnectionAccounts, getCustomerConnections, getTransactions} from '../saltedge';
 import { AddCard } from './addCard';

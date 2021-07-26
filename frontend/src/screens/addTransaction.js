@@ -4,7 +4,7 @@ import { View, Text, KeyboardAvoidingView, TouchableOpacity, ScrollView, StyleSh
 import { Icon } from 'react-native-elements';
 import CalendarPicker from 'react-native-calendar-picker';
 import Modal from 'react-native-modal'
-import { CardContext, TransactionContext } from '../context';
+import { CardContext, TransactionContext } from '../context/context';
 
 var moment = require('moment');
 const cardDetailsJSON = require('../creditCards.json'); 
