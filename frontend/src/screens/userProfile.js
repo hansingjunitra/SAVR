@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {View, Text, TouchableOpacity, Linking, ScrollView, SafeAreaView} from 'react-native';
-import {CardContext, CredentialsContext, TransactionContext} from '../context/context';
+import {AppContext, CardContext, CredentialsContext, TransactionContext} from '../context/context';
 
 import {createConnection, getConnectionAccounts, getCustomerConnections, getTransactions} from '../saltedge';
 import { AddCard } from './addCard';
 import { savrAlgo } from '../util/algo';
+import { Button } from 'react-native';
 
 const cardDetailsJSON = require('../creditCards.json');
 
@@ -88,33 +89,47 @@ const SyncStatus = (props) => {
 export const UserProfile = ({navigation}) => {
     console.log("Render User Profile");
 
-    const {getCardList, flushCards, deleteCard, updateCardConnectionID} = React.useContext(CardContext);
-    const {getCredentials, getConnections, getAccounts, setCredentials} = React.useContext(CredentialsContext);
+    // const {getCardList, flushCards, deleteCard, updateCardConnectionID} = React.useContext(CardContext);
+    // const {getCredentials, getConnections, getAccounts, setCredentials} = React.useContext(CredentialsContext);
+
+    const { state, dispatch } = useContext(AppContext);
 
     // React.useEffect(() => {
         // console.log('Render userProfile.js UseEffect');
         // getConnections();
     // }, [])
     
-    let cardList = getCardList();
-    cardList.map((card, index) => {
-        let cardDetail = cardDetailsJSON.find(d => d.id == card.id);
-        cardList[index] = {...cardDetail, ...card};
-    })
+    // let cardList = getCardList();
+    // cardList.map((card, index) => {
+    //     let cardDetail = cardDetailsJSON.find(d => d.id == card.id);
+    //     cardList[index] = {...cardDetail, ...card};
+    // })
 
-    const credentials = getCredentials();
+    // const credentials = getCredentials();
 
-    cardList.sort(function (a, b) {
-        return (a.bank).localeCompare(b.bank);
-    })
+    // cardList.sort(function (a, b) {
+    //     return (a.bank).localeCompare(b.bank);
+    // })
+
+    const deleteHandler = async () => {
+        try {
+            await AsyncStorage.removeItem("APP_STATE");
+            return true;
+        }
+        catch(exception) {
+            return false;
+        }
+    }
+
 
     return (
         <ScrollView>
         <SafeAreaView style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style= {{fontSize: 40}}>Hi {credentials.username}</Text>
+            <Text style= {{fontSize: 40}}>Hi {state.username}</Text>
             <Text style= {{fontSize: 24}}>Cashback Earned: </Text>
             <Text style= {{fontSize: 24}}>User Owned</Text>
-            <View>
+            <Button onPress = {deleteHandler} title =  "button"> </Button>
+            {/* <View>
                 {cardList.map((card, index) => {
                     return (
                         <View key={index} style = {{padding: 10, width: '100%', flexDirection: 'row'}}>
@@ -134,9 +149,9 @@ export const UserProfile = ({navigation}) => {
                             </View>
                         </View>
                 )})}
-            </View>
-            <Text style ={{fontSize: 20}}>Token</Text>
-            <Text>{JSON.stringify(credentials)}</Text>
+            </View> */}
+            <Text style ={{fontSize: 20}}>{JSON.stringify(state.token)}</Text>
+            {/* <Text>{JSON.stringify(credentials)}</Text> */}
             {/* <TouchableOpacity onPress={()=> deleteCredentials()}>
                 <Text>
                     Delete Credentials
@@ -147,24 +162,7 @@ export const UserProfile = ({navigation}) => {
                     Add Cards
                 </Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity onPress={()=> getConnections()} style ={{margin: 10}}>
-                <Text>
-                    Get Accounts
-                </Text>
-            </TouchableOpacity> */}
-            {/* {
-                credentials.connectionIDList.map((connection, index) => {
-                    
-                    const transactions = async () => {return (await getConnectionAccounts(connection.id))}
-                    console.log(transactions)
-                    return (
-                        <View key = {index}>
-                            <Text>{JSON.stringify(transactions)}</Text>
-                        </View>
-                    )
-                })
-            } */}
-            <TouchableOpacity onPress={()=> flushCards()} style ={{margin: 10}}>
+            {/* <TouchableOpacity onPress={()=> flushCards()} style ={{margin: 10}}>
                 <Text>
                     Delete Cards
                 </Text>
@@ -180,7 +178,7 @@ export const UserProfile = ({navigation}) => {
                     Update Card Connection
                 </Text>
             </TouchableOpacity>
-            
+             */}
             </SafeAreaView>
         </ScrollView>
     )

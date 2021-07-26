@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, ScrollView, Image, StyleSheet, SafeAreaView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { CardView } from '../components/addCardView';
 
-import { CardContext } from '../context/context';
+import { AppContext, CardContext } from '../context/context';
 
-const allcardList = require('../creditCards.json');
+const CARD_DATABASE = require('../creditCards.json');
 export const AddCard = ({navigation}) => {
 
-    const [cardList, setCardList] = React.useState([]);
-    const { addCard, getCardList, getCardConnectionAccount } = React.useContext(CardContext);
+    const [ cardList, setCardList ] = React.useState([]);
+    const { state, dispatch } = useContext(AppContext);
+    // const { addCard, getCardList, getCardConnectionAccount } = React.useContext(CardContext);
 
-    const ownedCardList = getCardList();
+    // const ownedCardList = getCardList();
 
     const addCardHandler = (newCard) => {
         let cardDetail = {
-            id: newCard.id,
+            ...newCard,
             totalSpent: 0,
             spendingBreakdown: {},
             iBankingSync: false,
@@ -29,6 +31,7 @@ export const AddCard = ({navigation}) => {
             cardDetail.spendingBreakdown[category.eligibility] = 0
         })
 
+
         setCardList((prevState) => [
             ...prevState,
             cardDetail
@@ -36,32 +39,36 @@ export const AddCard = ({navigation}) => {
         // TODO: Check if credit card is owned
     }
 
-    const removecard = (removedCard) => {
+    const removeCard = (removedCard) => {
         const updatedcardList = cardList.filter((card) => card.id !== removedCard.id)
         updatedcardList !== null ? setCardList(updatedcardList) : setCardList([])  
     }
 
     const selectCardHandler = (card) => {
-        if (ownedCardList.find((owned) => owned.id == card.id)){
-            console.log('Card is owned');
+        if (state.cardList.find((ownedCard) => ownedCard.id == card.id)){
             return
         }
 
         if (cardList.find((owned) => owned.id == card.id)){
-            removecard(card);
+            removeCard(card);
         } else {
             addCardHandler(card);
         }
     }
 
-    const getCardConnectionAccountHandler = (cardList) => {
-        cardList.map((card) => getCardConnectionAccount(card)); 
+    const addButtonHandler = () => {
+        {/* <TouchableOpacity style = {styles.button1} onPress = {() => {getCardConnectionAccountHandler(cardList); addCard(cardList); navigation.goBack();}}> */}
+        dispatch({type: "ADD_CARD", data: cardList})
     }
+
+    // const getCardConnectionAccountHandler = (cardList) => {
+    //     cardList.map((card) => getCardConnectionAccount(card)); 
+    // }
 
     return (
         <SafeAreaView>
             <View style = {{alignItems: 'center'}}>
-                <TouchableOpacity style = {styles.button1} onPress = {() => {getCardConnectionAccountHandler(cardList); addCard(cardList); navigation.goBack();}}>
+                <TouchableOpacity style = {styles.button1} onPress = {addButtonHandler}>
                     <View>
                         <Text>Add</Text>
                     </View>
@@ -69,18 +76,9 @@ export const AddCard = ({navigation}) => {
             </View>
             <ScrollView>
                 <View style = {{flexDirection: 'row', flexWrap:'wrap'}}>
-                    {allcardList.map((card, index) => {
-                        return (
-                            <View key = {index} style = {styles.cardContainer}>
-                                <TouchableOpacity onPress = {() => selectCardHandler(card)}>
-                                    <Image source = {{uri: card.image}} 
-                                            style = {[styles.cardImage, cardList.find((owned) => owned.id == card.id) != undefined ? {borderWidth: 4, borderColor: card.color.quartenary, borderRadius: 5} : null]}/>
-                                    <View style = {styles.cardTextContainer}>
-                                        <Text style = {styles.cardText}>{card.name}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        )
+                    {CARD_DATABASE.map((card, index) => {
+                        const selected = cardList.includes((s) => s.id == card.id);
+                        return <CardView key= {index} card = {card} index = {index} selected = {selected} cardList = {cardList} selectCardHandler = {selectCardHandler}/>
                     })}
                 </View>
             </ScrollView>
@@ -89,27 +87,6 @@ export const AddCard = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-    cardContainer: {
-        width: '50%', 
-        height: 150, 
-        padding: 10,
-        borderRadius: 20
-    },
-    cardText: {
-        fontSize: 15,
-        fontWeight: 'bold',
-        textAlign: 'center'
-    },
-    cardTextContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 50
-    },
-    cardImage: {
-        width: '100%',
-        height: 100, 
-        resizeMode: 'contain'       
-    },
     button1: {
         padding: 10,
         borderWidth: 1,
