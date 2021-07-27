@@ -30,16 +30,16 @@ const WalletTab = () => {
     )
 }
 
-// const HistoryStack  = createStackNavigator(); 
-// const HistoryTab = () => {
-//     return (
-//         <HistoryStack.Navigator>
-//             <HistoryStack.Screen name = {"Profile"} component = {ExpenseTracker} options = {{headerShown: false}}/>
-//             <HistoryStack.Screen name = {"EditTransactionScreen"} component = {EditTransaction} options = {{headerShown: false}}/>
-//             <HistoryStack.Screen name = {"AddTransactionScreen"} component = {AddTransaction} options = {{headerShown: false}}/>
-//         </HistoryStack.Navigator>
-//     )
-// }
+const HistoryStack  = createStackNavigator(); 
+const HistoryTab = () => {
+    return (
+        <HistoryStack.Navigator>
+            <HistoryStack.Screen name = {"Profile"} component = {ExpenseTracker} options = {{headerShown: false}}/>
+            <HistoryStack.Screen name = {"EditTransactionScreen"} component = {EditTransaction} options = {{headerShown: false}}/>
+            <HistoryStack.Screen name = {"AddTransactionScreen"} component = {AddTransaction} options = {{headerShown: false}}/>
+        </HistoryStack.Navigator>
+    )
+}
 
 // const RecommendationStack  = createStackNavigator(); 
 // const RecommendationTab = () => {
@@ -82,12 +82,12 @@ export const Navigator = () => {
                         component = {WalletTab}
                         options = {{tabBarIcon: () => <Icon name = {'credit-card-multiple'} type = {'material-community'}/>}}
                     />
-                    {/* <Tab.Screen
+                    <Tab.Screen
                         name = "History"
                         component = {HistoryTab}
                         options = {{tabBarIcon: () =>  <Icon name = {'view-list-outline'} type = {'material-community'}/>}}
                     />
-                    <Tab.Screen
+                    {/* <Tab.Screen
                         name = "Recommend"
                         component = {RecommendationTab}
                         listeners = {{

@@ -4,66 +4,47 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { CardView } from '../components/addCardView';
 
 import { AppContext, CardContext } from '../context/context';
+import { getCardConnectionAccount } from '../context/card';
+import { getConnectionIDListHandler } from '../context/credentials';
 
 const CARD_DATABASE = require('../creditCards.json');
 export const AddCard = ({navigation}) => {
 
-    const [ cardList, setCardList ] = React.useState([]);
     const { state, dispatch } = useContext(AppContext);
-    // const { addCard, getCardList, getCardConnectionAccount } = React.useContext(CardContext);
-
-    // const ownedCardList = getCardList();
-
-    const addCardHandler = (newCard) => {
-        let cardDetail = {
-            ...newCard,
-            totalSpent: 0,
-            spendingBreakdown: {},
-            iBankingSync: false,
-            saltEdge: {
-                connectionID: null,
-                accountID: null,
-                lastTransactionIDFetched: null
-            }
-        };
-
-        newCard.categories.map((category, index) => {
-            cardDetail.spendingBreakdown[category.eligibility] = 0
-        })
-
-
-        setCardList((prevState) => [
-            ...prevState,
-            cardDetail
-        ]);
-        // TODO: Check if credit card is owned
-    }
-
-    const removeCard = (removedCard) => {
-        const updatedcardList = cardList.filter((card) => card.id !== removedCard.id)
-        updatedcardList !== null ? setCardList(updatedcardList) : setCardList([])  
-    }
-
+    const [ newCardList, setNewCardList ] = React.useState([]);
     const selectCardHandler = (card) => {
-        if (state.cardList.find((ownedCard) => ownedCard.id == card.id)){
-            return
-        }
-
-        if (cardList.find((owned) => owned.id == card.id)){
-            removeCard(card);
+        if (newCardList.includes(card)){
+            setNewCardList(newCardList.filter((c) => c.id !== card.id))
         } else {
-            addCardHandler(card);
+            setNewCardList([ ...newCardList, card])
         }
     }
 
-    const addButtonHandler = () => {
-        {/* <TouchableOpacity style = {styles.button1} onPress = {() => {getCardConnectionAccountHandler(cardList); addCard(cardList); navigation.goBack();}}> */}
-        dispatch({type: "ADD_CARD", data: cardList})
+    const addButtonHandler = async () => {
+        const addCardDetail = async (card, index) => {
+            let spendingBreakdown = {}
+            card.categories.map(category => {
+                spendingBreakdown[category.eligibility] = 0
+            })
+            const saltEdgeCardDetails = await getCardConnectionAccount(state.connectionIDList, card)
+            const res = {
+                ...newCardList[index],
+                totalSpent: 0,
+                spendingBreakdown: spendingBreakdown,
+                saltEdge : saltEdgeCardDetails
+            }
+            return res
+        }
+        let promises = newCardList.map( async (card, index) => await addCardDetail(card, index))
+        Promise.all(promises).then(addCardDetailList => {
+            dispatch({type: "ADD_CARD", data: addCardDetailList})
+        }).catch(e => {
+          console.error(e);
+        })
+        setNewCardList([]);
+        navigation.goBack();
     }
 
-    // const getCardConnectionAccountHandler = (cardList) => {
-    //     cardList.map((card) => getCardConnectionAccount(card)); 
-    // }
 
     return (
         <SafeAreaView>
@@ -76,9 +57,8 @@ export const AddCard = ({navigation}) => {
             </View>
             <ScrollView>
                 <View style = {{flexDirection: 'row', flexWrap:'wrap'}}>
-                    {CARD_DATABASE.map((card, index) => {
-                        const selected = cardList.includes((s) => s.id == card.id);
-                        return <CardView key= {index} card = {card} index = {index} selected = {selected} cardList = {cardList} selectCardHandler = {selectCardHandler}/>
+                    {CARD_DATABASE.filter(c => state.cardList.filter(d => d.id == c.id)).map((card, index) => {
+                        return <CardView key= {index} card = {card} index = {index} newCardList = {newCardList} selectCardHandler = {selectCardHandler}/>
                     })}
                 </View>
             </ScrollView>

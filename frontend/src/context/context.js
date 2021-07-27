@@ -45,13 +45,14 @@ const reducer = (state, action) => {
         case "ADD_CARD":
             newState = {
                 ...state,
-                cardList: action.data
+                cardList: [...state.cardList, ...action.data]
             }
             break;
+        case "RESET_STATE":
+            newState = initialState
+            break;
         default:
-            newState = {
-                initialState
-            }
+            newState = initialState
             break;
     }
     storeIntoStorage(newState);

@@ -34,13 +34,13 @@ const borderCardStyle = (borderColor) => StyleSheet.create({
 })
 
 const CardView = (props) => {
-    const { card, selectCardHandler, cardList } = props;
+    const { card, selectCardHandler, newCardList } = props;
     return (
         <View style = {style.cardContainer}>
             <TouchableOpacity onPress = {() => selectCardHandler(card)}>
                 <Image source = {{uri: card.image}} 
                         style = {[style.cardImage, 
-                            cardList.find((owned) => owned.id == card.id) != undefined ? borderCardStyle(card.color.quartenary).selectedCard : null
+                            newCardList.find((owned) => owned.id == card.id) != undefined ? borderCardStyle(card.color.quartenary).selectedCard : null
                             ]}/>
                 <View style = {style.cardTextContainer}>
                     <Text style = {style.cardText}>{card.name}</Text>

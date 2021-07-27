@@ -11,6 +11,7 @@ const getConnectionIDListHandler = async (saltEdgeID) => {
             bank: connection.provider_name}
         ))  
     })
+    console.log(connectionIDList);
     return connectionIDList;
 }
 

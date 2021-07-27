@@ -14,6 +14,7 @@ import {createSaltEdgeCustomer, getCustomerConnections, getConnectionAccounts, g
 import { monthsShort } from 'moment'; 
 
 import { getConnectionIDListHandler } from './src/context/credentials';
+import { getCardConnectionAccount } from './src/context/card';
 
 const getUniqueId = (username) => {
     const date = new Date().getTime().toString();
@@ -28,30 +29,37 @@ const App = () => {
 
     const {state, dispatch} = useContext(AppContext);
 
-    useEffect(() => {
-        console.log('Fetching Data From Internal Storage');
+    
+    useEffect(async () => {
+        if (state.saltEdgeID !== null) {
+            getConnectionIDListHandler(state.saltEdgeID).then(connectionIDList => {dispatch({type: "SET_CONNECTION_ID_LIST", data: connectionIDList}); console.log(connectionIDList)});
+        }
+        return
+    }, [state.saltEdgeID])
+    
+    useEffect(async () => {
         const getFromStorage = async () => {
+            let res = null;
             try {
-                appState = await AsyncStorage.getItem('APP_STATE');
-                if (appState !== null) {
-                    dispatch({type: "SET_APP_STATE", data: JSON.parse(appState)});
-                }
+                await AsyncStorage.getItem('APP_STATE').then((APP_STATE) => {
+                    if (APP_STATE !== null) {
+                        dispatch({type: "SET_APP_STATE", data: JSON.parse(APP_STATE)});
+                        res = APP_STATE;
+                    }
+                });
             } catch (err) {
                 console.error(err);
             }
+            return res;
         }
         getFromStorage();
 
-        if (state.saltEdgeID !== null && state.connectionIDList === []) {
-            getConnectionIDListHandler(state.saltEdgeID).then(connectionIDList => dispatch({type: "SET_CONNECTION_ID_LIST", data: connectionIDList}));
-        }
-        
         setTimeout(() => setLoading(false), 500);
-
         return () => {
             console.log('Closing Application')
         }
     }, [])
+
 
     if (loading) {
         return (

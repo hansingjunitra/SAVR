@@ -1,8 +1,16 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet  } from 'react-native';
+import React, { useContext } from 'react';
+import { View, 
+        Text, 
+        Image,
+        TouchableOpacity,
+        StyleSheet  } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { ProgressBar, Colors } from 'react-native-paper';
+import { AppContext } from '../context/context';
 import { rebateFuncMap } from '../util/rebateCalculation';
+import { refreshCustomerConnection } from '../saltedge';
+import { fetchTransactions } from '../context/transactions';
+
 
 const getProgress = (totalSpent, minmumSpending) => {
     if (minmumSpending == null || minmumSpending == 0) {
@@ -26,10 +34,24 @@ const getCashback = (percentage, spent, cap) => {
     }
 }
 
+const getBankSyncStatus = (connectionIDList, bank) => {
+    const connection = connectionIDList.find(connection => bank == connection.bank);
+    // console.log(connection)
+    if (connection !== undefined) { 
+        return true;
+    } else {
+        return false;
+    }
+}
+
+const refreshConnectionHandler = async (connectionID) => {
+    const res = await refreshCustomerConnection(connectionID);     
+    return res;
+}
 
 const SwiperCardView = (props) => {
+    const { state, dispatch } = useContext(AppContext);
     const { card } = props;
-
     let realisedRebates = 0;
     try {
         realisedRebates = rebateFuncMap[card.card_name](card);
@@ -42,6 +64,13 @@ const SwiperCardView = (props) => {
 
     let progress = getProgress(card.totalSpent, card.minimum_spending)
 
+    // const fetchTransactionHandler()
+
+
+    const refreshButtonHandler = () => {
+        console.log(card, state.connectionIDList);
+        // Linking.openURL(res);   
+    }
 
     return (
         <View style = {style.mainContainer}>
@@ -55,7 +84,44 @@ const SwiperCardView = (props) => {
                     </View>
                 </View>
                 <Text style = {{fontSize: 12, marginTop :5, fontWeight: 'bold'}}>Current Total Rebate: ${realisedRebates.toFixed(2)} / ${card.maximum_rebates}</Text>
-            </View> 
+            </View>
+            <View style= {{height:80,}}>
+            {
+                card.saltEdge.iBankingSync ? 
+                <View style = {{alignItems: 'center', marginBottom:20}}>
+                    <View style={{justifyContent: 'space-evenly'}} flexDirection = 'row'>
+                        <View style = {{alignItems: 'center', justifyContent: 'center', flex:1}}>
+                            <Text style={{height:20, fontSize: 12, margin: 10}}>Last Fetched: </Text>
+                            <TouchableOpacity onPress = {() => fetchTransactions(card.saltEdge.connectionID, card.saltEdge.accountID, card)} style = {{padding: 5, marginHorizontal:10, borderRadius: 20, paddingHorizontal: 20, borderWidth: 2}}>
+                                <View style = {{alignItems: 'center', justifyContent: 'center'}}>
+                                    <Text style = {{fontSize: 14}}>Fetch</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <Text>{card.saltEdge.connectionID}</Text>
+                            <Text>{card.saltEdge.accountID}</Text>
+                            {/* <Text>{}</Text> */}
+                        </View>
+                        <View style = {{alignItems: 'center', justifyContent: 'center', flex:1}}>
+                            <Text style={{height:20, fontSize: 12, margin: 10}}>Last Refreshed: </Text>
+                            <TouchableOpacity onPress = {refreshButtonHandler} style = {{padding: 5, marginHorizontal:10, borderRadius: 20, paddingHorizontal: 20, borderWidth: 2}}>
+                                <View style = {{alignItems: 'center', justifyContent: 'center'}}>
+                                    <Text style = {{fontSize: 14}}>Refresh</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+                :
+                <View style = {{alignItems: 'center', marginBottom:20}}>
+                    <Text style= {{height: 20, margin: 10, textAlign:'center', fontSize: 12}}>You have not synced your iBanking account for this card!</Text>
+                    <TouchableOpacity onPress = {refreshButtonHandler}>
+                        <View style = {{padding: 5, borderRadius: 20, paddingHorizontal: 20, borderWidth: 2, alignItems: 'center', justifyContent: 'center'}}>
+                            <Text style = {{fontSize: 14}}>Sync</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>                                                
+            }
+            </View>
             <View style= {style.categoryParentContainer}>
                 {card.categories.map((category, index) => {
                     return (

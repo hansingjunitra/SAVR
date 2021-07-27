@@ -6,6 +6,7 @@ import {createConnection, getConnectionAccounts, getCustomerConnections, getTran
 import { AddCard } from './addCard';
 import { savrAlgo } from '../util/algo';
 import { Button } from 'react-native';
+import { getConnectionIDListHandler } from '../context/credentials';
 
 const cardDetailsJSON = require('../creditCards.json');
 
@@ -94,10 +95,9 @@ export const UserProfile = ({navigation}) => {
 
     const { state, dispatch } = useContext(AppContext);
 
-    // React.useEffect(() => {
-        // console.log('Render userProfile.js UseEffect');
-        // getConnections();
-    // }, [])
+    React.useEffect(() => {
+        console.log('Render userProfile.js UseEffect');
+    }, [])
     
     // let cardList = getCardList();
     // cardList.map((card, index) => {
@@ -150,7 +150,7 @@ export const UserProfile = ({navigation}) => {
                         </View>
                 )})}
             </View> */}
-            <Text style ={{fontSize: 20}}>{JSON.stringify(state.token)}</Text>
+            <Text style ={{fontSize: 20}}>{JSON.stringify(state.connectionIDList)}</Text>
             {/* <Text>{JSON.stringify(credentials)}</Text> */}
             {/* <TouchableOpacity onPress={()=> deleteCredentials()}>
                 <Text>
@@ -162,6 +162,22 @@ export const UserProfile = ({navigation}) => {
                     Add Cards
                 </Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress = {() => dispatch({type: 'RESET_STATE'})}>
+                <View>
+                    <Text>Reset</Text>
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress = {() => getConnectionIDListHandler(state.saltEdgeID)}>
+                <View>
+                    <Text>Get ConnectionID</Text>
+                </View>
+            </TouchableOpacity>
+            <View>
+                <Text>{state.saltEdgeID}</Text>
+                <Text>{state.secret}</Text>
+                <Text>{state.token}</Text>
+                <Text>{state.username}</Text>
+            </View>
             {/* <TouchableOpacity onPress={()=> flushCards()} style ={{margin: 10}}>
                 <Text>
                     Delete Cards
