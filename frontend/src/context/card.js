@@ -1,13 +1,12 @@
 import { getConnectionAccounts } from "../saltedge";
+const FAIL_RESPONSE = {
+    iBankingSync: false,
+    connectionID: null,
+    accountID: null,
+    lastTransactionIDFetched: null
+}
 
 const getCardConnectionAccount = async (connectionList, card) => {
-    const FAIL_RESPONSE = {
-        iBankingSync: false,
-        connectionID: null,
-        accountID: null,
-        lastTransactionIDFetched: null
-    }
-
     try {
         if (card === null) {
             throw new Error ("null card when getting card connection account");
@@ -34,7 +33,7 @@ const getCardConnectionAccount = async (connectionList, card) => {
             connectionID : account.connection_id,
             accountID : account.id,
             iBankingSync : true,
-            lastFetchedTransaction : null
+            lastTransactionIDFetched : null
         }
         
     } catch (err) {

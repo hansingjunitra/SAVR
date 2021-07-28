@@ -48,11 +48,30 @@ const reducer = (state, action) => {
                 cardList: [...state.cardList, ...action.data]
             }
             break;
+        case "UPDATE_CARD":
+            newState = {
+                ...state,
+                cardList: [...state.cardList.filter((card) => card.id != action.data.id), action.data]
+            }
+            break;
+        case "ADD_TRANSACTION":
+            console.log("EXEC")
+            newState = {
+                ...state,
+                transactionList: [...state.transactionList, action.data]
+            }
+            break;
+        case "UPDATE_TRANSACTION_LIST":
+            newState = {
+                ...state,
+                transactionList: action.data
+            }
+            break;
         case "RESET_STATE":
             newState = initialState
             break;
         default:
-            newState = initialState
+            newState == {...state}
             break;
     }
     storeIntoStorage(newState);

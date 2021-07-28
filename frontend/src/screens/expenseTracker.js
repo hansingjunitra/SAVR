@@ -5,74 +5,35 @@ import {AppContext, CardContext, TransactionContext} from '../context/context';
 import {EditTransaction} from './editTransaction';
 import {AddTransaction} from './addTransaction';
 import { Icon } from 'react-native-elements';
-import { FAB } from 'react-native-paper';
 import { Swipeable } from 'react-native-gesture-handler';
+import { FAB } from 'react-native-paper';
+import { SelectCardModal } from '../modal/addTransactionSelectCardModal';
 
 import 'intl';
 import 'intl/locale-data/jsonp/en'; // or any other locale you need
 import { SafeAreaView } from 'react-native';
 import { set } from 'react-native-reanimated';
+import { TransactionCardView } from '../components/transactionCardView';
 // import Modal from 'react-native-modal';
 
 export const ExpenseTracker = ({route, navigation}) => {
     console.log('Render ExpenseTracker.js');
-    // const {getTransactionList, addTransaction, deleteTransaction, flushTransactions} = React.useContext(TransactionContext);
-    // const {getCardList} = React.useContext(CardContext);
     const ref = React.useRef(null);
     const { state, dispatch } = useContext(AppContext);
-    // const [refresh, setRefresh] = React.useState(false);
-    // const setRefreshHandler = () => {
-    //     setRefresh(true);        
-    // }
-
-    // if (refresh) {
-    //     setRefresh(false);
-    // }
+    console.log(state.transactionList[0])
 
     return (
-            <SafeAreaView style = {{flex: 1}}>
-            {/* <Text style = {{fontSize: 40}}>Expense Tracker</Text> */}
-                <View style = {{alignItems: 'center', justifyContent: 'space-between', flexDirection:'row', margin: 10}}>
-                    {/* <TouchableOpacity style = {{width: 100, borderWidth: 2}} onPress = {() => flushTransactions()}>
-                        <View style = {{alignItems: 'center', justifyContent: 'center'}}>
-                            <Text style = {{fontSize: 16}}>Flush</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress = {() => setRefresh(true)} style = {{alignItems: 'flex-end'}}>
-                        <Icon name = {'refresh'} type = {'font-awesome'} size={20} color= {'black'} borderRadius= {20}/>
-                    </TouchableOpacity> */}
-                </View>
-                {/* <TransactionScrollView props = {{route: route, setRefresh: setRefresh}} ref={ref} navigation = {navigation}/> */}
-                <FlatList
-                    data = {state.transactionList}
-                    renderItem = {({item, index}) => {
-                            const transaction = item;
-                            let currentDate = new Date(transaction.date)                 
-                            let currentMonth = new Intl.DateTimeFormat('en-US', {month: 'long'}).format(currentDate)
-                            if (currentMonth != latestMonth) {
-                                latestMonth = currentMonth
-                                return (   
-                                    <View key ={index} style = {{flex: 1}}>
-                                        <Text style = {{fontSize: 14, margin: 10}}>{latestMonth} {currentDate.getFullYear()}</Text>
-                                        <TransactionEntry props={{transaction: transaction, route: route, setRefresh: setRefresh}} navigation= {navigation}/>
-                                    </View>
-                                )
-                            } else {
-                                return (
-                                    <Swipeable renderRightActions = {() => (
-                                        <TouchableOpacity onPress = {() => { console.log('swipe')}}>
-                                            <View style = {{width: 50, justifyContent: 'center', alignContent: 'center', flex: 1}}>
-                                                <Icon  name = 'delete' type= 'materials' style={{justifyContent: 'center', alignContent: 'center'}} size={30}/>
-                                            </View>
-                                        </TouchableOpacity>
-                                            )} key = {index}>
-                                        <TransactionEntry props={{transaction: transaction, route: route, setRefresh: setRefresh}} navigation= {navigation} key ={index}/>
-                                    </Swipeable>  
-                                )
-                            }              
-                    }}
-                />
-                {/* <SelectCardModal ref = {ref} navigation = {navigation} props= {{setRefresh: setRefresh}}/> */}
+        <SafeAreaView>
+            <View>
+              <FlatList 
+                  data = {state.transactionList.sort((a, b) => new Date(b.date) - new Date(a.date))} 
+                  keyExtractor={(item ,index)=> index.toString()}
+                  renderItem = {({item, index}) => {
+                      return ( 
+                      <TransactionCardView transaction = {item} index = {index} navigation = {navigation} key = {index}/>
+                      )}}>
+              </FlatList>
+              <View>
                 <TouchableOpacity
                     activeOpacity={.7}
                     style={{                
@@ -86,10 +47,14 @@ export const ExpenseTracker = ({route, navigation}) => {
                     backgroundColor: '#01a699',
                     borderRadius: 100,
                     }}
-                    onPress = {() => ref.current.setModalVisibility(true)}
+                    onPress = {() => ref.current.setModalVisibility(true)} 
                 >
-                    <Icon name='add' type = {'material'} size={25} color='#fff' />
+                <Icon name='add' type = {'material'} size={25} color='#fff' />
                 </TouchableOpacity>
+              </View>
+            </View>
+            {/* <SelectCardModal ref = {ref} navigation = {navigation}/> */}
+            <SelectCardModal ref = {ref} navigation = {navigation} />
         </SafeAreaView>
     )
 }
@@ -168,56 +133,7 @@ export const ExpenseTracker = ({route, navigation}) => {
 //     )
 // }
 
-// const SelectCardModal = React.forwardRef(({props, navigation}, ref) => {
-//     const [modalVisibility, setModalVisibility] = React.useState(false);
-//     const [selectedCard, setSelectedCard] = React.useState(null)
 
-//     const {setRefresh} = props;
-
-//     const {getCardList} = React.useContext(CardContext);
-//     const cardList = getCardList();
-//     React.useImperativeHandle(ref, () => {
-//         return {
-//             setModalVisibility: setModalVisibility,
-//             modalVisibility: modalVisibility
-//         }
-//     })
-
-//     return (
-//         <Modal animationType="none" transparent={true} visible={modalVisibility} onRequestClose={() => { Alert.alert("Modal has been closed.");   setModalVisibility(!modalVisibility); }}>
-//             <View style= {{flex: 1, justifyContent: "flex-end", alignItems: "center", }}>
-//                 <TouchableWithoutFeedback onPress={()=> setModalVisibility(false)}>
-//                     <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)'}} />
-//                 </TouchableWithoutFeedback>
-//                 <View style={{width:"100%" , height: "70%", backgroundColor: "white",  borderTopRightRadius: 30,  borderTopLeftRadius: 30, paddingHorizontal: 25, paddingTop: 25, alignItems: "center", shadowColor: "#000", shadowOffset: {width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 4, elevation: 5}}>
-//                     <View style = {{alignItems: 'center', marginBottom: 20}}>
-//                         <Text style = {{fontSize: 28}}>Select Card</Text>
-//                         <Text>Which card did you use for spending?</Text>
-//                     </View>
-//                     <ScrollView>
-//                         <View style = {{ alignContent: 'stretch',  flex: 1, flexWrap: "wrap",flexDirection: "row"} }>
-//                             {cardList.map((card, index) => {
-//                                 return (
-//                                     <View style = {{width : '50%', padding: 5, height: 100}} key = {index}>
-//                                         <TouchableOpacity style = {[(selectedCard !== null) && (selectedCard.id === card.id) ? {borderWidth: 3, borderColor: card.color.quartenary, backgroundColor: card.colorCode, borderRadius: 15} : null]} onPress = {() => setSelectedCard(card)}>
-//                                         {/* <TouchableOpacity> */}
-//                                             <Image style = {{height: '100%', width: '100%', borderRadius: 10}} source = {{uri: card.image}}></Image>
-//                                         </TouchableOpacity>
-//                                     </View>
-//                                 )
-//                             })}
-//                         </View>
-//                     </ScrollView>
-//                     <View style = {{height: '15%', justifyContent: 'center', width: '40%'}}>
-//                         <TouchableOpacity style = {{margin:5, padding: 10, backgroundColor: '#2196F3', borderRadius: 10, alignItems: 'center'}} onPress = {() => {setModalVisibility(false); navigation.navigate('AddTransactionScreen', {selectedCard:selectedCard, setRefresh:setRefresh})}}>
-//                                 <Text style = {{color: 'white'}}>Confirm</Text>
-//                         </TouchableOpacity>
-//                     </View>
-//                 </View>
-//             </View>
-//         </Modal>
-//     )
-// })
 
 // const Card = ({card}) => {
 //     return (
@@ -229,6 +145,70 @@ export const ExpenseTracker = ({route, navigation}) => {
 //         </View>
 //     )
 // }
+
+// return (
+//     <SafeAreaView style = {{flex: 1}}>
+//     <Text style = {{fontSize: 40}}>Expense Tracker</Text>
+//         <View style = {{alignItems: 'center', justifyContent: 'space-between', flexDirection:'row', margin: 10}}>
+//             <TouchableOpacity style = {{width: 100, borderWidth: 2}} onPress = {() => flushTransactions()}>
+//                 <View style = {{alignItems: 'center', justifyContent: 'center'}}>
+//                     <Text style = {{fontSize: 16}}>Flush</Text>
+//                 </View>
+//             </TouchableOpacity>
+//             <TouchableOpacity onPress = {() => setRefresh(true)} style = {{alignItems: 'flex-end'}}>
+//                 <Icon name = {'refresh'} type = {'font-awesome'} size={20} color= {'black'} borderRadius= {20}/>
+//             </TouchableOpacity>
+//         </View>
+//         <TransactionScrollView props = {{route: route, setRefresh: setRefresh}} ref={ref} navigation = {navigation}/>
+//         <FlatList
+//             data = {state.transactionList}
+//             renderItem = {({item, index}) => {
+//                     const transaction = item;
+//                     let currentDate = new Date(transaction.date)                 
+//                     let currentMonth = new Intl.DateTimeFormat('en-US', {month: 'long'}).format(currentDate)
+//                     if (currentMonth != latestMonth) {
+//                         latestMonth = currentMonth
+//                         return (   
+//                             <View key ={index} style = {{flex: 1}}>
+//                                 <Text style = {{fontSize: 14, margin: 10}}>{latestMonth} {currentDate.getFullYear()}</Text>
+//                                 <TransactionEntry props={{transaction: transaction, route: route, setRefresh: setRefresh}} navigation= {navigation}/>
+//                             </View>
+//                         )
+//                     } else {
+//                         return (
+//                             <Swipeable renderRightActions = {() => (
+//                                 <TouchableOpacity onPress = {() => { console.log('swipe')}}>
+//                                     <View style = {{width: 50, justifyContent: 'center', alignContent: 'center', flex: 1}}>
+//                                         <Icon  name = 'delete' type= 'materials' style={{justifyContent: 'center', alignContent: 'center'}} size={30}/>
+//                                     </View>
+//                                 </TouchableOpacity>
+//                                     )} key = {index}>
+//                                 <TransactionEntry props={{transaction: transaction, route: route, setRefresh: setRefresh}} navigation= {navigation} key ={index}/>
+//                             </Swipeable>
+//                         )
+//                     }              
+//             }}
+//         />
+//         <SelectCardModal ref = {ref} navigation = {navigation} props= {{setRefresh: setRefresh}}/>
+//         <TouchableOpacity
+//             activeOpacity={.7}
+//             style={{                
+//             alignItems: 'center',
+//             justifyContent: 'center',
+//             width: 60,
+//             position: 'absolute',
+//             bottom: 20,
+//             right: 20,
+//             height: 60,
+//             backgroundColor: '#01a699',
+//             borderRadius: 100,
+//             }}
+//             onPress = {() => ref.current.setModalVisibility(true)}
+//         >
+//             <Icon name='add' type = {'material'} size={25} color='#fff' />
+//         </TouchableOpacity>
+// </SafeAreaView>
+// )
 
 const style = StyleSheet.create({
     centeredView: {

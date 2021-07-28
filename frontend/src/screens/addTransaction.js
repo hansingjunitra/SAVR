@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, KeyboardAvoidingView, TouchableOpacity, ScrollView, StyleSheet, Alert, TextInput, Image } from 'react-native';
 
 import { Icon } from 'react-native-elements';
 import CalendarPicker from 'react-native-calendar-picker';
 import Modal from 'react-native-modal'
-import { CardContext, TransactionContext } from '../context/context';
+import { AppContext, CardContext, TransactionContext } from '../context/context';
 
 var moment = require('moment');
 const cardDetailsJSON = require('../creditCards.json'); 
 
 export const AddTransaction = ({route, navigation}) => {
-    const {selectedCard, setRefresh} = route.params;
+    const {selectedCard} = route.params;
     const [selectedDate, setSelectedDate] = React.useState(moment());
     const [calendarModal, setCalendarModal] = React.useState(false);
     const [categoryModal, setCategoryModal] = React.useState(false);
@@ -26,11 +26,14 @@ export const AddTransaction = ({route, navigation}) => {
         id: Math.floor(Math.random() * 1000000000000), 
         merchant: null
     })
+
+    const { state, dispatch } = useContext(AppContext);
     
     // const card = cardDetailsJSON.find(d => d.id == newTransaction.cardID);
     // const { updateTotalSpent } = React.useContext(CreditCardRecordContext);
     // const { addTransaction } = React.useContext(TransactionRecordContext);
-    const { addTransaction } = React.useContext(TransactionContext);
+    // const { addTransaction } = React.useContext(TransactionContext);
+
 
     const onChangeAmount = (amount) => {
         if (parseInt(amount) !== null) {
@@ -56,9 +59,29 @@ export const AddTransaction = ({route, navigation}) => {
     }
 
     const onAddTransactionHandler = () => {
-        addTransaction(newTransaction);
-        // updateTotalSpent(selectedCard, newTransaction);
-        setRefresh(true);
+
+        const card = state.cardList.find((c) => c.id == newTransaction.cardID)
+        const transactionDate = new Date (newTransaction.date)
+        const today = new Date()
+
+        let updatedTotalSpent = card.totalSpent;
+        let updatedSpendingBreakdown = card.spendingBreakdown;
+
+        if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
+            updatedTotalSpent += newTransaction.amount;
+            updatedSpendingBreakdown[`${newTransaction.category}`] += newTransaction.amount
+        }
+
+        console.log(newTransaction, updatedSpendingBreakdown);
+        let updatedCard = {
+            ...card,
+            totalSpent: updatedTotalSpent,
+            spendingBreakdown: updatedSpendingBreakdown
+        }
+
+        dispatch({type: "ADD_TRANSACTION", data: newTransaction});
+        dispatch({type: "UPDATE_CARD", data: updatedCard});
+        
         navigation.goBack();
     }
 

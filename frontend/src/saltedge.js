@@ -193,8 +193,8 @@ export const getTransactions = async (connectionID, accountID, lastFetchedID) =>
         }).then(response => {
             return response.json();
         });
-        console.log(res['meta'])
-        return {transactions: res['data'], lastFetchedID: res['meta']['next_id']};
+        // console.log(res['data'])
+        return {fetchedTransactionList: res['data'], lastFetchedID: res['meta']['next_id']};
     } catch (err) {
         console.error(err);
         return Error;

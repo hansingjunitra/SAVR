@@ -19,6 +19,7 @@ export const RebateProgress = () => {
 
     const { state, dispatch } = useContext(AppContext);
     const [cardList, setCardList] = useState([]);
+    console.log(state.transactionList[0])
 
     useEffect(() => {
         setCardList(state.cardList)
