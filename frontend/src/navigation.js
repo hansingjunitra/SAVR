@@ -41,14 +41,14 @@ const HistoryTab = () => {
     )
 }
 
-// const RecommendationStack  = createStackNavigator(); 
-// const RecommendationTab = () => {
-//     return (
-//         <RecommendationStack.Navigator>
-//             <RecommendationStack.Screen name = {"Recommend"} component = {Recommendation}/>        
-//         </RecommendationStack.Navigator>
-//     )
-// }
+const RecommendationStack  = createStackNavigator(); 
+const RecommendationTab = () => {
+    return (
+        <RecommendationStack.Navigator>
+            <RecommendationStack.Screen name = {"Recommend"} component = {Recommendation}/>        
+        </RecommendationStack.Navigator>
+    )
+}
 
 const ProfileStack  = createStackNavigator(); 
 const ProfileTab = () => {
@@ -87,7 +87,7 @@ export const Navigator = () => {
                         component = {HistoryTab}
                         options = {{tabBarIcon: () =>  <Icon name = {'view-list-outline'} type = {'material-community'}/>}}
                     />
-                    {/* <Tab.Screen
+                    <Tab.Screen
                         name = "Recommend"
                         component = {RecommendationTab}
                         listeners = {{
@@ -97,7 +97,7 @@ export const Navigator = () => {
                             },
                         }}
                         options = {{tabBarIcon: () =>  <SAVRRecommendationButton/>, tabBarLabel: () => null, }}
-                    /> */}
+                    />
                     <Tab.Screen
                         name = "Track"
                         component = {TrackTab}
@@ -110,7 +110,7 @@ export const Navigator = () => {
                     />
                 </Tab.Navigator>
             </NavigationContainer>
-            {/* <Recommendation modal = {modal} setModal = {setModal}/> */}
+            <Recommendation modal = {modal} setModal = {setModal}/>
         </>
     )
 }
