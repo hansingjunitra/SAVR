@@ -85,6 +85,12 @@ export const UserProfile = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
             </View>
+            <View style = {{flex: 1, flexDirection: 'row',  paddingHorizontal: 20}}>
+                <TouchableOpacity onPress={()=> dispatch({type: "RESET_STATE"})} style = {{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                    {/* <Icon name = {'credit-card-multiple-outline'} type = {'material-community'} size = {30} style = {{marginHorizontal: 10}}/> */}
+                    <Text style = {{fontSize: 18, flex: 1}}>Hard Reset</Text>
+                </TouchableOpacity>
+            </View>
            </SafeAreaView>
         </ScrollView>
     )

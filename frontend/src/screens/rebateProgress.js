@@ -76,6 +76,15 @@ export const RebateProgress = () => {
 
 
     // }
+    if (state.cardList.length == 0) {
+        return (
+            <View style = {{flex: 1, justifyContent: 'center' , alignContent: 'center', margin: 20}}>
+                <Text style = {{fontSize: 18, textAlign: 'center'}}>You don't have any cards! Go to Profile Tab and add a card!</Text>
+            </View>
+        )
+    } 
+
+
 
     return (    
         <SafeAreaView style = {{flex: 1, backgroundColor:'white'}}>
