@@ -176,7 +176,7 @@ export const AddTransaction = ({route, navigation}) => {
                         </View>
                         <TextInput placeholder={'None'}
                                     style = {{padding: 0, margin: 0, textAlign: 'right'}} 
-                                    defaultValue = {transaction.description}
+                                    defaultValue = {newTransaction.description}
                                     placeholderTextColor = {'black'} onChangeText = {(description) => onChangeDescription(description)}/>
                     </View>
                     <View style = {{marginVertical: 10}}>

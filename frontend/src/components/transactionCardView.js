@@ -1,18 +1,45 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {View,
         TouchableOpacity,
         Text} from 'react-native'
 import { Icon } from 'react-native-elements';
 import { Swipeable } from 'react-native-gesture-handler';
+import { AppContext } from '../context/context';
         
 const TransactionCardView = (props) => {
     const { transaction, index, navigation } = props;
-    const { dispatch, state } = props;
+    const { dispatch, state } = useContext(AppContext);
+
+    const deleteTransactionHandler = () => {
+
+        const card = state.cardList.find((c) => c.id == transaction.cardID)
+
+        const transactionDate = new Date (transaction.date)
+        const today = new Date()
+        let updatedTotalSpent = card.totalSpent;
+        let updatedSpendingBreakdown = card.spendingBreakdown;
+
+        if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
+            updatedTotalSpent -= transaction.amount;
+            updatedSpendingBreakdown[`${transaction.category}`] -= transaction.amount
+        }
+
+        let updatedCard = {
+            ...card,
+            totalSpent: updatedTotalSpent,
+            spendingBreakdown: updatedSpendingBreakdown
+        }
+
+        console.log(updatedTotalSpent, updatedSpendingBreakdown, transaction.amount)
+
+        dispatch({type: "UPDATE_CARD", data: updatedCard});
+        dispatch({type: "DELETE_TRANSACTION", data: transaction});
+    }
 
     return (
         <View key = {index}>
             <Swipeable renderRightActions = {() => (
-                    <TouchableOpacity onPress = {() => { dispatch({type: "DELETE_TRANSACTION", data: transaction})}}>
+                    <TouchableOpacity onPress = {() => deleteTransactionHandler()}>
                         <View style = {{width: 50, justifyContent: 'center', alignContent: 'center', flex: 1}}>
                             <Icon  name = 'delete' type= 'materials' style={{justifyContent: 'center', alignContent: 'center'}} size={30}/>
                         </View>

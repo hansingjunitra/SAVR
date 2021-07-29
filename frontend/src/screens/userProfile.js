@@ -7,110 +7,27 @@ import { AddCard } from './addCard';
 import { savrAlgo } from '../util/algo';
 import { Button } from 'react-native';
 import { getConnectionIDListHandler } from '../context/credentials';
+import { Icon, Divider } from 'react-native-elements';
+import { fonts } from 'react-native-elements/dist/config';
 
 const cardDetailsJSON = require('../creditCards.json');
 
-const syncBankHandler = async (customerID, bankCode) => {
-    try {
-        const res = await createConnection(customerID, bankCode)
-        Linking.openURL(res);
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-const syncAccountHandler = async (connectionID, cardName, updateCardConnectionID) => {
-    // console.log(connectionID, cardName)
-    // try {
-    //     const accounts = await getConnectionAccounts(connectionID);
-    //     var found = 0;
-    //     try {
-    //         const acc = accounts.data;
-    //         var i;
-    //         for (i=0; i<acc.length; i++) {
-    //             if (acc[i].extra.account_name==cardName) {
-    //                 found = 1;
-    //                 const accountID = acc[i].id;                 
-    //                 updateCardConnectionID(accountID, connectionID, cardName)
-    //             }
-    //         }
-    //         if (found==0) {
-    //             alert('Card not found');
-    //         }
-    //     }
-    //     catch {
-    //         console.error("connectionID not found");
-    //         console.log(accounts.data[0].id);
-    //     }
-    // } catch (err) {
-    //     console.error(err);
-    // }
-}
-
-const SyncButton = (props) => {
-    const {credentials, card} = props.props
-    const connections = credentials.connectionIDList.find((connection) => connection.bank == card.bank)
-
-    const {updateCardConnectionID} = React.useContext(CardContext);
-
+const TextBox = (props) => {
+    const { text, fontSize } = props
     return (
-        <View>
-            <TouchableOpacity onPress = {() => card.bank_saltedge_code != null ? syncBankHandler(credentials.saltEdgeID, card.bank_saltedge_code): null}>
-                <View>
-                    <Text>Sync bank</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress = {() => connections != undefined ? syncAccountHandler(connections.id, card.card_name, updateCardConnectionID): alert("Sync bank first")}>
-            <View>
-                <Text>Sync card</Text>
-            </View>
-            </TouchableOpacity>
+        <View style = {{flex: 1, justifyContent: 'center'}}>
+            <Text style = {{fontSize: fontSize}}>{text}</Text>
         </View>
     )
 }
 
-const SyncStatus = (props) => {
-    const {credentials, card} = props.props
-    const synced = credentials.connectionIDList.find((connection) => connection.bank == card.bank)
-    if (synced != undefined) {
-        return (
-            <View>
-                <Text>Status: Synced</Text>
-            </View>
-        )            
-    } else {
-        return (
-            <View>
-                <Text>Status: Not Synced</Text>
-            </View>
-        )
-    }
-}
-
 export const UserProfile = ({navigation}) => {
-    console.log("Render User Profile");
-
-    // const {getCardList, flushCards, deleteCard, updateCardConnectionID} = React.useContext(CardContext);
-    // const {getCredentials, getConnections, getAccounts, setCredentials} = React.useContext(CredentialsContext);
-
     const { state, dispatch } = useContext(AppContext);
 
     React.useEffect(() => {
         console.log('Render userProfile.js UseEffect');
     }, [])
     
-    // let cardList = getCardList();
-    // cardList.map((card, index) => {
-    //     let cardDetail = cardDetailsJSON.find(d => d.id == card.id);
-    //     cardList[index] = {...cardDetail, ...card};
-    // })
-
-    // const credentials = getCredentials();
-
-    // cardList.sort(function (a, b) {
-    //     return (a.bank).localeCompare(b.bank);
-    // })
-
     const deleteHandler = async () => {
         try {
             await AsyncStorage.removeItem("APP_STATE");
@@ -120,82 +37,55 @@ export const UserProfile = ({navigation}) => {
             return false;
         }
     }
-
-
+    
     return (
         <ScrollView>
-        <SafeAreaView style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style= {{fontSize: 40}}>Hi {state.username}</Text>
-            <Text style= {{fontSize: 24}}>Cashback Earned: </Text>
-            <Text style= {{fontSize: 24}}>User Owned</Text>
-            <Button onPress = {deleteHandler} title =  "button"> </Button>
-            {/* <View>
-                {cardList.map((card, index) => {
-                    return (
-                        <View key={index} style = {{padding: 10, width: '100%', flexDirection: 'row'}}>
-                            <View style ={{flex: 1}}>
-                                <Text>{card.card_name}</Text>
-                            </View>
-                            <View style ={{flex: 1}}>
-                                <SyncButton props = {{credentials: credentials, card: card}}/>
-                                <SyncStatus props = {{credentials: credentials, card: card}}/>
-                            </View>
-                            <View style ={{flex: 1}}>
-                            <TouchableOpacity onPress = {() => deleteCard(card)}>
-                                <View>
-                                    <Text>Delete</Text>
-                                </View>
-                            </TouchableOpacity>
-                            </View>
-                        </View>
-                )})}
-            </View> */}
-            <Text style ={{fontSize: 20}}>{JSON.stringify(state.connectionIDList)}</Text>
-            {/* <Text>{JSON.stringify(credentials)}</Text> */}
-            {/* <TouchableOpacity onPress={()=> deleteCredentials()}>
-                <Text>
-                    Delete Credentials
-                </Text>
-            </TouchableOpacity> */}
-            <TouchableOpacity onPress={()=> navigation.navigate("AddCard")} style ={{margin: 10}}>
-                <Text>
-                    Add Cards
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress = {() => dispatch({type: 'RESET_STATE'})}>
-                <View>
-                    <Text>Reset</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress = {() => getConnectionIDListHandler(state.saltEdgeID)}>
-                <View>
-                    <Text>Get ConnectionID</Text>
-                </View>
-            </TouchableOpacity>
-            <View>
-                <Text>{state.saltEdgeID}</Text>
-                <Text>{state.secret}</Text>
-                <Text>{state.token}</Text>
-                <Text>{state.username}</Text>
+        <SafeAreaView style = {{flex: 1, justifyContent: 'center', alignItems: 'center', margin: 25}}>
+            <View style= {{margin: 20, justifyContent: 'center', alignItems: 'center'}}>
+                <Icon name = {'account'} type = {'material-community'} color= "white" size = {80} style = {{backgroundColor: '#ddd', borderRadius: 100, height: 100, width: 100, justifyContent: 'center'}}/>
+                {/* <Text>{state.username}</Text> */}
             </View>
-            {/* <TouchableOpacity onPress={()=> flushCards()} style ={{margin: 10}}>
-                <Text>
-                    Delete Cards
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={()=> setCredentials()} style ={{margin: 10}}>
-                <Text>
-                    Edit Credentials
-                </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={()=> updateCardConnectionID()} style ={{margin: 10}}>
-                <Text>
-                    Update Card Connection
-                </Text>
-            </TouchableOpacity>
-             */}
-            </SafeAreaView>
+            <View style = {{height: 200, width: "100%", paddingVertical: 10, backgroundColor: '#eaeaea', marginVertical: 20, alignItems: 'center', borderRadius: 30}}>
+                {/* <Text style ={{fontSize: 20, flex: 1}}>Account</Text> */}
+                <View style = {{flex: 1, justifyContent: 'center'}}>
+                    <Text style = {{fontSize: 24}}>Account</Text>
+                </View>
+                <Divider orientation="vertical" width="85%"/>
+                <View style = {{flex: 1, flexDirection: 'row',  paddingHorizontal: 20}}>
+                    <TouchableOpacity style = {{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                    <Icon name = {'account-outline'} type = {'material-community'} size = {30} style = {{marginHorizontal: 10}}/>
+                    <Text style = {{fontSize: 18, flex: 1}}>Account Details</Text>
+                    </TouchableOpacity>
+                </View>
+                <Divider orientation="vertical" width="85%"/>
+                <View style = {{flex: 1, flexDirection: 'row',  paddingHorizontal: 20}}>
+                    <TouchableOpacity onPress={()=> navigation.navigate("AddCard")} style = {{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                        <Icon name = {'credit-card-multiple-outline'} type = {'material-community'} size = {30} style = {{marginHorizontal: 10}}/>
+                        <Text style = {{fontSize: 18, flex: 1}}>Add Cards</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style = {{height: 200, width: "100%", paddingVertical: 10, backgroundColor: '#eaeaea', marginVertical: 20, alignItems: 'center', borderRadius: 30}}>
+                {/* <Text style ={{fontSize: 20, flex: 1}}>Account</Text> */}
+                <View style = {{flex: 1, justifyContent: 'center'}}>
+                    <Text style = {{fontSize: 24}}>About Us</Text>
+                </View>
+                <Divider orientation="vertical" width="85%"/>
+                <View style = {{flex: 1, flexDirection: 'row',  paddingHorizontal: 20}}>
+                    <TouchableOpacity style = {{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                    <Icon name = {'customerservice'} type = {'antdesign'} size = {30} style = {{marginHorizontal: 10}}/>
+                    <Text style = {{fontSize: 18, flex: 1}}>Customer Support</Text>
+                    </TouchableOpacity>
+                </View>
+                <Divider orientation="vertical" width="85%"/>
+                <View style = {{flex: 1, flexDirection: 'row',  paddingHorizontal: 20}}>
+                    <TouchableOpacity style = {{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                        <Icon name = {'file-document-outline'} type = {'material-community'} size = {30} style = {{marginHorizontal: 10}}/>
+                        <Text style = {{fontSize: 18, flex: 1}}>Terms and Condition</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+           </SafeAreaView>
         </ScrollView>
     )
 }

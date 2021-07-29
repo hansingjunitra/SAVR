@@ -23,6 +23,8 @@ const AppContext = React.createContext({
 
 const reducer = (state, action) => {
     let newState;
+    let transactionIndex;
+    
     switch (action.type) {
         case "SET_CREDENTIALS":
             newState=  {
@@ -61,7 +63,7 @@ const reducer = (state, action) => {
             }
             break;
         case "EDIT_TRANSACTION":
-            let transactionIndex = state.transactionList.findIndex((t) => t.id === action.data.id) 
+            transactionIndex = state.transactionList.findIndex((t) => t.id === action.data.id) 
             if (transactionIndex != null) {
                 newState = {
                     ...state,
@@ -70,7 +72,7 @@ const reducer = (state, action) => {
             } 
             break;
         case "DELETE_TRANSACTION":
-            let transactionIndex = state.transactionList.findIndex((t) => t.id === action.data.id) 
+            transactionIndex = state.transactionList.findIndex((t) => t.id === action.data.id) 
             if (transactionIndex != null) {
                 newState = {
                     ...state,
