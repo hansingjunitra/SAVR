@@ -7,17 +7,19 @@ import { Swipeable } from 'react-native-gesture-handler';
         
 const TransactionCardView = (props) => {
     const { transaction, index, navigation } = props;
+    const { dispatch, state } = props;
+
     return (
         <View key = {index}>
             <Swipeable renderRightActions = {() => (
-                    <TouchableOpacity onPress = {() => { console.log('swipe')}}>
+                    <TouchableOpacity onPress = {() => { dispatch({type: "DELETE_TRANSACTION", data: transaction})}}>
                         <View style = {{width: 50, justifyContent: 'center', alignContent: 'center', flex: 1}}>
                             <Icon  name = 'delete' type= 'materials' style={{justifyContent: 'center', alignContent: 'center'}} size={30}/>
                         </View>
                     </TouchableOpacity>
                         )}>
-                <TouchableOpacity style = {{backgroundColor:'white', margin: 3, marginHorizontal: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.5, shadowRadius: 5,  elevation: 4, borderRadius: 20, height: 70, justifyContent: 'center'}}>
-                {/* <TouchableOpacity onPress = {()=> navigation.navigate("EditTransactionScreen", {transaction:transaction, setRefresh:setRefresh})} style = {{backgroundColor:'white', margin: 3, marginHorizontal: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.5, shadowRadius: 5,  elevation: 4, borderRadius: 20, height: 70, justifyContent: 'center'}}> */}
+                <TouchableOpacity onPress = {() => {navigation.navigate("EditTransactionScreen", {transaction:transaction})}}
+                        style = {{backgroundColor:'white', margin: 3, marginHorizontal: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.5, shadowRadius: 5,  elevation: 4, borderRadius: 20, height: 70, justifyContent: 'center'}}>
                     <View style = {{flexDirection: 'row',}}>
                         <View style = {{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems:'center'}}>
                             <View>

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, KeyboardAvoidingView, TouchableOpacity, ScrollView, StyleSheet, Alert, TextInput, Image, SafeAreaView } from 'react-native';
 
 import { Icon } from 'react-native-elements';
 import CalendarPicker from 'react-native-calendar-picker';
 import Modal from 'react-native-modal'
-import { CardContext, TransactionContext } from '../context/context';
+import { AppContext, CardContext, TransactionContext } from '../context/context';
 import { stringify } from 'uuid';
 
 var moment = require('moment');
@@ -12,25 +12,30 @@ var moment = require('moment');
 const cardDetailsJSON = require('../creditCards.json'); 
 
 export const EditTransaction = ({route, navigation}) => {
-    const { transaction, setRefresh } = route.params;
-    const { updateTransaction } = React.useContext(TransactionContext);
-    const card = cardDetailsJSON.find(d => d.id == transaction.cardID);
-    console.log(transaction, card);
+    const { transaction } = route.params;
+    // console.log(transaction, card);
     
     const [newTransaction, setNewTransaction] = React.useState(transaction)
+    const { state, dispatch } = useContext(AppContext);
+    const card = state.cardList.find(d => d.id == transaction.cardID);
+
 
     const onChangeAmount = (amount) => {
-        if (parseInt(amount) !== null) {
-            setNewTransaction(prevState => {return {
-                ...prevState,
-                amount:  parseInt(amount)
-            }})
-        } else {
-            setNewTransaction(prevState => {return {
-                ...prevState,
-                amount: 0
-            }})
-        }
+        setNewTransaction(prevState => {return {
+            ...prevState,
+            amount:  amount
+        }})
+        // if (parseInt(amount) !== null) {
+        //     setNewTransaction(prevState => {return {
+        //         ...prevState,
+        //         amount:  parseInt(amount)
+        //     }})
+        // } else {
+        //     setNewTransaction(prevState => {return {
+        //         ...prevState,
+        //         amount: 0
+        //     }})
+        // }
     }
 
     const onSelectCategory = (selectedCategory) => {
@@ -42,11 +47,63 @@ export const EditTransaction = ({route, navigation}) => {
         setCategoryModal(false);
     }
 
-    const onAddTransactionHandler = () => {
-        updateTransaction(newTransaction);
-        // updateTotalSpent(selectedCreditCard, newTransaction);
-        setRefresh(true);
-        navigation.goBack();
+    const onEditTransactionHandler = () => {
+        switch (true) {
+            case (newTransaction.amount === null || newTransaction.amount == 0):
+                Alert.alert (
+                    "Invalid Amount Spent",
+                    "Please key in Amount Spent",
+                    [
+                        { text: "OK" }
+                    ]
+                )
+                break;
+            case (newTransaction.category === null):
+                Alert.alert (
+                    "Invalid Category",
+                    "Please select a Category for the transaction",
+                    [
+                        { text: "OK" }
+                    ]
+                )
+                break;
+            case (newTransaction.descriptipon === null):
+                Alert.alert (
+                    "Invalid Description",
+                    "Please key in a proper descrition for the transaction",
+                    [
+                        { text: "OK" }
+                    ]
+                )
+                break;
+            default:
+                // const card = state.cardList.find((c) => c.id == newTransaction.cardID)
+                const transactionDate = new Date (newTransaction.date)
+                const today = new Date()
+        
+                let updatedTotalSpent = card.totalSpent;
+                let updatedSpendingBreakdown = card.spendingBreakdown;
+                let amount = parseFloat(newTransaction.amount);
+
+                if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
+                    updatedTotalSpent += amount - transaction.amount;
+                    updatedSpendingBreakdown[`${newTransaction.category}`] += amount - transaction.amount
+                }
+        
+                let updatedCard = {
+                    ...card,
+                    totalSpent: updatedTotalSpent,
+                    spendingBreakdown: updatedSpendingBreakdown
+                }
+
+                console.log(updatedTotalSpent, updatedSpendingBreakdown, amount, transaction.amount)
+
+                dispatch({type: "EDIT_TRANSACTION", data: newTransaction});
+                dispatch({type: "UPDATE_CARD", data: updatedCard});
+                
+                navigation.goBack();
+        }
+        // navigation.goBack();
     }
 
     const onChangeDescription = (description) => {
@@ -63,30 +120,16 @@ export const EditTransaction = ({route, navigation}) => {
         // }
     }
 
-    const onChangeAlias = (alias) => {
-        setNewTransaction(prevState => {return {
-            ...prevState,
-            alias: alias    
-        }})
-        // if (alias !== null) {
-        // } else {
-        //     setNewTransaction(prevState => {return {
-        //         ...prevState,
-        //         alias: null
-        //     }})
-        // }
-    }
-
     // const [selectedDate, setSelectedDate] = React.useState(moment());
     const [calendarModal, setCalendarModal] = React.useState(false);
     const [categoryModal, setCategoryModal] = React.useState(false);
 
     return (
-        <SafeAreaView style = {{margin: 15, flex: 1}}>
+        <SafeAreaView style = {{paddingBottom: 30, flex: 1}}>
             <View style = {{flex: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
                 <Image source = {{uri: card.image}} style = {{height: 150, width: 240, borderRadius: 20}}></Image>
             </View>
-            <View style = {{flex: 3}}>
+            <View style = {{flex: 3, marginHorizontal: 15, justifyContent:'center'}}>
                 <View style = {{marginVertical: 10}}>
                     <TouchableOpacity>
                         <View style = {{flexDirection: 'row'}}>
@@ -108,21 +151,13 @@ export const EditTransaction = ({route, navigation}) => {
                     </TouchableOpacity>
                 </View>
                 <View style = {{marginVertical: 10}}>
-                    <View style = {{flexDirection: 'row', justifyContent: 'center'}}>
-                        <View  style = {{flex: 1, justifyContent: 'center'}}>
-                            <Text style = {{fontSize: 20}}> Description </Text>
-                        {/* <TextInput placeholder={'None'} defaultValue = {transaction.description} style = {{padding: 0, margin: 0}} placeholderTextColor = {'black'} onChangeText = {(merchant) => onChangeDescription(merchant)}/> */}
-                        <Text>{transaction.description}</Text>
-                        </View>
+                    <View  style = {{justifyContent: 'center'}}>
+                        <Text style = {{fontSize: 20}}> Description </Text>
                     </View>
-                </View>
-                <View style = {{marginVertical: 10}}>
-                    <View style = {{flexDirection: 'row', justifyContent: 'center'}}>
-                        <View  style = {{flex: 1, justifyContent: 'center'}}>
-                            <Text style = {{fontSize: 20}}> Alias </Text>
-                        <TextInput placeholder={'None'} defaultValue = {transaction.alias} style = {{padding: 0, margin: 0}} placeholderTextColor = {'black'} onChangeText = {(alias) => onChangeAlias(alias)}/>
-                        </View>
-                    </View>
+                    <TextInput placeholder={'None'}
+                                style = {{padding: 0, margin: 0, textAlign: 'right'}} 
+                                defaultValue = {transaction.description}
+                                placeholderTextColor = {'black'} onChangeText = {(description) => onChangeDescription(description)}/>
                 </View>
                 <View style = {{marginVertical: 10}}>
                     <TouchableOpacity onPress = {() => setCalendarModal(true)} >
@@ -141,7 +176,7 @@ export const EditTransaction = ({route, navigation}) => {
                 <TouchableOpacity style = {{flex: 1}} onPress = {() => navigation.goBack()}>
                     <Icon name='close' type='material-community'/>
                 </TouchableOpacity>  
-                <TouchableOpacity style = {{flex: 1}} onPress = {() => onAddTransactionHandler()}>
+                <TouchableOpacity style = {{flex: 1}} onPress = {() => onEditTransactionHandler()}>
                     <Icon name='check' type='material-community'/>
                 </TouchableOpacity>  
             </View>

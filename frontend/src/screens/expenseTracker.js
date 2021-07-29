@@ -24,36 +24,35 @@ export const ExpenseTracker = ({route, navigation}) => {
 
     return (
         <SafeAreaView>
-            <View>
-              <FlatList 
-                  data = {state.transactionList.sort((a, b) => new Date(b.date) - new Date(a.date))} 
-                  keyExtractor={(item ,index)=> index.toString()}
-                  renderItem = {({item, index}) => {
-                      return ( 
-                      <TransactionCardView transaction = {item} index = {index} navigation = {navigation} key = {index}/>
-                      )}}>
-              </FlatList>
-              <View>
+            <View style = {{height: "100%"}}>
+              {/* <View style = {{height: "100%"}}> */}
+                <FlatList 
+                    data = {state.transactionList.sort((a, b) => new Date(b.date) - new Date(a.date))} 
+                    keyExtractor={(item ,index)=> index.toString()}
+                    contentContainerStyle={{paddingBottom:60, paddingVertical: 15}} 
+                    renderItem = {({item, index}) => {
+                        return ( 
+                        <TransactionCardView transaction = {item} index = {index} navigation = {navigation} key = {index}/>
+                        )}}>
+                </FlatList>
                 <TouchableOpacity
-                    activeOpacity={.7}
-                    style={{                
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: 60,
-                    position: 'absolute',
-                    bottom: 20,
-                    right: 20,
-                    height: 60,
-                    backgroundColor: '#01a699',
-                    borderRadius: 100,
-                    }}
-                    onPress = {() => ref.current.setModalVisibility(true)} 
+                  activeOpacity={.7}
+                  style={{                
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 60,
+                  position: 'absolute',
+                  bottom: 20,
+                  right: 20,
+                  height: 60,
+                  backgroundColor: '#01a699',
+                  borderRadius: 100,
+                  }}
+                  onPress = {() => ref.current.setModalVisibility(true)} 
                 >
-                <Icon name='add' type = {'material'} size={25} color='#fff' />
+                <Icon name='add' type = {'material'} size={25} height={25} color='#fff' />
                 </TouchableOpacity>
-              </View>
             </View>
-            {/* <SelectCardModal ref = {ref} navigation = {navigation}/> */}
             <SelectCardModal ref = {ref} navigation = {navigation} />
         </SafeAreaView>
     )

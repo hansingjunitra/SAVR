@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 export const TrackProgress = () => {
     return (
         <View style = {{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-            <Text style = {{textAlign: 'center'}}>Future Implementation</Text>
+            <Text style = {{fontSize: 24, textAlign: 'center'}}>Coming Soon!</Text>
         </View>
     )
 }

@@ -55,11 +55,28 @@ const reducer = (state, action) => {
             }
             break;
         case "ADD_TRANSACTION":
-            console.log("EXEC")
             newState = {
                 ...state,
                 transactionList: [...state.transactionList, action.data]
             }
+            break;
+        case "EDIT_TRANSACTION":
+            let transactionIndex = state.transactionList.findIndex((t) => t.id === action.data.id) 
+            if (transactionIndex != null) {
+                newState = {
+                    ...state,
+                    transactionList: [...state.transactionList.slice(0, transactionIndex), action.data, ...state.transactionList.slice(transactionIndex + 1)]
+                }    
+            } 
+            break;
+        case "DELETE_TRANSACTION":
+            let transactionIndex = state.transactionList.findIndex((t) => t.id === action.data.id) 
+            if (transactionIndex != null) {
+                newState = {
+                    ...state,
+                    transactionList: [...state.transactionList.slice(0, transactionIndex), ...state.transactionList.slice(transactionIndex + 1)]
+                }    
+            } 
             break;
         case "UPDATE_TRANSACTION_LIST":
             newState = {
