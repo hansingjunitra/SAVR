@@ -6,6 +6,7 @@ import { View, Text, Modal, TextInput, TouchableOpacity, TouchableWithoutFeedbac
 import { Icon } from 'react-native-elements';
 // import { CardContext } from '../context/context';
 import { AppContext } from '../context/context';
+import RecommendedCardModal from '../modal/recommendedCardModal';
 
 import { savrAlgo } from './algo';
 
@@ -194,6 +195,7 @@ const CategoryModal = (props) => {
     )
 }
 
+
 export const Recommendation = (props) => {
     const {modal, setModal} = props;
     const [viewCategory, setViewCategory] = React.useState(false); 
@@ -212,8 +214,9 @@ export const Recommendation = (props) => {
 
     return (
         <Modal visible = {modal} transparent={true}>
-            {viewCategory ? <CategoryModal setViewCategory = {setViewCategory} amountSpent = {amountSpent} setModal = {setModal} setSelectedCategory = {setSelectedCategory} closeModalHandler = {closeModalHandler}/> 
-            : <InputModal setViewCategory = {setViewCategory} setModal = {setModal} selectedCategory = {selectedCategory} closeModalHandler = {closeModalHandler} amountSpent={amountSpent} setAmountSpent={setAmountSpent}/>}
+            {/* {viewCategory ? <CategoryModal setViewCategory = {setViewCategory} amountSpent = {amountSpent} setModal = {setModal} setSelectedCategory = {setSelectedCategory} closeModalHandler = {closeModalHandler}/> 
+            : <InputModal setViewCategory = {setViewCategory} setModal = {setModal} selectedCategory = {selectedCategory} closeModalHandler = {closeModalHandler} amountSpent={amountSpent} setAmountSpent={setAmountSpent}/>} */}
+            <RecommendedCardModal closeModalHandler = {closeModalHandler} cardName = "DBS Live Fresh Card"/>
         </Modal>
     )
 

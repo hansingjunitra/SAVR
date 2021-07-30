@@ -70,7 +70,6 @@ const FetchAndRefreshView = (props) => {
         dispatch({type: 'UPDATE_CARD', data: updatedCard})
         dispatch({type: 'UPDATE_TRANSACTION_LIST', data: updatedTransactionList})
     }
-    
 
     return (
         <View style = {{alignItems: 'center', marginBottom:20}}>
