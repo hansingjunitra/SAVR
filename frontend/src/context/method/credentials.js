@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
-import { AppContext } from './context'
-import { getCustomerConnections } from '../saltedge'
+import { AppContext } from '../context'
+import { getCustomerConnections } from '../../saltedge'
 
 // const {state , dispatch} = useContext(AppContext)
 const getConnectionIDListHandler = async (saltEdgeID) => {

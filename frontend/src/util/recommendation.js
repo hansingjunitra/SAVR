@@ -12,8 +12,6 @@ import { savrAlgo } from './algo';
 
 const InputModal = (props) => {
     const {setModal, setModalView, selectedCategory, closeModalHandler, setAmountSpent, amountSpent, setCardName} = props
-    // const [amountSpent, setAmountSpent] = React.useState(0);
-    // const {getCardList} = React.useContext(CardContext);
     const { state, dispatch } = useContext(AppContext);
 
     const setAmountSpentHandler = (amount) => {

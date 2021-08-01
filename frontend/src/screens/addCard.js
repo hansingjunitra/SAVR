@@ -4,8 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { CardView } from '../components/addCardView';
 
 import { AppContext, CardContext } from '../context/context';
-import { getCardConnectionAccount } from '../context/card';
-import { getConnectionIDListHandler } from '../context/credentials';
+import { getCardConnectionAccount } from '../context/method/card';
 
 const CARD_DATABASE = require('../creditCards.json');
 export const AddCard = ({navigation}) => {

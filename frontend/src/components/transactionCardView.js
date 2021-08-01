@@ -30,8 +30,6 @@ const TransactionCardView = (props) => {
             spendingBreakdown: updatedSpendingBreakdown
         }
 
-        console.log(updatedTotalSpent, updatedSpendingBreakdown, transaction.amount)
-
         dispatch({type: "UPDATE_CARD", data: updatedCard});
         dispatch({type: "DELETE_TRANSACTION", data: transaction});
     }

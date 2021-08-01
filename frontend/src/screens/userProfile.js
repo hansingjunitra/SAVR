@@ -1,13 +1,19 @@
 import React, { useContext } from 'react';
-import {View, Text, TouchableOpacity, Linking, ScrollView, SafeAreaView} from 'react-native';
-import {AppContext, CardContext, CredentialsContext, TransactionContext} from '../context/context';
+import { View,
+        StyleSheet, 
+        Text, 
+        TouchableOpacity, 
+        ScrollView, 
+        SafeAreaView} from 'react-native';
+import {AppContext} from '../context/context';
 
 import {createConnection, getConnectionAccounts, getCustomerConnections, getTransactions} from '../saltedge';
 import { AddCard } from './addCard';
 import { savrAlgo } from '../util/algo';
 import { Button } from 'react-native';
-import { getConnectionIDListHandler } from '../context/credentials';
-import { Icon, Divider } from 'react-native-elements';
+import { getConnectionIDListHandler } from '../context/method/credentials';
+import { Icon,
+         Divider } from 'react-native-elements';
 import { fonts } from 'react-native-elements/dist/config';
 
 const cardDetailsJSON = require('../creditCards.json');
@@ -85,12 +91,11 @@ export const UserProfile = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style = {{flex: 1, flexDirection: 'row',  paddingHorizontal: 20}}>
+            {/* <View style = {{flex: 1, flexDirection: 'row',  paddingHorizontal: 20}}>
                 <TouchableOpacity onPress={()=> dispatch({type: "RESET_STATE"})} style = {{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                    {/* <Icon name = {'credit-card-multiple-outline'} type = {'material-community'} size = {30} style = {{marginHorizontal: 10}}/> */}
                     <Text style = {{fontSize: 18, flex: 1}}>Hard Reset</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
            </SafeAreaView>
         </ScrollView>
     )

@@ -4,7 +4,7 @@ import { View, Text, KeyboardAvoidingView, TouchableOpacity, ScrollView, StyleSh
 import { Icon } from 'react-native-elements';
 import CalendarPicker from 'react-native-calendar-picker';
 import Modal from 'react-native-modal'
-import { AppContext, CardContext, TransactionContext } from '../context/context';
+import { AppContext } from '../context/context';
 
 var moment = require('moment');
 const cardDetailsJSON = require('../creditCards.json'); 
@@ -29,11 +29,6 @@ export const AddTransaction = ({route, navigation}) => {
 
     const { state, dispatch } = useContext(AppContext);
     
-    // const card = cardDetailsJSON.find(d => d.id == newTransaction.cardID);
-    // const { updateTotalSpent } = React.useContext(CreditCardRecordContext);
-    // const { addTransaction } = React.useContext(TransactionRecordContext);
-    // const { addTransaction } = React.useContext(TransactionContext);
-
     const onAddTransactionHandler = () => {
         
         switch (true) {
@@ -95,29 +90,7 @@ export const AddTransaction = ({route, navigation}) => {
             ...prevState,
             description: description    
         }})
-        // if (description !== null) {
-        // } else {
-        //     setNewTransaction(prevState => {return {
-        //         ...prevState,
-        //         description: null
-        //     }})
-        // }
     }
-
-    const onChangeAlias = (alias) => {
-        setNewTransaction(prevState => {return {
-            ...prevState,
-            alias: alias    
-        }})
-        // if (alias !== null) {
-        // } else {
-        //     setNewTransaction(prevState => {return {
-        //         ...prevState,
-        //         alias: null
-        //     }})
-        // }
-    }
-
 
     const onChangeAmount = (amount) => {
         if (parseInt(amount) !== null) {

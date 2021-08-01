@@ -1,4 +1,4 @@
-import { getConnectionAccounts } from "../saltedge";
+import { getConnectionAccounts } from "../../saltedge";
 const FAIL_RESPONSE = {
     iBankingSync: false,
     connectionID: null,

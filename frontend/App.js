@@ -8,13 +8,13 @@ import {SHA1} from './src/sha1';
 
 import {SplashScreen} from './src/splashScreen';
 import {SignUp} from './src/screens/signUp';
-import {CardContext, TransactionContext, CredentialsContext, AppContextProvider, AppContext, AppContextConsumer} from './src/context/context';
 
 import {createSaltEdgeCustomer, getCustomerConnections, getConnectionAccounts, getTransactions, refreshCustomerConnection} from './src/saltedge';
 import { monthsShort } from 'moment'; 
 
-import { getConnectionIDListHandler } from './src/context/credentials';
-import { getCardConnectionAccount } from './src/context/card';
+import {AppContext} from './src/context/context';
+import { getConnectionIDListHandler } from './src/context/method/credentials';
+// import { getCardConnectionAccount } from './src/context/method/card';
 
 const getUniqueId = (username) => {
     const date = new Date().getTime().toString();
@@ -69,14 +69,7 @@ const App = () => {
 
     return (
         <>
-            {/* <CardContext.Provider value = {CardContextValue}>
-            <TransactionContext.Provider value = {TransactionContextValue}>
-            <CredentialsContext.Provider value = {CredentialsContextValue}> */}
-            {loading ? <SplashScreen/>: null}
             {state.username === null ?  <SignUp/> : <Navigator/>}
-            {/* </CredentialsContext.Provider>
-            </TransactionContext.Provider>
-            </CardContext.Provider> */}
         </>
     )
 }

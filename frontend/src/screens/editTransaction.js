@@ -1,5 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, KeyboardAvoidingView, TouchableOpacity, ScrollView, StyleSheet, Alert, TextInput, Image, SafeAreaView } from 'react-native';
+import { View, 
+        Text,
+        TouchableOpacity, ScrollView, StyleSheet, 
+        Alert, 
+        TextInput, 
+        Image, 
+        SafeAreaView } from 'react-native';
 
 import { Icon } from 'react-native-elements';
 import CalendarPicker from 'react-native-calendar-picker';
@@ -105,23 +111,25 @@ export const EditTransaction = ({route, navigation}) => {
                             "Edit Category",
                             "Apply for matching description?",
                             [
-                                { text: "No"},
-                                { text: "Apply", onPress : () =>  dispatch({type: "EDIT_CATEGORY", data: {description: newTransaction.description,
-                                                                                                            category: newTransaction.category,
-                                                                                                            icon: newTransaction.icon
-                                                                                                        }})}
+                                { text: "No", onPress: () => resolve(false)},
+                                { text: "Apply", onPress : () =>  resolve(true)}
                             ],
                             {cancelable: false}
                         )
                     })
                 }
-                console.log(newTransaction);
                 
-                dispatch({type: "EDIT_TRANSACTION", data: newTransaction});
-                dispatch({type: "UPDATE_CARD", data: updatedCard});
-                
-                const userResponse = await AsyncCategoryAlert().then(navigation.goBack());
-        }
+                const userResponse = await AsyncCategoryAlert();
+                if (userResponse) {
+                    dispatch({type: "EDIT_CATEGORY", data: {description: newTransaction.description,
+                        category: newTransaction.category,
+                        icon: newTransaction.icon}
+                    })
+                }
+                navigation.goBack()
+                // dispatch({type: "EDIT_TRANSACTION", data: newTransaction});
+                // dispatch({type: "UPDATE_CARD", data: updatedCard});
+            }
         // navigation.goBack();
     }
 

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import {View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback} from 'react-native';
-import { AppContext, CardContext, CredentialsContext, TransactionContext } from '../context/context';
+import { AppContext } from '../context/context';
 import { ProgressBar, Colors } from 'react-native-paper';
 import Swiper from 'react-native-swiper';
 import { Icon } from 'react-native-elements';
@@ -19,7 +19,6 @@ export const RebateProgress = () => {
 
     const { state, dispatch } = useContext(AppContext);
     const [cardList, setCardList] = useState([]);
-    console.log(state.transactionList[0])
 
     useEffect(() => {
         setCardList(state.cardList)

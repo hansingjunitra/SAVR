@@ -10,7 +10,7 @@ import { ProgressBar, Colors } from 'react-native-paper';
 import { AppContext } from '../context/context';
 import { rebateFuncMap } from '../util/rebateCalculation';
 import { refreshCustomerConnection } from '../saltedge';
-import { fetchTransactions } from '../context/transactions';
+import { fetchTransactions } from '../context/method/transactions';
 
 const getProgress = (totalSpent, minmumSpending) => {
     if (!(minmumSpending == null || minmumSpending == 0)) {

@@ -1,7 +1,13 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, FlatList, KeyboardAvoidingView, Image, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, 
+        Text, 
+        StyleSheet, 
+        FlatList, 
+        TouchableOpacity, 
+        Modal,
+         TouchableWithoutFeedback } from 'react-native';
 
-import {AppContext, CardContext, TransactionContext} from '../context/context';
+import {AppContext} from '../context/context';
 import {EditTransaction} from './editTransaction';
 import {AddTransaction} from './addTransaction';
 import { Icon } from 'react-native-elements';
@@ -20,7 +26,6 @@ export const ExpenseTracker = ({route, navigation}) => {
     console.log('Render ExpenseTracker.js');
     const ref = React.useRef(null);
     const { state, dispatch } = useContext(AppContext);
-    console.log(state.transactionList[0])
 
     return (
         <SafeAreaView>
@@ -58,7 +63,6 @@ export const ExpenseTracker = ({route, navigation}) => {
 }
 
 // const TransactionScrollView = ({props, navigation}) => {
-//     console.log("Render Scroll View")
 
 //     const {route, setRefresh, ref} = props;
 //     const {getTransactionList, addTransaction, deleteTransaction, flushTransactions} = React.useContext(TransactionContext);
