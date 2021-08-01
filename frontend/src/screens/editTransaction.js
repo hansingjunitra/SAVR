@@ -103,8 +103,6 @@ export const EditTransaction = ({route, navigation}) => {
                     spendingBreakdown: updatedSpendingBreakdown
                 }
 
-                console.log(updatedTotalSpent, updatedSpendingBreakdown, amount, transaction.amount)
-
                 const AsyncCategoryAlert = () => {
                     return new Promise((resolve, reject) => {
                         Alert.alert(
@@ -127,8 +125,8 @@ export const EditTransaction = ({route, navigation}) => {
                     })
                 }
                 navigation.goBack()
-                // dispatch({type: "EDIT_TRANSACTION", data: newTransaction});
-                // dispatch({type: "UPDATE_CARD", data: updatedCard});
+                dispatch({type: "EDIT_TRANSACTION", data: newTransaction});
+                dispatch({type: "UPDATE_CARD", data: updatedCard});
             }
         // navigation.goBack();
     }
