@@ -11,7 +11,7 @@ import RecommendedCardModal from '../modal/recommendedCardModal';
 import { savrAlgo } from './algo';
 
 const InputModal = (props) => {
-    const {setModal, setViewCategory, selectedCategory, closeModalHandler, setAmountSpent, amountSpent} = props
+    const {setModal, setModalView, selectedCategory, closeModalHandler, setAmountSpent, amountSpent, setCardName} = props
     // const [amountSpent, setAmountSpent] = React.useState(0);
     // const {getCardList} = React.useContext(CardContext);
     const { state, dispatch } = useContext(AppContext);
@@ -24,7 +24,7 @@ const InputModal = (props) => {
         }
     }
 
-    const optimizeButtonHandler = () => {
+    const optimizeButtonHandler = async () => {
         switch (true) {
             case (amountSpent == 0):
                 Alert.alert(
@@ -46,7 +46,9 @@ const InputModal = (props) => {
                 break
             default:
                 console.log("Fire API")
-                savrAlgo(amountSpent, selectedCategory, "uid", state.cardList);
+                const res = await savrAlgo(amountSpent, selectedCategory, "uid", state.cardList);
+                setCardName(res);
+                setModalView("SHOW_RECOMMENDED_CARD_MODAL")
         }
     }
 
@@ -87,7 +89,7 @@ const InputModal = (props) => {
                     </View>
                 </View> */}
                 <Text>What are you intending to purchase?</Text>
-                <TouchableOpacity placeholder="Select Category" onPress= {() => setViewCategory(true)} style = {{borderWidth: 2, borderColor: '#d3d3d3', borderRadius:1, padding:10, shadowColor: "#000", width : 200, margin: 10}}>
+                <TouchableOpacity placeholder="Select Category" onPress= {() => setModalView("SELECT_CATEGORY_MODAL")} style = {{borderWidth: 2, borderColor: '#d3d3d3', borderRadius:1, padding:10, shadowColor: "#000", width : 200, margin: 10}}>
                     <View>
                         <Text>{selectedCategory === null ? "Select Category" : selectedCategory}</Text>
                     </View>
@@ -103,7 +105,7 @@ const InputModal = (props) => {
 }
 
 const CategoryModal = (props) => {
-    const {setModal, amountSpent, setSelectedCategory, setViewCategory, closeModalHandler} = props
+    const {setModal, amountSpent, setSelectedCategory, setModalView, closeModalHandler} = props
     const categoryList = require('../categories.json')
     console.log(amountSpent);
     const [modalCategory, setModalCategory] = React.useState(null);
@@ -123,11 +125,15 @@ const CategoryModal = (props) => {
                 break 
             case modalCategory != null && modalMerchant == null:
                 setSelectedCategory(modalCategory.name); 
-                setViewCategory(false);
+                setModalView("INPUT_MODAL");
                 break
             case modalCategory == null && modalMerchant != null:
-                setSelectedCategory("Others"); 
-                setViewCategory(false);
+                if (modalMerchant.toLowerCase() == "giant"){
+                    setSelectedCategory("Groceries"); 
+                } else {
+                    setSelectedCategory("Others"); 
+                }
+                setModalView("INPUT_MODAL");
                 break
         }
     }
@@ -147,7 +153,7 @@ const CategoryModal = (props) => {
     }
 
     return (
-        <KeyboardAvoidingView  keyboardVerticalOffset={0} style = {{flex: 1, flexDirection:'column'}} enabled>
+        <KeyboardAvoidingView  keyboardVerticalOffset={0} style = {{flex: 1, flexDirection:'column',  justifyContent: 'center', alignContent: 'center'}} enabled>
             <TouchableWithoutFeedback onPress={()=> closeModalHandler()}>
                 <View style={{position: "absolute",top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)'}} />
             </TouchableWithoutFeedback>
@@ -155,8 +161,8 @@ const CategoryModal = (props) => {
 
             </View>
             {/* <View style = {{"}}> */}
-                <View style = {{flex: 1, backgroundColor: "white", justifyContent:'flex-end', height: "70%", backgroundColor: "white", borderTopRightRadius: 30,  borderTopLeftRadius: 30, paddingHorizontal: 30, paddingTop: 25, shadowColor: "#000", shadowOffset: {width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 4, elevation: 5}}>
-                    <View style={{width:"100%", alignItems: "center"}}>
+                <View style = {{flex: 1, backgroundColor: "white", justifyContent:'center', height: "70%", backgroundColor: "white", borderTopRightRadius: 30,  borderTopLeftRadius: 30, paddingHorizontal: 30, paddingTop: 25, shadowColor: "#000", shadowOffset: {width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 4, elevation: 5}}>
+                    <View style={{width:"100%", alignItems: "center", justifyContent: 'center'}}>
                     <ScrollView>
                         <View style= {{marginBottom: 5, alignItems: 'center'}}>
                             <Text style={{fontSize: 24}}>Select Category</Text>
@@ -198,14 +204,46 @@ const CategoryModal = (props) => {
 
 export const Recommendation = (props) => {
     const {modal, setModal} = props;
-    const [viewCategory, setViewCategory] = React.useState(false); 
+    const [modalView, setModalView] = React.useState("INPUT_MODAL"); 
     const [selectedCategory, setSelectedCategory] = React.useState(null); 
     const [amountSpent, setAmountSpent] = React.useState(0);
-    
+    const [cardName, setCardName] = React.useState(null);
+
     const closeModalHandler = () => {
-        setViewCategory(false);
+        setModalView("INPUT_MODAL");
         setModal(false);
     }
+
+    const switchModalView = () => {
+        switch(modalView) {
+            case "INPUT_MODAL": 
+                return (
+                    <InputModal setModalView = {setModalView} 
+                                setModal = {setModal} 
+                                selectedCategory = {selectedCategory} 
+                                closeModalHandler = {closeModalHandler} 
+                                amountSpent={amountSpent} 
+                                setCardName = {setCardName}
+                                setAmountSpent={setAmountSpent}/>
+                )
+            case "SELECT_CATEGORY_MODAL":
+                return (
+                    <CategoryModal setModalView = {setModalView} 
+                                amountSpent = {amountSpent} 
+                                setModal = {setModal} 
+                                setSelectedCategory = {setSelectedCategory} 
+                                closeModalHandler = {closeModalHandler}/>
+                )
+            case "SHOW_RECOMMENDED_CARD_MODAL": 
+                return (
+                    <RecommendedCardModal setModalView = {setModalView}
+                                cardName = {cardName}
+                                amountSpent = {amountSpent}
+                                closeModalHandler = {closeModalHandler}/>
+                )
+        }
+    }
+    
     console.log("Launch Recommendation");
 
     React.useEffect(() => {
@@ -214,9 +252,8 @@ export const Recommendation = (props) => {
 
     return (
         <Modal visible = {modal} transparent={true}>
-            {/* {viewCategory ? <CategoryModal setViewCategory = {setViewCategory} amountSpent = {amountSpent} setModal = {setModal} setSelectedCategory = {setSelectedCategory} closeModalHandler = {closeModalHandler}/> 
-            : <InputModal setViewCategory = {setViewCategory} setModal = {setModal} selectedCategory = {selectedCategory} closeModalHandler = {closeModalHandler} amountSpent={amountSpent} setAmountSpent={setAmountSpent}/>} */}
-            <RecommendedCardModal closeModalHandler = {closeModalHandler} cardName = "DBS Live Fresh Card"/>
+            { switchModalView() }
+            {/* <RecommendedCardModal closeModalHandler = {closeModalHandler} cardName = "DBS Live Fresh Card"/> */}
         </Modal>
     )
 

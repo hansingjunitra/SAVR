@@ -48,13 +48,13 @@ def userAlgo(request, user):
         # return HttpResponse(bestcard)
         return HttpResponse("Return sth")
 
-    # elif request.method == "CALL":
-    #     print("received")
-    #     data = request.data
-    #     spend = request.META['HTTP_SPEND']
-    #     category = request.META['HTTP_CATEGORY']
-    #     bestcard = getBestCardv2(data, spend, category)
-    #     return HttpResponse(bestcard)
+    elif request.method == "CALL":
+        print("received")
+        data = request.data
+        spend = request.META['HTTP_SPEND']
+        category = request.META['HTTP_CATEGORY']
+        bestcard = getBestCardv2(data, spend, category)
+        return HttpResponse(bestcard)
             
     # elif request.method == "GET":
     #     spend = request.META['HTTP_SPEND']

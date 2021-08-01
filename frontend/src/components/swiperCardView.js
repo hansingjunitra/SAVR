@@ -3,6 +3,7 @@ import { View,
         Text, 
         Image,
         TouchableOpacity,
+        Linking,
         StyleSheet  } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { ProgressBar, Colors } from 'react-native-paper';
@@ -35,20 +36,16 @@ const refreshConnectionHandler = async (connectionID) => {
     return res;
 }
 
-const refreshButtonHandler = () => {
-    console.log(card, state.connectionIDList);
-    // Linking.openURL(res);   
-}
 
 const NoBankTextView = () => {
     return (
         <View style = {{alignItems: 'center', marginBottom:20}}>
             <Text style= {{height: 20, margin: 10, textAlign:'center', fontSize: 12}}>You have not synced your iBanking account for this card!</Text>
-            <TouchableOpacity onPress = {refreshButtonHandler}>
+            {/* <TouchableOpacity onPress = {refreshButtonHandler}> */}
                 <View style = {{padding: 5, borderRadius: 20, paddingHorizontal: 20, borderWidth: 2, alignItems: 'center', justifyContent: 'center'}}>
                     <Text style = {{fontSize: 14}}>Sync</Text>
                 </View>
-            </TouchableOpacity>
+            {/* </TouchableOpacity> */}
         </View> 
     )
 }
@@ -71,6 +68,13 @@ const FetchAndRefreshView = (props) => {
         dispatch({type: 'UPDATE_TRANSACTION_LIST', data: updatedTransactionList})
     }
 
+    const refreshButtonHandler = async () => {
+        // console.log(state.saltEdgeID);
+        const res = await refreshCustomerConnection(state.saltEdgeID);     
+        // Linking.openURL(res);   
+    }
+
+
     return (
         <View style = {{alignItems: 'center', marginBottom:20}}>
             <View style={{justifyContent: 'space-evenly'}} flexDirection = 'row'>
@@ -84,7 +88,7 @@ const FetchAndRefreshView = (props) => {
                 </View>
                 <View style = {{alignItems: 'center', justifyContent: 'center', flex:1}}>
                     <Text style={{height:20, fontSize: 12, margin: 10}}>Last Refreshed: </Text>
-                    <TouchableOpacity onPress = {refreshButtonHandler} style = {{padding: 5, marginHorizontal:10, borderRadius: 20, paddingHorizontal: 20, borderWidth: 2}}>
+                    <TouchableOpacity onPress = {() => refreshButtonHandler()} style = {{padding: 5, marginHorizontal:10, borderRadius: 20, paddingHorizontal: 20, borderWidth: 2}}>
                         <View style = {{alignItems: 'center', justifyContent: 'center'}}>
                             <Text style = {{fontSize: 14}}>Refresh</Text>
                         </View>

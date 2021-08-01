@@ -131,10 +131,12 @@ export const getConnectionAccounts = async (connectionID) => {
 }
 
 export const refreshCustomerConnection = async (connectionID) => {
+    console.log("DEBUG>>", connectionID)
+
     const url = `https://www.saltedge.com/api/v5/connect_sessions/refresh`
     const data = {
         data: {
-            connection_id: connectionID,
+            connection_id: connectionID.toString(),
             attempt: { 
                 from_date: "2021-03-01", //one year?
                 return_to: "savr://home",

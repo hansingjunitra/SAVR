@@ -36,15 +36,15 @@ def SAVRAlgo(spend, category, cards):                               # recommends
 
     for card in cards:                                          # loop through each card the user owns
         totalSpent = card['totalSpent']
-        # for categories in card['categories']:                   # initialize values with 'Others' category 
-        #     if categories['eligibility'] == 'Others':
-        #         alpha = categories['percentage']
-        #         cap = categories['cap']
-        #         if totalSpent < card['minimum_spending']:
-        #             rebate = card['spendingBreakdown']['Others'] * 0.03 
-        #         else:
-        #             rebate =  card['spendingBreakdown']['Others'] * categories['percentage'] 
-        #         rebate = card['spendingBreakdown'][categories['eligibility']] * alpha
+        for categories in card['categories']:                   # initialize values with 'Others' category 
+            if categories['eligibility'] == 'Others':
+                alpha = categories['percentage']
+                cap = categories['cap']
+                if totalSpent < card['minimum_spending']:
+                    rebate = card['spendingBreakdown']['Others'] * 0.03 
+                else:
+                    rebate =  card['spendingBreakdown']['Others'] * categories['percentage'] 
+                rebate = card['spendingBreakdown'][categories['eligibility']] * alpha
 
         for categories in card['categories']:                   # get percentage, cap and rebate for category if exists
             total_rebate += min(card['spendingBreakdown'][categories['eligibility']] * alpha, categories["cap"])
@@ -88,8 +88,8 @@ def SAVRAlgo(spend, category, cards):                               # recommends
 
         # maximize utility across cards that have not hit max rebate
         
-        # if utility >= highest_utility and total_rebate < card['maximum_rebates']:
-        #     highest_utility = utility
+        if utility >= highest_utility and total_rebate < card['maximum_rebates']:
+            highest_utility = utility
         if utility >= highest_utility and total_rebate < card['maximum_rebates']:
             bestcard = card['card_name']
     
@@ -97,7 +97,7 @@ def SAVRAlgo(spend, category, cards):                               # recommends
     if all(total_rebate >= card['maximum_rebates'] for card in cards):  # if all cards hit max rebate, assign first card in list
         bestcard = cards[0]['card_name']
 
-
+    print(bestcard)
     return bestcard
 
 # SAVRAlgo(100,'Dining')

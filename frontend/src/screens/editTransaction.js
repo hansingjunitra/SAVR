@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, KeyboardAvoidingView, TouchableOpacity, ScrollView, StyleSheet, Alert, TextInput, Image, SafeAreaView } from 'react-native';
 
 import { Icon } from 'react-native-elements';
@@ -15,9 +15,10 @@ export const EditTransaction = ({route, navigation}) => {
     const { transaction } = route.params;
     // console.log(transaction, card);
     
-    const [newTransaction, setNewTransaction] = React.useState(transaction)
+    const [newTransaction, setNewTransaction] = useState(transaction)
     const { state, dispatch } = useContext(AppContext);
     const card = state.cardList.find(d => d.id == transaction.cardID);
+    const [ applyAll, setApplyAll ] = useState(false);
 
 
     const onChangeAmount = (amount) => {
@@ -47,7 +48,7 @@ export const EditTransaction = ({route, navigation}) => {
         setCategoryModal(false);
     }
 
-    const onEditTransactionHandler = () => {
+    const onEditTransactionHandler = async () => {
         switch (true) {
             case (newTransaction.amount === null || newTransaction.amount == 0):
                 Alert.alert (
@@ -98,10 +99,28 @@ export const EditTransaction = ({route, navigation}) => {
 
                 console.log(updatedTotalSpent, updatedSpendingBreakdown, amount, transaction.amount)
 
+                const AsyncCategoryAlert = () => {
+                    return new Promise((resolve, reject) => {
+                        Alert.alert(
+                            "Edit Category",
+                            "Apply for matching description?",
+                            [
+                                { text: "No"},
+                                { text: "Apply", onPress : () =>  dispatch({type: "EDIT_CATEGORY", data: {description: newTransaction.description,
+                                                                                                            category: newTransaction.category,
+                                                                                                            icon: newTransaction.icon
+                                                                                                        }})}
+                            ],
+                            {cancelable: false}
+                        )
+                    })
+                }
+                console.log(newTransaction);
+                
                 dispatch({type: "EDIT_TRANSACTION", data: newTransaction});
                 dispatch({type: "UPDATE_CARD", data: updatedCard});
                 
-                navigation.goBack();
+                const userResponse = await AsyncCategoryAlert().then(navigation.goBack());
         }
         // navigation.goBack();
     }

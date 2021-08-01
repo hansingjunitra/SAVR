@@ -80,6 +80,16 @@ const reducer = (state, action) => {
                 }    
             } 
             break;
+        case "EDIT_CATEGORY":
+            newState = {
+                ...state,
+                transactionList: state.transactionList.map((t) => t.description === action.data.description ? 
+                {...t, 
+                    category : action.data.category,
+                    icon: action.data.icon} : t)
+            }
+            break;
+        
         case "UPDATE_TRANSACTION_LIST":
             newState = {
                 ...state,

@@ -19,7 +19,7 @@
         "type": "ionicon",
         "color": "#d41dde"},
     { "id": 5, 
-        "name": "Groceries",
+        "name": "Grocery",
         "icon": "local-grocery-store", 
         "type": "material",
         "color": "#fff240"},

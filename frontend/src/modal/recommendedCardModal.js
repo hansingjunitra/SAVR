@@ -11,7 +11,7 @@ import { ProgressBar, Colors } from 'react-native-paper';
 import { AppContext } from '../context/context';
 
 const RecommendedCardModal = (props) => {
-    const { cardName, closeModalHandler } = props;
+    const { cardName, closeModalHandler, amountSpent } = props;
     const { state } = useContext(AppContext);
     const card = state.cardList.find((c) => c.card_name == cardName )
 
@@ -25,7 +25,7 @@ const RecommendedCardModal = (props) => {
         return 1;
     }
 
-    const progress = getProgress(card.totalSpent, card.minimum_spending)
+    const progress = getProgress(card.totalSpent + amountSpent, card.minimum_spending)
 
     return (
         <View style= {{flex: 1, justifyContent: "flex-end", alignItems: "center", }}>
@@ -46,18 +46,18 @@ const RecommendedCardModal = (props) => {
                     <Image source = {{uri: card.image}} style = {style.cardImage}/>
                     <View style = {style.progressBarContainer}>
                         <ProgressBar progress={progress} color={card.color.quartenary} style = {style.progressBar}/>
-                        <Text style = {style.progressBarText}>${card.totalSpent.toFixed(2)} / ${card.minimum_spending}</Text>
+                        <Text style = {style.progressBarText}>${(card.totalSpent + amountSpent).toFixed(2) } / ${card.minimum_spending}</Text>
                     </View>
-                    <Text style = {{textAlign: "center", padding: 10, fontSize: 14}}>Cashback from this transaction $2.71</Text>
+                    <Text style = {{textAlign: "center", padding: 10, fontSize: 14}}>Cashback from this transaction $ 0.6 </Text>
                     <View style = {{flexDirection: 'row', alignContent: 'space-between'}}>
                         <TouchableOpacity onPress = {() => null} style = {{flex: 1}}>
-                            <View style= {{alignSelf: 'center', width: 80, height: 40, borderRadius: 10, borderWidth: 1, justifyContent: 'center', paddingHorizontal: 10, borderColor: '#01a699'}}>
+                            <View style= {{alignSelf: 'center', width: 100, height: 40, borderRadius: 10, borderWidth: 1, justifyContent: 'center', paddingHorizontal: 10, borderColor: '#01a699'}}>
                                 <Text style = {{textAlign: 'center', color: "#01a699"}}>Confirm</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress = {() => null} style = {{flex: 1}}>
-                            <View style= {{alignSelf: 'center', width: 80, height: 40, borderRadius: 10, borderWidth: 1, justifyContent: 'center', paddingHorizontal: 10, borderColor: '#01a699'}}>
-                                <Text style = {{textAlign: 'center', color: "#01a699"}}>Confirm</Text>
+                            <View style= {{alignSelf: 'center', width: 100, height: 40, borderRadius: 10, borderWidth: 1, justifyContent: 'center', paddingHorizontal: 10, borderColor: '#01a699'}}>
+                                <Text style = {{textAlign: 'center', color: "#01a699"}}>Next Card</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -70,8 +70,8 @@ const RecommendedCardModal = (props) => {
 
 const style = StyleSheet.create({
     cardImage: {
-        height: 150, 
-        width: 250, 
+        height: 168, 
+        width: 280, 
         borderRadius: 10,
         marginVertical: 10,
     },
@@ -86,7 +86,7 @@ const style = StyleSheet.create({
     },
     progressBarContainer: {
         height: 50, 
-        width: 250, 
+        width: 280, 
         borderRadius: 10,
         marginVertical: 15,
         alignContent: 'center'
