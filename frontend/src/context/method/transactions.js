@@ -33,8 +33,9 @@ const fetchTransactions = async (card, transactionList) => {
                     }
     
                     const transactionDate = new Date(transaction.made_on); 
-                    if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
-                        updatedTotalSpent += parseFloat(t['amount'].toFixed(2))
+                    // if ((today.getMonth() == transactionDate.getMonth() || today.getMonth() - 1 == transactionDate.getMonth()) && today.getFullYear() == transactionDate.getFullYear()) {
+                    if ((( transactionDate.getMonth() == 6  && transactionDate.getDate() > 21) ||  transactionDate.getMonth() == 7) && today.getFullYear() == transactionDate.getFullYear()) { // for demo
+                            updatedTotalSpent += parseFloat(t['amount'].toFixed(2))
                         updatedSpendingBreakdown[`${t["category"]}`] += parseFloat(t['amount'].toFixed(2))
                     }
                     updatedTransactionList.unshift(t);

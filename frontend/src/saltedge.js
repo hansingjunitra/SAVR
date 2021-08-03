@@ -71,7 +71,7 @@ export const createConnection = async (customerID, bank) => {
         }).then(response => {
             return response.json();
         });
-        //console.log(res);
+        console.log(res);
         return res['data']['connect_url'];
     } catch (err) {
         console.error(err);
@@ -168,7 +168,7 @@ export const refreshCustomerConnection = async (connectionID) => {
         console.log(res);
         return res['data']['connect_url'];
     } catch (err) {
-        console.error(err);
+        console.log(err);
         return Error;
     }
 }

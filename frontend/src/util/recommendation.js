@@ -9,9 +9,10 @@ import { AppContext } from '../context/context';
 import RecommendedCardModal from '../modal/recommendedCardModal';
 
 import { savrAlgo } from './algo';
+// var moment = require('moment');
 
 const InputModal = (props) => {
-    const {setModal, setModalView, selectedCategory, closeModalHandler, setAmountSpent, amountSpent, setCardName} = props
+    const {setModal, setModalView, selectedCategory, closeModalHandler, setAmountSpent, amountSpent, setCardList} = props
     const { state, dispatch } = useContext(AppContext);
 
     const setAmountSpentHandler = (amount) => {
@@ -45,7 +46,8 @@ const InputModal = (props) => {
             default:
                 console.log("Fire API")
                 const res = await savrAlgo(amountSpent, selectedCategory, "uid", state.cardList);
-                setCardName(res);
+                setCardList(JSON.parse(res));
+                console.log(res);
                 setModalView("SHOW_RECOMMENDED_CARD_MODAL")
         }
     }
@@ -103,7 +105,7 @@ const InputModal = (props) => {
 }
 
 const CategoryModal = (props) => {
-    const {setModal, amountSpent, setSelectedCategory, setModalView, closeModalHandler} = props
+    const {setModal, amountSpent, setSelectedCategory, setModalView, closeModalHandler, setSelectedDescription} = props
     const categoryList = require('../categories.json')
     console.log(amountSpent);
     const [modalCategory, setModalCategory] = React.useState(null);
@@ -123,14 +125,18 @@ const CategoryModal = (props) => {
                 break 
             case modalCategory != null && modalMerchant == null:
                 setSelectedCategory(modalCategory.name); 
+                setSelectedDescription("NEW UNNAMED DESCRIPTION")
                 setModalView("INPUT_MODAL");
                 break
             case modalCategory == null && modalMerchant != null:
                 if (modalMerchant.toLowerCase() == "giant"){
                     setSelectedCategory("Groceries"); 
+                } else if (modalMerchant.toLowerCase() == "sbs") {
+                    setSelectedCategory("Travel")
                 } else {
                     setSelectedCategory("Others"); 
                 }
+                setSelectedDescription(modalMerchant)
                 setModalView("INPUT_MODAL");
                 break
         }
@@ -204,8 +210,11 @@ export const Recommendation = (props) => {
     const {modal, setModal} = props;
     const [modalView, setModalView] = React.useState("INPUT_MODAL"); 
     const [selectedCategory, setSelectedCategory] = React.useState(null); 
+    const [selectedDescription, setSelectedDescription] = React.useState(null); 
     const [amountSpent, setAmountSpent] = React.useState(0);
-    const [cardName, setCardName] = React.useState(null);
+    const [cardList, setCardList] = React.useState(null);
+
+
 
     const closeModalHandler = () => {
         setModalView("INPUT_MODAL");
@@ -221,7 +230,8 @@ export const Recommendation = (props) => {
                                 selectedCategory = {selectedCategory} 
                                 closeModalHandler = {closeModalHandler} 
                                 amountSpent={amountSpent} 
-                                setCardName = {setCardName}
+                                setCardList = {setCardList}
+                                setSelectedDescription = {setSelectedDescription}
                                 setAmountSpent={setAmountSpent}/>
                 )
             case "SELECT_CATEGORY_MODAL":
@@ -230,13 +240,17 @@ export const Recommendation = (props) => {
                                 amountSpent = {amountSpent} 
                                 setModal = {setModal} 
                                 setSelectedCategory = {setSelectedCategory} 
+                                setSelectedDescription = {setSelectedDescription}
                                 closeModalHandler = {closeModalHandler}/>
                 )
             case "SHOW_RECOMMENDED_CARD_MODAL": 
                 return (
                     <RecommendedCardModal setModalView = {setModalView}
-                                cardName = {cardName}
+                                cardList = {cardList}
                                 amountSpent = {amountSpent}
+                                selectedCategory = {selectedCategory} 
+                                selectedDescription = {selectedDescription} 
+                                setSelectedCategory = {setSelectedCategory}
                                 closeModalHandler = {closeModalHandler}/>
                 )
         }

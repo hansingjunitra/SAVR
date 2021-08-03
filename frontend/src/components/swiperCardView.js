@@ -1,16 +1,19 @@
-import React, { useContext } from 'react';
-import { View, 
+import React, { useContext, useState } from 'react';
+import { Alert,
+        View, 
         Text, 
         Image,
         TouchableOpacity,
+        TouchableWithoutFeedback,
         Linking,
         StyleSheet  } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { ProgressBar, Colors } from 'react-native-paper';
 import { AppContext } from '../context/context';
 import { rebateFuncMap } from '../util/rebateCalculation';
-import { refreshCustomerConnection } from '../saltedge';
+import { createConnection, refreshCustomerConnection } from '../saltedge';
 import { fetchTransactions } from '../context/method/transactions';
+import { ActivityIndicator } from 'react-native';
 
 const getProgress = (totalSpent, minmumSpending) => {
     if (!(minmumSpending == null || minmumSpending == 0)) {
@@ -32,11 +35,11 @@ const getCashback = (percentage, spent, cap) => {
 }
 
 const NoBankTextView = (props) => {
-    const { refreshButtonHandler } = props;
+    const { syncButtonHandler } = props;
     return (
         <View style = {{alignItems: 'center', marginBottom:20}}>
             <Text style= {{height: 20, margin: 10, textAlign:'center', fontSize: 12}}>You have not synced your iBanking account for this card!</Text>
-            <TouchableOpacity onPress = {refreshButtonHandler}>
+            <TouchableOpacity onPress = {syncButtonHandler}>
                 <View style = {{padding: 5, borderRadius: 20, paddingHorizontal: 20, borderWidth: 2, alignItems: 'center', justifyContent: 'center'}}>
                     <Text style = {{fontSize: 14}}>Sync</Text>
                 </View>
@@ -46,11 +49,11 @@ const NoBankTextView = (props) => {
 }
 
 const NoCardTextView = (props) => {
-    const { refreshButtonHandler } = props;
+    const { syncButtonHandler } = props;
     return (
         <View style = {{alignItems: 'center', marginBottom:20}}>
             <Text style= {{margin: 10, textAlign:'center', fontSize: 12}}>There is no such card in your Bank Account! Please contact us if this is not the case or try syncing again!</Text>
-            <TouchableOpacity onPress = {refreshButtonHandler}>
+            <TouchableOpacity onPress = {syncButtonHandler}>
                 <View style = {{padding: 5, borderRadius: 20, paddingHorizontal: 20, borderWidth: 2, alignItems: 'center', justifyContent: 'center'}}>
                     <Text style = {{fontSize: 14}}>Sync</Text>
                 </View>
@@ -60,13 +63,15 @@ const NoCardTextView = (props) => {
 }
 
 const FetchAndRefreshView = (props) => {
-    const { card, refreshButtonHandler } = props;
+    const { card, refreshButtonHandler, setIsLoading } = props;
     const { state, dispatch } = useContext(AppContext);
 
     const fetchTransactionsButtonHandler = async (card, transactionList) => {
+        setIsLoading(true);
         const {updatedCard, updatedTransactionList} =  await fetchTransactions(card, transactionList);
         dispatch({type: 'UPDATE_CARD', data: updatedCard})
         dispatch({type: 'UPDATE_TRANSACTION_LIST', data: updatedTransactionList})
+        setIsLoading(false);
     }
 
     return (
@@ -95,7 +100,7 @@ const FetchAndRefreshView = (props) => {
 
 const SwiperCardView = (props) => {
     const { state, dispatch } = useContext(AppContext);
-    const { card } = props;
+    const { card, setIsLoading } = props;
     let realisedRebates = 0;
     try {
         realisedRebates = rebateFuncMap[card.card_name](card);
@@ -107,11 +112,50 @@ const SwiperCardView = (props) => {
     }
 
     const refreshButtonHandler = async () => {
-        const res = await refreshCustomerConnection(card.saltEdge.connectionID);     
-        Linking.openURL(res);   
+        try {
+            const res = await refreshCustomerConnection(card.saltEdge.connectionID);     
+            Linking.openURL(res);
+        } catch (err) {
+            console.log(err);
+            Alert.alert(
+                "Fail Refreshing Connection",
+                "Your card cannot be refreshed now, please try again later",
+                [
+                    { text: "OK"},
+                ],
+                {cancelable: false}
+            )
+        }
+    }
+
+    const syncButtonHandler = async () => {
+        try {
+            const res = await createConnection(state.saltEdgeID, card.bank_saltedge_code);
+            Linking.openURL(res);
+        } catch (err) {
+            console.log(err)
+            Alert.alert(
+                "Fail Creating Connection",
+                "Please try again later",
+                [
+                    { text: "OK"},
+                ],
+                {cancelable: false}
+            )
+        }
     }
 
     let progress = getProgress(card.totalSpent, card.minimum_spending)
+
+
+    // if (isLoading) {
+    //     return (
+    //         <View style={{position: 'absolute', opacity: 10, top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.5)'}}>
+    //             <ActivityIndicator size="large" color="#00ff00" />
+    //         </View>
+
+    //     )
+    // }
 
     return (
         <View style = {style.mainContainer}>
@@ -127,9 +171,9 @@ const SwiperCardView = (props) => {
                 <Text style = {{fontSize: 12, marginTop :5, fontWeight: 'bold'}}>Current Total Rebate: ${realisedRebates.toFixed(2)} / ${card.maximum_rebates}</Text>
             </View>
             <View style= {{height:80,}}>
-            { card.saltEdge.iBankingSync && card.saltEdge.accountID !== null ? <FetchAndRefreshView card = {card} refreshButtonHandler = {refreshButtonHandler}/> : null }
-            { card.saltEdge.iBankingSync && card.saltEdge.accountID === null ? <NoCardTextView refreshButtonHandler = {refreshButtonHandler}/> : null }
-            { !card.saltEdge.iBankingSync ? <NoBankTextView refreshButtonHandler = {refreshButtonHandler}/> : null }
+            { card.saltEdge.iBankingSync && card.saltEdge.accountID !== null ? <FetchAndRefreshView card = {card} refreshButtonHandler = {refreshButtonHandler} setIsLoading = {setIsLoading}/> : null }
+            { card.saltEdge.iBankingSync && card.saltEdge.accountID === null ? <NoCardTextView syncButtonHandler = {syncButtonHandler}/> : null }
+            { !card.saltEdge.iBankingSync ? <NoBankTextView syncButtonHandler = {syncButtonHandler}/> : null }
             </View>
             <View style= {style.categoryParentContainer}>
                 {card.categories.map((category, index) => {

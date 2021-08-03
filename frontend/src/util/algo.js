@@ -1,6 +1,6 @@
 
 export const savrAlgo = async (amount, category, uid, data) => {
-    const url = "http://127.0.0.1:8000/algo/user"
+    const url = "http://127.0.0.1:8080/algo/user"
     console.log(JSON.stringify({amount: amount, category: category}))
     // try {
     //     console.log('sending', amount, category);

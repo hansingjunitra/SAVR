@@ -19,8 +19,9 @@ const TransactionCardView = (props) => {
         let updatedTotalSpent = card.totalSpent;
         let updatedSpendingBreakdown = card.spendingBreakdown;
 
-        if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
-            updatedTotalSpent -= transaction.amount;
+        // if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
+        if ((( transactionDate.getMonth() == 6  && transactionDate.getDate() > 21) ||  transactionDate.getMonth() == 7) && today.getFullYear() == transactionDate.getFullYear()) { // for demo
+                updatedTotalSpent -= transaction.amount;
             updatedSpendingBreakdown[`${transaction.category}`] -= transaction.amount
         }
 
@@ -30,8 +31,8 @@ const TransactionCardView = (props) => {
             spendingBreakdown: updatedSpendingBreakdown
         }
 
-        dispatch({type: "UPDATE_CARD", data: updatedCard});
         dispatch({type: "DELETE_TRANSACTION", data: transaction});
+        dispatch({type: "UPDATE_CARD", data: updatedCard});
     }
 
     return (

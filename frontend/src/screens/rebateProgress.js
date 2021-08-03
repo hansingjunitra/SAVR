@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback} from 'react-native';
+import {ActivityIndicator, View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback} from 'react-native';
 import { AppContext } from '../context/context';
 import { ProgressBar, Colors } from 'react-native-paper';
 import Swiper from 'react-native-swiper';
@@ -19,6 +19,7 @@ export const RebateProgress = () => {
 
     const { state, dispatch } = useContext(AppContext);
     const [cardList, setCardList] = useState([]);
+    const [ isLoading, setIsLoading ] = useState(false);
 
     useEffect(() => {
         setCardList(state.cardList)
@@ -98,11 +99,17 @@ export const RebateProgress = () => {
             <View style = {{flex: 1 , alignItems: 'center'}}>
                 <Swiper ref={component => swiperObj = component} loop={true} autoplayTimeout = {10} autoplay = {false} showsPagination= {true} paginationStyle={{bottom: undefined, left: undefined, top: -100, right: 0}} style = {{alignSelf: 'flex-start'}}>
                     {state.cardList.map((card, index) => 
-                        <SwiperCardView card = {card} key = {index}/>
+                        <SwiperCardView card = {card} key = {index} setIsLoading = {setIsLoading}/>
                     )}
                 </Swiper>
             </View>
+            {isLoading ? 
+            <View style={{justifyContent: 'center', position: 'absolute', backgroundColor: 'rgba(52, 52, 52, 0.4)', width: "100%", height: "100%"}}>
+                <ActivityIndicator size="large" color="#00ff00" />
+            </View>: null}
+
             <WalletCardModal ref = {ref} setSwiperHandler = {setSwiperHandler}/>
+            
         </SafeAreaView>
     )
 }

@@ -167,7 +167,7 @@ export const rebateFuncMap = {
     "DBS Live Fresh Card" : dbsLiveFresh,
     "Maybank Family and Friends" : maybankFandF, //t&c updated, wrong calc now
     "Advance Credit Card" : hsbcAdvance,
-    "Citi Cash Back®" : citiCashback,
+    "Citi Cash Back" : citiCashback,
     "POSB Everyday" : posb, //still doesnt work
     "FRANK Credit Card" : frank
 }
