@@ -33,6 +33,7 @@ def SAVRAlgo(spend, category, cards):                               # recommends
     highest_utility = 0
     spend = float(spend)
     total_rebate = 0
+    card_utility_list = []
 
     for card in cards:                                          # loop through each card the user owns
         totalSpent = card['totalSpent']
@@ -84,7 +85,8 @@ def SAVRAlgo(spend, category, cards):                               # recommends
         # z = (a-b)*t/31 + b
         netrebate = min( (10-9/31*datetime.now().day) * min(alpha*spend, cap-rebate) + total_rebate, card['maximum_rebates'] )
         utility =  netrebate * (1- probability)
-        print("Utility: ", utility, card['card_name'])        
+        print("Utility: ", utility, card['card_name'])    
+        card_utility_list.append({"card_name": card["card_name"], "utility": utility})    
 
         # maximize utility across cards that have not hit max rebate
         
@@ -97,8 +99,14 @@ def SAVRAlgo(spend, category, cards):                               # recommends
     if all(total_rebate >= card['maximum_rebates'] for card in cards):  # if all cards hit max rebate, assign first card in list
         bestcard = cards[0]['card_name']
 
-    print(bestcard)
-    return bestcard
+    print(card_utility_list)
+    card_utility_list.sort(key=lambda x: x['utility'], reverse=True)
+
+    recommended_card_list = []
+    for card in card_utility_list:
+        recommended_card_list.append(card['card_name'])
+
+    return  recommended_card_list
 
 # SAVRAlgo(100,'Dining')
 

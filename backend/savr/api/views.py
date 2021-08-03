@@ -54,8 +54,8 @@ def userAlgo(request, user):
         spend = request.META['HTTP_SPEND']
         category = request.META['HTTP_CATEGORY']
         bestcard = getBestCardv2(data, spend, category)
-        return HttpResponse(bestcard)
-            
+        return HttpResponse(json.dumps(bestcard), content_type="application/json")
+
     # elif request.method == "GET":
     #     spend = request.META['HTTP_SPEND']
     #     category = request.META['HTTP_CATEGORY']
