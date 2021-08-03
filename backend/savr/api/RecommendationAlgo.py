@@ -62,9 +62,9 @@ def SAVRAlgo(spend, category, cards):                               # recommends
                                                             
         delta = min(0, card['minimum_spending'] - card['totalSpent'])      # update probabilities
         minspend = card['minimum_spending']
-        pt = 0.3 * (math.exp(math.log(1/0.3)/31))**datetime.now().day
+        pt = 0.27 * (math.exp(math.log(1/0.3)/31))**datetime.now().day
         if minspend != 0:
-            pdelta = 0.3 * (math.exp(math.log(1.3/0.3)/minspend))**delta - 0.3
+            pdelta = 0.27 * (math.exp(math.log(1.3/0.3)/minspend))**delta - 0.27
         else:
             pdelta = 1
 
@@ -82,7 +82,7 @@ def SAVRAlgo(spend, category, cards):                               # recommends
 
         # utility function
         # z = (a-b)*t/31 + b
-        netrebate = min( min(alpha*spend, cap-rebate) + total_rebate, card['maximum_rebates'] )
+        netrebate = min( (10-9/31*datetime.now().day) * min(alpha*spend, cap-rebate) + total_rebate, card['maximum_rebates'] )
         utility =  netrebate * (1- probability)
         print("Utility: ", utility, card['card_name'])        
 
