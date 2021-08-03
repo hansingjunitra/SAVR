@@ -31,35 +31,36 @@ const getCashback = (percentage, spent, cap) => {
     }
 }
 
-const refreshConnectionHandler = async (connectionID) => {
-    const res = await refreshCustomerConnection(connectionID);     
-    return res;
-}
-
-
-const NoBankTextView = () => {
+const NoBankTextView = (props) => {
+    const { refreshButtonHandler } = props;
     return (
         <View style = {{alignItems: 'center', marginBottom:20}}>
             <Text style= {{height: 20, margin: 10, textAlign:'center', fontSize: 12}}>You have not synced your iBanking account for this card!</Text>
-            {/* <TouchableOpacity onPress = {refreshButtonHandler}> */}
+            <TouchableOpacity onPress = {refreshButtonHandler}>
                 <View style = {{padding: 5, borderRadius: 20, paddingHorizontal: 20, borderWidth: 2, alignItems: 'center', justifyContent: 'center'}}>
                     <Text style = {{fontSize: 14}}>Sync</Text>
                 </View>
-            {/* </TouchableOpacity> */}
+            </TouchableOpacity>
         </View> 
     )
 }
 
-const NoCardTextView = () => {
+const NoCardTextView = (props) => {
+    const { refreshButtonHandler } = props;
     return (
         <View style = {{alignItems: 'center', marginBottom:20}}>
-            <Text style= {{margin: 10, textAlign:'center', fontSize: 12}}>There is no such card in your Bank Account! Please contact us if this is not the case!</Text>
+            <Text style= {{margin: 10, textAlign:'center', fontSize: 12}}>There is no such card in your Bank Account! Please contact us if this is not the case or try syncing again!</Text>
+            <TouchableOpacity onPress = {refreshButtonHandler}>
+                <View style = {{padding: 5, borderRadius: 20, paddingHorizontal: 20, borderWidth: 2, alignItems: 'center', justifyContent: 'center'}}>
+                    <Text style = {{fontSize: 14}}>Sync</Text>
+                </View>
+            </TouchableOpacity>
         </View> 
     )
 }
 
 const FetchAndRefreshView = (props) => {
-    const { card } = props;
+    const { card, refreshButtonHandler } = props;
     const { state, dispatch } = useContext(AppContext);
 
     const fetchTransactionsButtonHandler = async (card, transactionList) => {
@@ -67,13 +68,6 @@ const FetchAndRefreshView = (props) => {
         dispatch({type: 'UPDATE_CARD', data: updatedCard})
         dispatch({type: 'UPDATE_TRANSACTION_LIST', data: updatedTransactionList})
     }
-
-    const refreshButtonHandler = async () => {
-        // console.log(state.saltEdgeID);
-        const res = await refreshCustomerConnection(state.saltEdgeID);     
-        // Linking.openURL(res);   
-    }
-
 
     return (
         <View style = {{alignItems: 'center', marginBottom:20}}>
@@ -112,6 +106,11 @@ const SwiperCardView = (props) => {
         console.log(card.card_name, "Card not found")
     }
 
+    const refreshButtonHandler = async () => {
+        const res = await refreshCustomerConnection(card.saltEdge.connectionID);     
+        Linking.openURL(res);   
+    }
+
     let progress = getProgress(card.totalSpent, card.minimum_spending)
 
     return (
@@ -128,9 +127,9 @@ const SwiperCardView = (props) => {
                 <Text style = {{fontSize: 12, marginTop :5, fontWeight: 'bold'}}>Current Total Rebate: ${realisedRebates.toFixed(2)} / ${card.maximum_rebates}</Text>
             </View>
             <View style= {{height:80,}}>
-            { card.saltEdge.iBankingSync && card.saltEdge.accountID !== null ? <FetchAndRefreshView card = {card}/> : null }
-            { card.saltEdge.iBankingSync && card.saltEdge.accountID === null ? <NoCardTextView/> : null }
-            { !card.saltEdge.iBankingSync ? <NoBankTextView/> : null }
+            { card.saltEdge.iBankingSync && card.saltEdge.accountID !== null ? <FetchAndRefreshView card = {card} refreshButtonHandler = {refreshButtonHandler}/> : null }
+            { card.saltEdge.iBankingSync && card.saltEdge.accountID === null ? <NoCardTextView refreshButtonHandler = {refreshButtonHandler}/> : null }
+            { !card.saltEdge.iBankingSync ? <NoBankTextView refreshButtonHandler = {refreshButtonHandler}/> : null }
             </View>
             <View style= {style.categoryParentContainer}>
                 {card.categories.map((category, index) => {

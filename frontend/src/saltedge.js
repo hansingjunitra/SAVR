@@ -39,13 +39,13 @@ export const createConnection = async (customerID, bank) => {
             country_code: "SG", 
             provider_code: bank,
             consent: {
-                from_date: "2021-03-01", //start of month YYYY--MM--DD
+                from_date: "2021-07-01", //start of month YYYY--MM--DD
                 scopes: [ "account_details", "transactions_details" ],
                 daily_refresh: true,
                 automatic_fetch: true
             },
             attempt: { 
-                from_date: "2021-03-01", //one year?
+                from_date: "2021-07-01", //one year?
                 return_to: "savr://home",
                 fetch_scopes: [ "accounts", "transactions" ],
                 custom_fields: {
@@ -131,14 +131,15 @@ export const getConnectionAccounts = async (connectionID) => {
 }
 
 export const refreshCustomerConnection = async (connectionID) => {
-    console.log("DEBUG>>", connectionID)
+    // console.log("DEBUG>>", connectionID)
 
     const url = `https://www.saltedge.com/api/v5/connect_sessions/refresh`
+    console.log("URL: >> ", url, connectionID.toString())
     const data = {
         data: {
             connection_id: connectionID.toString(),
             attempt: { 
-                from_date: "2021-03-01", //one year?
+                from_date: "2021-07-01", //one year?
                 return_to: "savr://home",
                 fetch_scopes: [ "accounts", "transactions" ],
                 custom_fields: {

@@ -20,7 +20,7 @@ const getCardConnectionAccount = async (connectionList, card) => {
             throw new Error ("Error when getting connection accounts from saltedge");
         }
         const accountList = res.data;
-        const account = accountList.find(a => a.extra.account_name == card.card_name);
+        const account = accountList.find(a => a.extra.account_name == card.saltEdge_card_name);
         if (account === undefined) {
             return {
                 iBankingSync: true,
