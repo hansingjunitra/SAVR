@@ -62,7 +62,7 @@
         "categories": [
             {
                 "eligibility": "Dining",
-                "percentage": 0.05,
+                "percentage": 0.06,
                 "cap": 99999,
                 "icon":  {
                     "name": "local-dining",
@@ -72,7 +72,7 @@
             },
             {
                 "eligibility": "Grocery",
-                "percentage": 0.003,
+                "percentage": 0.03,
                 "cap": 99999,
                 "icon":  {
                     "name": "local-grocery-store",
@@ -82,7 +82,7 @@
             },
             {
                 "eligibility": "Transport",
-                "percentage": 0.003,
+                "percentage": 0.03,
                 "cap": 99999,
                 "icon":  {
                     "name": "train",
@@ -92,7 +92,7 @@
             },
             {
                 "eligibility": "Petrol",
-                "percentage": 0.003,
+                "percentage": 0.05,
                 "cap": 99999,
                 "icon":  {
                     "name": "gas-pump",
@@ -102,7 +102,7 @@
             },
             {
                 "eligibility": "Travel",
-                "percentage": 0.003,
+                "percentage": 0.03,
                 "cap": 99999,
                 "icon":  {
                     "name": "plane",
@@ -112,7 +112,7 @@
             },
             {
                 "eligibility": "Recurring Bills",
-                "percentage": 0.003,
+                "percentage": 0.03,
                 "cap": 99999,
                 "icon":  {
                     "name": "lightning-bolt",
@@ -286,7 +286,7 @@
             {
                 "eligibility": "Food Delivery",
                 "percentage": 0.05,
-                "cap": 99999,
+                "cap": 25,
                 "icon":  {
                     "name": "delivery-dining",
                     "type": "material",
@@ -295,8 +295,8 @@
             },
             {
                 "eligibility": "Fast Food",
-                "percentage": 0.003,
-                "cap": 99999,
+                "percentage": 0.08,
+                "cap": 25,
                 "icon":  {
                     "name": "hamburger",
                     "type": "font-awesome-5",
@@ -305,8 +305,8 @@
             },
             {
                 "eligibility": "Grocery",
-                "percentage": 0.003,
-                "cap": 99999,
+                "percentage": 0.08,
+                "cap": 25,
                 "icon":  {
                     "name": "local-grocery-store",
                     "type": "material",
@@ -315,8 +315,8 @@
             },
             {
                 "eligibility": "Transport",
-                "percentage": 0.003,
-                "cap": 99999,
+                "percentage": 0.08,
+                "cap": 25,
                 "icon":  {
                     "name": "train",
                     "type": "material-community",
@@ -325,8 +325,8 @@
             },
             {
                 "eligibility": "Petrol",
-                "percentage": 0.003,
-                "cap": 99999,
+                "percentage": 0.08,
+                "cap": 25,
                 "icon":  {
                     "name": "gas-pump",
                     "type": "font-awesome-5",
@@ -335,8 +335,8 @@
             },
             {
                 "eligibility": "Learning/Retail",
-                "percentage": 0.003,
-                "cap": 99999,
+                "percentage": 0.08,
+                "cap": 25,
                 "icon":  {
                     "name": "book",
                     "type": "font-awesome-5",
@@ -345,8 +345,8 @@
             },
             {
                 "eligibility": "Tele/Streaming",
-                "percentage": 0.003,
-                "cap": 99999,
+                "percentage": 0.08,
+                "cap": 25,
                 "icon":  {
                     "name": "television",
                     "type": "material-community",
@@ -355,7 +355,7 @@
             },
             {
                 "eligibility": "Others" ,
-                "percentage": 0.003,
+                "percentage": 0.0025,
                 "cap": 99999,
                 "icon":  {
                     "name": "dots-horizontal",

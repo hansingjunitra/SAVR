@@ -24,7 +24,7 @@
         "type": "material",
         "color": "#fff240"},
     { "id": 6, 
-        "name": "Airfare",
+        "name": "Transport",
         "icon": "paper-plane", 
         "type": "font-awesome-5",
         "color": "#ff2a12"},

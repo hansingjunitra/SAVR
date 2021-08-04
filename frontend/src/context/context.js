@@ -56,10 +56,11 @@ const reducer = (state, action) => {
         case "ADD_TRANSACTION":
             newState = {
                 ...state,
-                transactionList: [...state.transactionList, action.data]
+                transactionList: [action.data, ...state.transactionList]
             }
             break;
         case "EDIT_TRANSACTION":
+            // console.log(transactionList)
             transactionIndex = state.transactionList.findIndex((t) => t.id === action.data.id) 
             if (transactionIndex != null) {
                 newState = {
@@ -78,14 +79,59 @@ const reducer = (state, action) => {
             } 
             break;
         case "EDIT_CATEGORY":
+            const today = new Date()
+
+            let updatedTotalSpent = action.data.card.totalSpent;
+            let updatedSpendingBreakdown = action.data.card.spendingBreakdown;
+
+            // if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
+            // if ((( transactionDate.getMonth() == 6  && transactionDate.getDate() > 21) ||  transactionDate.getMonth() == 7) && today.getFullYear() == transactionDate.getFullYear()) {                   
+            // // if ((( transactionDate.getMonth() == 6  && transactionDate.getDate() > 21) ||  transactionDate.getMonth() == 7) && today.getFullYear() == transactionDate.getFullYear()) { // for demo
+            //     updatedSpendingBreakdown[`${action.data.oldTransaction.category}`] -= transaction.amount
+            //     updatedSpendingBreakdown[`${action.data.newTransaction.category}`] += amount
+            //     updatedTotalSpent += amount - transaction.amount;
+            //     console.log("DEBUG>>" ,updatedTotalSpent, updatedSpendingBreakdown)
+            // }
+    
+
+            let newTransactionList = state.transactionList.map((t) => {
+                console.log("DEBUG HERE>> ", t)
+                if (t.description === action.data.description) {
+                    if (action.data.transactionId !== t.id) {
+                        if ((( new Date(t.date).getMonth() == 6  && new Date(t.date).getDate() > 21) ||  new Date(t.date).getMonth() == 7) && today.getFullYear() == new Date(t.date).getFullYear()) {
+                            updatedSpendingBreakdown[`${action.data.oldCategory}`] -= t.amount
+                            updatedSpendingBreakdown[`${action.data.newCategory}`] += t.amount
+                        }
+        
+                    }
+                    return (
+                        {...t, 
+                            category : action.data.newCategory,
+                            icon: action.data.icon} 
+                    )                        
+                } else {
+                    return (
+                        t
+                    )
+                }
+        })
+
+            let updatedCard = {
+                ...action.data.card,
+                spendingBreakdown: updatedSpendingBreakdown
+            }
+
+            let cardIndex = state.cardList.findIndex((c) => c.id == action.data.card.id)
+
+            console.log(updatedCard, cardIndex)
+
             newState = {
                 ...state,
-                transactionList: state.transactionList.map((t) => t.description === action.data.description ? 
-                {...t, 
-                    category : action.data.category,
-                    icon: action.data.icon} : t)
+                transactionList: newTransactionList,
+                cardList: [...state.cardList.slice(0, cardIndex), updatedCard, ...state.cardList.slice(cardIndex + 1)]
             }
             break;       
+
         case "UPDATE_TRANSACTION_LIST":
             newState = {
                 ...state,

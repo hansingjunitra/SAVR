@@ -119,7 +119,7 @@ const RecommendedCardModal = (props) => {
                         <ProgressBar progress={getProgress(card.totalSpent + amountSpent, card.minimum_spending)} color={card.color.quartenary} style = {style.progressBar}/>
                         <Text style = {style.progressBarText}>${(card.totalSpent + amountSpent).toFixed(2) } / ${card.minimum_spending}</Text>
                     </View>
-                    <Text style = {{textAlign: "center", padding: 10, fontSize: 14}}>Cashback from this transaction $ {getRebate()} </Text>
+                    <Text style = {{textAlign: "center", padding: 10, fontSize: 14}}>Cashback from this transaction $ {getRebate().toFixed(2)} </Text>
                     <View style = {{flexDirection: 'row', alignContent: 'space-between'}}>
                         <TouchableOpacity onPress = {addTransactionHandler} style = {{flex: 1}}>
                             <View style= {{alignSelf: 'center', width: 100, height: 40, borderRadius: 10, borderWidth: 1, justifyContent: 'center', paddingHorizontal: 10, borderColor: '#01a699'}}>

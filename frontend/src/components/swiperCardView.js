@@ -184,10 +184,10 @@ const SwiperCardView = (props) => {
                                 <Icon name = {category.icon.name} type = {category.icon.type} size={15} color= {'black'} borderRadius= {10}/>
                             </View>
                             <View style = {style.categorySpendingContainer}>
-                                <Text style = {style.categorySpendingText}>${card.spendingBreakdown[category.eligibility].toFixed(2)}</Text>
+                                <Text style = {style.categorySpendingText}>${Math.abs(card.spendingBreakdown[category.eligibility]).toFixed(2)}</Text>
                             </View>
                             <View style = {style.categoryCashbackContainer}>
-                                <Text style = {style.categoryCashbackText}>Cashback: ${getCashback(category.percentage, card.spendingBreakdown[category.eligibility], category.cap)}</Text>
+                                <Text style = {style.categoryCashbackText}>Cashback: ${Math.abs(getCashback(category.percentage, card.spendingBreakdown[category.eligibility], category.cap))}</Text>
                             </View>
                         </View>
                     )

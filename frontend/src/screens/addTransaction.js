@@ -67,8 +67,8 @@ export const AddTransaction = ({route, navigation}) => {
                 let updatedTotalSpent = card.totalSpent;
                 let updatedSpendingBreakdown = card.spendingBreakdown;
         
-                if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
-                    updatedTotalSpent += newTransaction.amount;
+                // if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
+                if ((( transactionDate.getMonth() == 6  && transactionDate.getDate() > 21) ||  transactionDate.getMonth() == 7) && today.getFullYear() == transactionDate.getFullYear()) {                     updatedTotalSpent += newTransaction.amount;
                     updatedSpendingBreakdown[`${newTransaction.category}`] += newTransaction.amount
                 }
         

@@ -44,7 +44,7 @@ const InputModal = (props) => {
                 )
                 break
             default:
-                console.log("Fire API")
+                console.log("Fire API", amountSpent, selectedCategory)
                 const res = await savrAlgo(amountSpent, selectedCategory, "uid", state.cardList);
                 setCardList(JSON.parse(res));
                 console.log(res);
@@ -130,7 +130,7 @@ const CategoryModal = (props) => {
                 break
             case modalCategory == null && modalMerchant != null:
                 if (modalMerchant.toLowerCase() == "giant"){
-                    setSelectedCategory("Groceries"); 
+                    setSelectedCategory("Grocery"); 
                 } else if (modalMerchant.toLowerCase() == "sbs") {
                     setSelectedCategory("Travel")
                 } else {

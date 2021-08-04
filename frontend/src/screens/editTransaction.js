@@ -19,7 +19,7 @@ const cardDetailsJSON = require('../creditCards.json');
 
 export const EditTransaction = ({route, navigation}) => {
     const { transaction } = route.params;
-    // console.log(transaction, card);
+    console.log(transaction);
     
     const [newTransaction, setNewTransaction] = useState(transaction)
     const { state, dispatch } = useContext(AppContext);
@@ -92,9 +92,13 @@ export const EditTransaction = ({route, navigation}) => {
                 let updatedSpendingBreakdown = card.spendingBreakdown;
                 let amount = parseFloat(newTransaction.amount);
 
-                if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
+                // if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
+                if ((( transactionDate.getMonth() == 6  && transactionDate.getDate() > 21) ||  transactionDate.getMonth() == 7) && today.getFullYear() == transactionDate.getFullYear()) {                   
+                // if ((( transactionDate.getMonth() == 6  && transactionDate.getDate() > 21) ||  transactionDate.getMonth() == 7) && today.getFullYear() == transactionDate.getFullYear()) { // for demo
+                    updatedSpendingBreakdown[`${transaction.category}`] -= transaction.amount
+                    updatedSpendingBreakdown[`${newTransaction.category}`] += amount
                     updatedTotalSpent += amount - transaction.amount;
-                    updatedSpendingBreakdown[`${newTransaction.category}`] += amount - transaction.amount
+                    console.log("DEBUG>>" ,updatedTotalSpent, updatedSpendingBreakdown)
                 }
         
                 let updatedCard = {
@@ -120,8 +124,11 @@ export const EditTransaction = ({route, navigation}) => {
                 const userResponse = await AsyncCategoryAlert();
                 if (userResponse) {
                     dispatch({type: "EDIT_CATEGORY", data: {description: newTransaction.description,
-                        category: newTransaction.category,
-                        icon: newTransaction.icon}
+                        oldCategory: transaction.category,
+                        newCategory: newTransaction.category,
+                        icon: newTransaction.icon,
+                        transactionId: transaction.id,
+                        card: card}
                     })
                 }
                 navigation.goBack()
