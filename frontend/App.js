@@ -24,12 +24,9 @@ const getUniqueId = (username) => {
 }
 
 const App = () => {
-    console.log("Render App.js")
     const [loading, setLoading] = useState(true);
-
     const {state, dispatch} = useContext(AppContext);
 
-    
     useEffect(async () => {
         if (state.saltEdgeID !== null) {
             getConnectionIDListHandler(state.saltEdgeID).then(connectionIDList => {dispatch({type: "SET_CONNECTION_ID_LIST", data: connectionIDList}); console.log(connectionIDList)});

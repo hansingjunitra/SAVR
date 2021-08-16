@@ -20,7 +20,6 @@ const AppContext = React.createContext({
 const reducer = (state, action) => {
     let newState;
     let transactionIndex;
-    
     switch (action.type) {
         case "SET_CREDENTIALS":
             newState=  {
@@ -83,19 +82,7 @@ const reducer = (state, action) => {
 
             let updatedTotalSpent = action.data.card.totalSpent;
             let updatedSpendingBreakdown = action.data.card.spendingBreakdown;
-
-            // if (today.getMonth() == transactionDate.getMonth() && today.getFullYear() == transactionDate.getFullYear()) {
-            // if ((( transactionDate.getMonth() == 6  && transactionDate.getDate() > 21) ||  transactionDate.getMonth() == 7) && today.getFullYear() == transactionDate.getFullYear()) {                   
-            // // if ((( transactionDate.getMonth() == 6  && transactionDate.getDate() > 21) ||  transactionDate.getMonth() == 7) && today.getFullYear() == transactionDate.getFullYear()) { // for demo
-            //     updatedSpendingBreakdown[`${action.data.oldTransaction.category}`] -= transaction.amount
-            //     updatedSpendingBreakdown[`${action.data.newTransaction.category}`] += amount
-            //     updatedTotalSpent += amount - transaction.amount;
-            //     console.log("DEBUG>>" ,updatedTotalSpent, updatedSpendingBreakdown)
-            // }
-    
-
             let newTransactionList = state.transactionList.map((t) => {
-                console.log("DEBUG HERE>> ", t)
                 if (t.description === action.data.description) {
                     if (action.data.transactionId !== t.id) {
                         if ((( new Date(t.date).getMonth() == 6  && new Date(t.date).getDate() > 21) ||  new Date(t.date).getMonth() == 7) && today.getFullYear() == new Date(t.date).getFullYear()) {
@@ -120,18 +107,13 @@ const reducer = (state, action) => {
                 ...action.data.card,
                 spendingBreakdown: updatedSpendingBreakdown
             }
-
             let cardIndex = state.cardList.findIndex((c) => c.id == action.data.card.id)
-
-            console.log(updatedCard, cardIndex)
-
             newState = {
                 ...state,
                 transactionList: newTransactionList,
                 cardList: [...state.cardList.slice(0, cardIndex), updatedCard, ...state.cardList.slice(cardIndex + 1)]
             }
             break;       
-
         case "UPDATE_TRANSACTION_LIST":
             newState = {
                 ...state,

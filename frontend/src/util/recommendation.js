@@ -4,12 +4,10 @@ import { KeyboardAvoidingView } from 'react-native';
 import { Alert } from 'react-native';
 import { View, Text, Modal, TextInput, TouchableOpacity, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { Icon } from 'react-native-elements';
-// import { CardContext } from '../context/context';
 import { AppContext } from '../context/context';
 import RecommendedCardModal from '../modal/recommendedCardModal';
 
 import { savrAlgo } from './algo';
-// var moment = require('moment');
 
 const InputModal = (props) => {
     const {setModal, setModalView, selectedCategory, closeModalHandler, setAmountSpent, amountSpent, setCardList} = props
